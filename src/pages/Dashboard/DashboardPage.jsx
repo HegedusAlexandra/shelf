@@ -1,18 +1,22 @@
 import React from "react";
-import Calendar from "../../components/Calendar";
 import { useQuery } from "@apollo/client";
-import {GET_BOOKS} from '../../utils/graphql/queries'
+import {GET_INGREDIENTS} from '../../utils/graphql/queries'
+import LeftColumn from "./LeftColumn";
+import RightColumn from "./RightColumn";
+import Center from "./Center";
 
 export default function DashboardPage() {
 
-  const { loading, error, data } = useQuery(GET_BOOKS);
+  const { loading, error, data } = useQuery(GET_INGREDIENTS);
 
-  console.log(loading,error,data?.getBooks[0]);
+  console.log(loading,error,data?.getIngredients.map(el => el.name));
   
 
   return (
-    <div className="w-full bg-amber-50 p-[2vw] flex flex-col justify-center items-center">
-      <Calendar />
+    <div className="w-full h-[100vh] flex flex-row justify-center items-center font-parkinsans">
+      <LeftColumn/>
+      <Center />
+      <RightColumn/>
     </div>
   );
 }

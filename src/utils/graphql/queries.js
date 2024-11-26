@@ -10,3 +10,13 @@ export const GET_BOOKS = gql`
     }
   }
 `;
+
+export const GET_INGREDIENTS = gql`
+  query {
+    getIngredients {
+      id
+      name
+      measurement
+    }
+  }
+`;

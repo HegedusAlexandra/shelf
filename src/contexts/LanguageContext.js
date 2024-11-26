@@ -1,37 +1,63 @@
-import { createContext ,useContext, useState,useEffect} from "react";
-import { Language } from "../utils/Enum";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { Language, Navigation } from "../utils/Enum"; // Import enums for language and navigation
 import { useTranslation } from "react-i18next";
 
-const LanguageContext = createContext()
+// Create a Context
+const LanguageNavContext = createContext();
 
-export const LanguageProvider = ({children}) => {
+export const LanguageNavProvider = ({ children }) => {
+  // State for the selected language
+  const [selectedLanguage, setSelectedLanguage] = useState(Language.EN); // Default to English
 
-    const [selectedLanguage,setSelectedLanguage] = useState(Language.EN)
-    const { i18n } = useTranslation();
-    const browserLanguages = navigator.languages;
-  
-    const findMatchingLanguage = () => {
-      const availableLanguages = Object.values(Language);
-      const match = browserLanguages.find((lang) =>
-        availableLanguages.includes(lang)
-      );
-      return match.toUpperCase() || 'EN';
-    };
-  
-    useEffect(
-      () => findMatchingLanguage && setSelectedLanguage(findMatchingLanguage()),
-      []
+  // State for the current navigation name
+  const [currentNavigation, setCurrentNavigation] = useState(Navigation.MAIN); // Default navigation
+
+  const { i18n } = useTranslation();
+
+  // Detect browser language and match it with available languages
+  const findMatchingLanguage = () => {
+    const browserLanguages = navigator.languages || [navigator.language];
+    const availableLanguages = Object.values(Language);
+
+    const match = browserLanguages.find((lang) =>
+      availableLanguages.includes(lang.toUpperCase())
     );
-  
-    useEffect(() => {
+
+    return match ? match.toUpperCase() : Language.EN; // Default to 'EN' if no match
+  };
+
+  // Set language on mount
+  useEffect(() => {
+    const matchingLanguage = findMatchingLanguage();
+    setSelectedLanguage(matchingLanguage);
+  }, []);
+
+  // Change i18n language when `selectedLanguage` changes
+  useEffect(() => {
+    if (selectedLanguage) {
       i18n.changeLanguage(selectedLanguage);
-    }, [i18n, selectedLanguage]);
+    }
+  }, [i18n, selectedLanguage]);
 
-    return (
-        <LanguageContext.Provider value={{selectedLanguage,setSelectedLanguage}}>
-            {children}
-        </LanguageContext.Provider>   
-    )
-}
+  return (
+    <LanguageNavContext.Provider
+      value={{
+        selectedLanguage,
+        setSelectedLanguage,
+        currentNavigation,
+        setCurrentNavigation,
+      }}
+    >
+      {children}
+    </LanguageNavContext.Provider>
+  );
+};
 
-export const useLanguage = () => useContext(LanguageContext)
+// Custom hook to access LanguageNavContext
+export const useLanguageNav = () => {
+  const context = useContext(LanguageNavContext);
+  if (!context) {
+    throw new Error("useLanguageNav must be used within a LanguageNavProvider");
+  }
+  return context;
+};

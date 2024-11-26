@@ -7,8 +7,7 @@ import DashboardPage from "./pages/Dashboard/DashboardPage";
 import reportWebVitals from "./reportWebVitals";
 import "../src/utils/i18n/i18n";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./screens/Layout";
-import { LanguageProvider } from "./contexts/LanguageContext";
+import { LanguageNavProvider } from "./contexts/LanguageContext";
 import { Sitemap } from "./utils/Enum";
 import { ApolloProvider } from '@apollo/client';
 import client from './utils/ApolloClient';
@@ -25,9 +24,7 @@ const router = createBrowserRouter([
   {
     path: `/${Sitemap.DASHBOARD}`,
     element: (
-      <Layout>
         <DashboardPage />
-      </Layout>
     )
   }
 ]);
@@ -35,9 +32,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ApolloProvider client={client}>
-    <LanguageProvider>
+    <LanguageNavProvider>
       <RouterProvider router={router} />
-    </LanguageProvider>
+    </LanguageNavProvider>
   </ApolloProvider>
 );
 
