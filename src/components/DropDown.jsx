@@ -4,6 +4,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useTranslation } from "react-i18next";
 import { Language,Sitemap } from "../utils/Enum";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 export default function DropdownComp({ type }) {
   const {selectedLanguage, setSelectedLanguage } = useLanguage();
@@ -23,8 +24,8 @@ export default function DropdownComp({ type }) {
       `/${
         site === "HOME"
           ? Sitemap.HOME
-          : site === "PRODUCTS"
-          ? Sitemap.PRODUCTS
+          : site === "DASHBOARD"
+          ? Sitemap.DASHBOARD
           : Sitemap.CART
       }`
     );
@@ -42,7 +43,7 @@ export default function DropdownComp({ type }) {
 
   return (
     <div
-      className={`w-[4vh] ${
+      className={`w-[10vw] ${
         type !== "Language" && "w-fit ml-[2vh] md:translate-y-1"
       } flex justify-center items-center rounded-sm`}
     >

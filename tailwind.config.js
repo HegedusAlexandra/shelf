@@ -4,9 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'montserrat': ['Montserrat', 'sans-serif'],
-        'afacad':['Afacad', 'sans-serif'],
-        'playfair':['Playfair Display', 'serif'],
+        'anton': ['Anton', 'sans-serif'],
+        'parkinsans': ['Parkinsans', 'sans-serif'],
       },
       backgroundImage: {
         'ab1': "url('./assets/abstract_1.jpg')",    

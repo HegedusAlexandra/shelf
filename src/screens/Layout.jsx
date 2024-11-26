@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 function Layout({ children }) {
   return (
-    <section>
+    <section className="font-parkinsans">
       <Header />
       {children}
       <Footer />

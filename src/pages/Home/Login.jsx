@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import img from "../../assets/abstract_2.jpg";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -22,12 +21,9 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full h-[80vh] flex items-center justify-center overflow-hidden">
-      <div className="w-[140%] h-[80vh] flex justify-center items-center">
-        <img src={img} alt="háttér" className="w-[100vw]"/>
-      </div>
+    <div className="w-full h-[80vh] flex items-center justify-center overflow-hidden bg-ab2 bg-no-repeat bg-cover bg-center">
       <div className="w-[80%] h-[72vh] absolute z-10 top-[14vh] bg-white/20 backdrop-blur-md flex items-center justify-center rounded-full">
-        <div className="max-w-md mx-auto mt-10 flex flex-col justify-center items-center">
+        <div className="w-[90%] md:w-[300px] mx-auto mt-10 flex flex-col justify-center items-center">
           <TextInput
             label="Your Name"
             placeholder="Enter your full name"

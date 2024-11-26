@@ -15,13 +15,13 @@ const router = createBrowserRouter([
   {
     path: `/${Sitemap.HOME}`,
     element: (
-      <Layout>
+      <div className="w-full h-full py-[10vh]">
         <HomePage />
-      </Layout>
+      </div>
     )
   },
   {
-    path: `/${Sitemap.PRODUCTS}`,
+    path: `/${Sitemap.DASHBOARD}`,
     element: (
       <Layout>
         <DashboardPage />

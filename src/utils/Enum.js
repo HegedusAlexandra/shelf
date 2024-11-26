@@ -5,7 +5,7 @@ const Language = Object.freeze({
 
 const Sitemap = Object.freeze({
     HOME: "",
-    PRODUCTS: "products",
+    DASHBOARD: "dashboard",
   });
   
   
