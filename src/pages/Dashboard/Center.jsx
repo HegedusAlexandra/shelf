@@ -19,7 +19,7 @@ export default function Center() {
   };
 
   return (
-    <div className="flex-1 h-[100vh]">
+    <div className="flex-1 h-[100vh] bg-cyan-50">
       <h1
         className="text-[10vh] font-bold w-full flex justify-center p-[2vw] text-cyan-300 bg-cyan-50"
         style={{

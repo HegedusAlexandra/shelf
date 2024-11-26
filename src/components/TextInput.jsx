@@ -9,7 +9,7 @@ export default function TextInput({
   required = false,
 }) {
   return (
-    <div className="flex flex-col mb-4 w-full">
+    <div className="flex flex-col mb-2 w-full">
       {label && (
         <label
           htmlFor="input-field"
@@ -20,7 +20,7 @@ export default function TextInput({
       )}
       <input
         id="input-field"
-        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cyan-500 focus:outline-none focus:border-cyan-500 placeholder-gray-400 text-gray-900 transition duration-200"
+        className="w-full px-4 py-2 bg-white rounded-md focus:ring-2 focus:ring-cyan-500 focus:outline-none focus:border-cyan-500 placeholder-gray-400 text-gray-900 transition duration-200"
         type={type}
         placeholder={placeholder}
         value={value}
