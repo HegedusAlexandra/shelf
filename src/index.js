@@ -10,6 +10,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./screens/Layout";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Sitemap } from "./utils/Enum";
+import { ApolloProvider } from '@apollo/client';
+import client from './utils/ApolloClient';
 
 const router = createBrowserRouter([
   {
@@ -32,9 +34,11 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <LanguageProvider>
-    <RouterProvider router={router} />
-  </LanguageProvider>
+  <ApolloProvider client={client}>
+    <LanguageProvider>
+      <RouterProvider router={router} />
+    </LanguageProvider>
+  </ApolloProvider>
 );
 
 reportWebVitals();
