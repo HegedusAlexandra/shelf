@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-
-export default function Drop({
+import TextInput from "./TextInput";
+export default function IngredientDrop({
   options = [],
   label,
   onSelect,
@@ -20,24 +20,23 @@ export default function Drop({
   };
 
   return (
-    <div className="flex flex-col mb-2 w-[100%]">
-      {label && (
-        <label
-          htmlFor="input-field"
-          className="text-xs font-medium text-gray-700 mb-2"
+    <div className="flex flex-row items-end gap-[1vw] w-[100%] my-1">
+      <div className="flex flex-row items-end w-[100%] gap-[1vw]">
+        <button
+          className="flex-1 bg-white text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
+          onClick={handleToggle}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
         >
-          <span>{label}</span>
-        </label>
-      )}
-      <button
-        className="w-[100%] bg-white text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
-        onClick={handleToggle}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-      >
-        {selectedOption ? selectedOption.name : placeholder}
-      </button>
-
+          {selectedOption ? selectedOption.name : placeholder}
+        </button>
+        <input
+          type="number"
+          placeholder="0"
+          className="px-3 py-0.5 w-[80px] bg-white rounded-md"
+        />
+        <p>{selectedOption?.measurement || 'n'}</p>
+      </div>
       {/* Dropdown Options */}
       {isOpen && (
         <ul

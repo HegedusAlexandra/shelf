@@ -7,20 +7,21 @@ export default function TextInput({
   onChange,
   label = "",
   required = false,
+  style
 }) {
   return (
     <div className="flex flex-col mb-2 w-full">
       {label && (
         <label
           htmlFor="input-field"
-          className="text-base font-medium text-gray-700 mb-2"
+          className="text-xs font-medium text-gray-700 mb-2"
         >
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <input
         id="input-field"
-        className="w-full px-4 py-2 bg-white rounded-md focus:ring-2 focus:ring-cyan-500 focus:outline-none focus:border-cyan-500 placeholder-gray-400 text-gray-900 transition duration-200"
+        className={`w-full px-4 py-0.5 bg-white rounded-md focus:ring-2 focus:ring-sky-500 focus:outline-none focus:border-sky-500 placeholder-gray-400 text-gray-900 transition duration-200 ${style}`}
         type={type}
         placeholder={placeholder}
         value={value}

@@ -12,7 +12,7 @@ export default function Button({
     "inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 transition duration-200";
 
   const variantStyles = {
-    primary: "text-cyan hover:bg-cyan-500 hover:text-white focus:ring-cyan-700 bg-cyan-50 my-[2px] font-parkinsans uppercase",
+    primary: "text-sky hover:bg-sky-500 hover:text-white focus:ring-sky-700 bg-sky-50 my-[2px] font-parkinsans uppercase",
     secondary:
       "bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-300",
     danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-400",

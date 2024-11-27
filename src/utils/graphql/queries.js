@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_BOOKS = gql`
   query {
@@ -17,6 +17,29 @@ export const GET_INGREDIENTS = gql`
       id
       name
       measurement
+    }
+  }
+`;
+
+export const GET_RECIPE_BY_ID = gql`
+  query ($id: ID!) {
+    getRecipeById(id: $id) {
+      id
+      name
+      ingredients {
+        id
+        ingredient {
+          id
+          name
+          measurement
+        }
+        amount
+      }
+      steps {
+        id
+        order
+        value
+      }
     }
   }
 `;

@@ -38,13 +38,13 @@ export default function NavButton({ title, icon }) {
   return (
     <button
       onClick={handleNavigation} // Trigger navigation update on click
-      className={`w-[100%] h-[10vh]  bg-[#fad2e4] flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-cyan-50`}
+      className={`w-[100%] h-[10vh]  bg-[#fad2e4] flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-sky-50`}
     >
       <p
-        className="text-lg text-[#fee6f1] font-bold drop-shadow-md pr-[1vw] uppercase"
+        className="text-lg text-[#663F4F] font-bold drop-shadow-md pr-[1vw]"
         style={{
           textShadow:
-            "1px 1px 1px rgba(0, 0, 0, 0.7), -1px -1px 2px rgba(0, 0, 0, 0.2)",
+            "2px 2px 2px rgba(255, 255, 255, 0.7)",
         }}
       >
         {title}

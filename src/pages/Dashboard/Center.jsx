@@ -19,9 +19,9 @@ export default function Center() {
   };
 
   return (
-    <div className="flex-1 h-[100vh] bg-cyan-50">
+    <div className="flex-1 h-[100vh] bg-sky-300 overflow-y-scroll nice-scrollbar smooth-scroll">
       <h1
-        className="text-[10vh] font-bold w-full flex justify-center p-[2vw] text-cyan-300 bg-cyan-50"
+        className="text-[10vh] font-bold w-full flex justify-center p-[2vw] text-sky-300 bg-sky-50"
         style={{
           textShadow:
             "1px 1px 1px rgba(0, 0, 0, 0.7), -1px -1px 2px rgba(0, 0, 0, 0.2)"
