@@ -43,10 +43,10 @@ export default function NavButton({ title, icon,setIsVisible }) {
   return (
     <button
       onClick={handleNavigation} // Trigger navigation update on click
-      className={`w-[100%] h-[8vh] bg-transparent flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-sky-50`}
+      className={`w-[100%] h-[8vh] bg-transparent flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-[#fafafa]`}
     >
       <p
-        className="text-lg text-lime-300 font-bold drop-shadow-md pr-[1vw]"
+        className="text-lg text-lime-300 drop-shadow-md pr-[1vw] uppercase"
         style={{
           textShadow: "2px 2px 2px rgba(0, 0, 0, 0.7)",
         }}

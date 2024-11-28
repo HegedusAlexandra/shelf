@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'anton': ['Anton', 'sans-serif'],
-        'parkinsans': ['Parkinsans', 'sans-serif'],
+        'didone': ['AnticDidone', 'serif'],
+        'opensans': ['OpenSans', 'sans-serif'],
       },
       backgroundImage: {
         'ab1': "url('./assets/abstract_1.jpg')",    

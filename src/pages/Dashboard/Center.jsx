@@ -14,13 +14,9 @@ export default function Center() {
   };
 
   return (
-    <div className="flex-1 h-[100vh] bg-sky-300 overflow-y-scroll hide-scrollbar smooth-scroll">
+    <div className="flex-1 h-[100vh] bg-stone-50 overflow-y-scroll hide-scrollbar smooth-scroll">
       <h1
-        className="text-[10vh] font-bold w-full flex justify-center p-[2vw] text-sky-300 bg-sky-50"
-        style={{
-          textShadow:
-            "1px 1px 1px rgba(0, 0, 0, 0.7), -1px -1px 2px rgba(0, 0, 0, 0.2)"
-        }}
+        className="text-[6vh] w-full flex justify-center p-[2vw] text-stone-600"
       >
         {titleList[currentNavigation]}
       </h1>

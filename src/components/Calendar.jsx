@@ -174,7 +174,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="h-[70vh] p-[2vw] bg-sky-50 flex flex-col">
+    <div className="h-[70vh] p-[2vw] bg-[#fafafa] flex flex-col">
       <div className="flex-1 flex flex-row justify-between items-center">
         <button onClick={handlePrevious}>◀</button>
         <h2>{currentDate.format("MMMM YYYY")}</h2>

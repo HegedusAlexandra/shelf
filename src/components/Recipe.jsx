@@ -7,6 +7,8 @@ import IngredientDrop from "./IngredientDrop";
 
 const Recipe = () => {
   const cakeId = "1";
+  const [steps, setSteps] = useState([""]); // Holds steps text inputs
+  const [ingredients, setIngredients] = useState([""]); // Holds ingredients dropdowns
   const { loading, error, data } = useQuery(GET_INGREDIENTS);
   const { data: recipeData, loading: recipeLoading } = useQuery(
     GET_RECIPE_BY_ID,
@@ -15,9 +17,6 @@ const Recipe = () => {
       skip: !cakeId, // Skip query if no ID is provided
     }
   );
-
-  const [steps, setSteps] = useState([""]); // Holds steps text inputs
-  const [ingredients, setIngredients] = useState([""]); // Holds ingredients dropdowns
 
   // Pre-fill data when cake ID is provided
   useEffect(() => {
