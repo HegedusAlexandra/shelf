@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: `/${Sitemap.HOME}`,
     element: (
-      <div className="w-full h-full py-[10vh]">
+      <div className="w-full h-full">
         <HomePage />
       </div>
     )

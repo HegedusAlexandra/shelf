@@ -3,7 +3,6 @@ import TextInput from "./TextInput";
 import { useQuery } from "@apollo/client";
 import { GET_INGREDIENTS, GET_RECIPE_BY_ID } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
 import plus from "../assets/icons/plus.png";
-import trash from "../assets/icons/delete.png";
 import IngredientDrop from "./IngredientDrop";
 
 const Recipe = () => {
@@ -13,7 +12,7 @@ const Recipe = () => {
     GET_RECIPE_BY_ID,
     {
       variables: { id: cakeId },
-      skip: !cakeId // Skip query if no ID is provided
+      skip: !cakeId, // Skip query if no ID is provided
     }
   );
 
@@ -32,8 +31,14 @@ const Recipe = () => {
 
   const addStep = () => setSteps([...steps, ""]);
   const addIngredient = () => setIngredients([...ingredients, ""]);
-  const deleteIngredient = () => setIngredients([...ingredients, ""]);
 
+  const deleteIngredient = (index) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
+
+  const deleteStep = (index) => {
+    setSteps(steps.filter((_, i) => i !== index));
+  };
 
   const handleStepChange = (index, value) => {
     const updatedSteps = [...steps];
@@ -81,10 +86,10 @@ const Recipe = () => {
             </button>
             <button
               className="w-[31px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-              onClick={deleteIngredient}
+              onClick={() => deleteIngredient(index)}
             >
               <img src={plus} alt="plus" />
-            </button>  
+            </button>
           </div>
         ))}
       </div>
@@ -101,6 +106,12 @@ const Recipe = () => {
             <button
               className="w-[30px] h-full flex justify-center items-center m-3 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
               onClick={addStep}
+            >
+              <img src={plus} alt="plus" />
+            </button>
+            <button
+              className="w-[31px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+              onClick={() => deleteStep(index)}
             >
               <img src={plus} alt="plus" />
             </button>

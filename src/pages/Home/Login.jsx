@@ -1,51 +1,56 @@
-import React, { useState } from "react";
-import TextInput from "../../components/TextInput";
-import Button from "../../components/Button";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function Login() {
-  const [value_name, setValue_name] = useState("");
-  const [value_password, setValue_password] = useState("");
-  const navigate = useNavigate()
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
 
-  const handleChangeName = (e) => {
-    setValue_name(e.target.value);
-  };
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
 
-  const handleChangePassword = (e) => {
-    setValue_password(e.target.value);
-  };
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
 
-  const handleSubmit = () => {
-    if(value_name === "Hexa" && value_password === "myRecipes") navigate('/dashboard')
-  };
+    return () => subscription.unsubscribe();
+  }, []);
 
-  return (
-    <div className="w-full h-[80vh] flex items-center justify-center overflow-hidden bg-ab2 bg-no-repeat bg-cover bg-center">
-      <div className="w-[80%] h-[72vh] absolute z-10 top-[14vh] bg-white/20 backdrop-blur-md flex items-center justify-center rounded-full">
-        <div className="w-[90%] md:w-[300px] mx-auto mt-10 flex flex-col justify-center items-center">
-          <TextInput
-            label="Your Name"
-            placeholder="Enter your full name"
-            value={value_name}
-            onChange={handleChangeName}
-            required
-          />
-          <TextInput
-            label="Your Password"
-            placeholder="Enter your password"
-            value={value_password}
-            onChange={handleChangePassword}
-            required
-          />
-          <Button
-            label="Bejelentkezés"
-            variant="primary"
-            size="md"
-            onClick={handleSubmit}
-          />
+  if (!session) {
+    return (
+      <div className="w-full h-[100vh] flex items-center justify-center overflow-hidden bg-ab2 bg-no-repeat bg-cover bg-center">
+        <div className=" absolute z-10 lg:p-[4vw] lg:px-[20vw] p-[14vw] px-[14vw] bg-white/40 backdrop-blur-md flex items-center justify-center rounded-full">   
+            <Auth
+              supabaseClient={supabase}
+              providers={[]} 
+              appearance={{
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      defaultButtonBackground: 'transparent',
+                    },
+                  },
+                },
+              }}
+              localization={{
+                lang: 'hu',
+              }}
+            />
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    navigate("/dashboard");
+  }
 }
