@@ -23,29 +23,25 @@
   }
 }
 
-.nice-scrollbar {
-  scrollbar-width: thin; /* Firefox: makes the scrollbar thinner */
-  scrollbar-color: #888888 #f1f1f1; /* Firefox: scrollbar and track colors */
+/* Hide scrollbar for all browsers */
+.hide-scrollbar {
+  overflow: hidden; /* Prevents scrollbars from being visible */
 }
 
-.nice-scrollbar::-webkit-scrollbar {
-  width: 8px; /* Scrollbar width */
-  height: 8px; /* Scrollbar height for horizontal scrolling */
+.hide-scrollbar-scrollable {
+  overflow: auto; /* Allows scrolling */
 }
 
-.nice-scrollbar::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar thumb color */
-  border-radius: 10px; /* Rounded edges */
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.hide-scrollbar-scrollable::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar */
 }
 
-.nice-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Darker color on hover */
+/* Hide scrollbar for Firefox */
+.hide-scrollbar-scrollable {
+  scrollbar-width: none; /* Hides the scrollbar in Firefox */
 }
 
-.nice-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Scrollbar track color */
-  border-radius: 10px;
-}
 
 .smooth-scroll {
   scroll-behavior: smooth; /* Enables smooth scrolling */

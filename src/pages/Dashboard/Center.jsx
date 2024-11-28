@@ -1,8 +1,6 @@
 import React from "react";
 import Stock from "../../components/Stock";
 import Calendar from "../../components/Calendar";
-import Daylist from '../../components/DayList';
-import Weeklylist from '../../components/WeeklyList';
 import Recipe from '../../components/Recipe';
 import { useLanguageNav } from "../../contexts/LanguageContext";
 
@@ -10,16 +8,13 @@ export default function Center() {
   const { currentNavigation } = useLanguageNav();
 
   const titleList = {
-    day: "Napi lista",
-    daily: "Napi nyersanyagok",
-    weekly: "Heti nyersanyagok",
     stock: "Készlet",
     recipe: "Recept",
     main: "Irányítópult"
   };
 
   return (
-    <div className="flex-1 h-[100vh] bg-sky-300 overflow-y-scroll nice-scrollbar smooth-scroll">
+    <div className="flex-1 h-[100vh] bg-sky-300 overflow-y-scroll hide-scrollbar smooth-scroll">
       <h1
         className="text-[10vh] font-bold w-full flex justify-center p-[2vw] text-sky-300 bg-sky-50"
         style={{
@@ -31,8 +26,6 @@ export default function Center() {
       </h1>
       {currentNavigation === "main" && <Calendar />}
       {currentNavigation === "stock" && <Stock />}
-      {currentNavigation === "daily" && <Daylist />}
-      {currentNavigation === "weekly" && <Weeklylist />}
       {currentNavigation === "recipe" && <Recipe />}
     </div>
   );

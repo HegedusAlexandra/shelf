@@ -6,7 +6,7 @@ import print from "../assets/icons/print.png";
 import { useLanguageNav } from "../contexts/LanguageContext";
 import { Navigation } from "../utils/Enum";
 
-export default function NavButton({ title, icon }) {
+export default function NavButton({ title, icon,setIsVisible }) {
   const { currentNavigation, setCurrentNavigation } = useLanguageNav();
 
   // Handle navigation logic
@@ -14,9 +14,6 @@ export default function NavButton({ title, icon }) {
     const navigationMap = {
       készlet: Navigation.STOCK,
       naptár: Navigation.MAIN,
-      nap: Navigation.DAY,
-      napi_nyersanyagok: Navigation.DAILY,
-      heti_nyersanyagok: Navigation.WEEKLY,
       recept: Navigation.RECIPE,
     };
 
@@ -25,6 +22,7 @@ export default function NavButton({ title, icon }) {
     if (newNavigation && newNavigation !== currentNavigation) {
       setCurrentNavigation(newNavigation);
     }
+    setIsVisible(false)
   };
 
   // Determine the icon based on the provided prop
@@ -35,24 +33,30 @@ export default function NavButton({ title, icon }) {
     print,
   };
 
+  // Fix the mapping of titles to display names
+  const namesMap = {
+    készlet: "Készlet",
+    naptár: "Naptár",
+    recept: "Recept",
+  };
+
   return (
     <button
       onClick={handleNavigation} // Trigger navigation update on click
-      className={`w-[100%] h-[10vh]  bg-[#fad2e4] flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-sky-50`}
+      className={`w-[100%] h-[8vh] bg-transparent flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-sky-50`}
     >
       <p
-        className="text-lg text-[#663F4F] font-bold drop-shadow-md pr-[1vw]"
+        className="text-lg text-lime-300 font-bold drop-shadow-md pr-[1vw]"
         style={{
-          textShadow:
-            "2px 2px 2px rgba(255, 255, 255, 0.7)",
+          textShadow: "2px 2px 2px rgba(0, 0, 0, 0.7)",
         }}
       >
-        {title}
+        {namesMap[title] || title} {/* Show a mapped name or fallback to title */}
       </p>
       <img
         src={iconMap[icon]} // Dynamically fetch the correct icon
         alt={icon}
-        className="w-[30px] h-[30px] rounded"
+        className="w-[20px] h-[20px] rounded"
         style={{
           borderWidth: "2px", // Optional: Add a border for visual clarity
           borderColor: "blue",
