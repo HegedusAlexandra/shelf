@@ -2,10 +2,16 @@ import React, { memo, useState, useEffect } from "react";
 import TextInput from "./TextInput";
 import { useQuery } from "@apollo/client";
 import { GET_INGREDIENTS, GET_RECIPE_BY_ID } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
+import { ADD_RECIPE } from "../utils/graphql/mutations"; 
 import plus from "../assets/icons/plus.png";
-import IngredientDrop from "./AmountDropDown";
+import IngredientDrop from "./IngredientDropDown";
+import AmountDropDown from "./AmountDropDown";
 import Drop from "../components/Drop";
 import { useUser } from "../contexts/UserProvider";
+import Button from "./Button";
+import RecipeValidationSchema from '../utils/recipeValidationSchema'
+import { useMutation } from "@apollo/client";
+import { BakingMethod, PreparationMethod, TagType } from "../utils/Enum";
 
 const Recipe = () => {
   const cakeId = "1";
@@ -14,13 +20,15 @@ const Recipe = () => {
   const [ingredients, setIngredients] = useState([""]);
   const [phases, setPhases] = useState([""]);
   const [tags, setTags] = useState([""]);
+  const [errors, setErrors] = useState({});
+  const [addRecipe] = useMutation(ADD_RECIPE);
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
   const { data: recipeData } = useQuery(GET_RECIPE_BY_ID, {
     variables: { id: cakeId },
     skip: !cakeId
   });
   const user = useUser();
-console.log("User UUID:", user?.id);
+  console.log("User UUID:", user?.id);
 
   useEffect(() => {
     if (recipeData?.getRecipeById) {
@@ -43,9 +51,66 @@ console.log("User UUID:", user?.id);
       return updated;
     });
 
+  const submitRecipe = async () => {
+    const recipeData = {
+      recipeName,
+      steps,
+      ingredients: ingredients.map((ing) => ({
+        id: ing, // Ensure this matches the actual `id` format from your state
+        amount: 100 // Add a default or dynamic value for amount
+      })),
+      phases: phases.map((phase) => ({
+        preparationMethod: phase.preparationMethod || "",
+        bakingMethod: phase.bakingMethod || "",
+        time: phase.time || 0,
+        temperature: phase.temperature || 0
+      })),
+      tags
+    };
+
+    console.log(recipeData)
+
+    try {
+      await RecipeValidationSchema.validate(recipeData, { abortEarly: false }); // Validates the entire data structure
+      console.log("Validation successful:", recipeData);
+
+      addRecipe({
+        variables: recipeData
+      })
+        .then((response) => {
+          console.log("Recipe added successfully:", response.data.addRecipe);
+          alert("Recipe added successfully!");
+        })
+        .catch((err) => {
+          console.error("Error adding recipe:", err);
+        });
+    } catch (validationErrors) {
+      console.error("Validation failed:", validationErrors.inner);
+      const formattedErrors = validationErrors.inner.reduce(
+        (acc, err) => ({
+          ...acc,
+          [err.path]: err.message
+        }),
+        {}
+      );
+      setErrors(formattedErrors); // Map Yup errors to your component state
+    }
+  };
+
   return (
     <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row pb-2">
+        <div
+          style={{
+            position: "absolute",
+            width: 0,
+            height: 0,
+            borderLeft: "100px solid transparent",
+            borderRight: "100px solid transparent",
+            borderTop: "100px solid #fccb62",
+            transform: "translate(-40%, -50%)"
+          }}
+        ></div>
         <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
           Receptek
         </h1>
@@ -115,7 +180,7 @@ console.log("User UUID:", user?.id);
             <div key={index} className="flex flex-row items-end w-full">
               <TextInput
                 label={index < 1 && `Lépések`}
-                defaultValue={step}
+                value={step}
                 onChange={(e) => updateField(setSteps, index, e.target.value)}
               />
               <button
@@ -145,13 +210,21 @@ console.log("User UUID:", user?.id);
                   key={index}
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
-                  <IngredientDrop
-                    options={[]}
+                  <div className="w-full">
+                  <AmountDropDown
+                    options={Object.values(PreparationMethod)}
                     value={phase}
                     onChange={(e) =>
                       updateField(setPhases, index, e.target.value)
                     }
                   />
+                  <AmountDropDown
+                    options={Object.values(BakingMethod)}
+                    value={phase}
+                    onChange={(e) =>
+                      updateField(setPhases, index, e.target.value)
+                    }
+                  /></div>
                   <button
                     className="w-[22px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
                     onClick={() => addField(setPhases)}
@@ -180,7 +253,7 @@ console.log("User UUID:", user?.id);
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
                   <Drop
-                    options={[]}
+                    options={Object.keys(TagType)}
                     value={tag}
                     onChange={(e) =>
                       updateField(setTags, index, e.target.value)
@@ -200,6 +273,15 @@ console.log("User UUID:", user?.id);
                   </button>
                 </div>
               ))}
+              <div className="w-[20%] fixed bottom-[6vh] right-[4vw]">
+                <Button
+                  onClick={submitRecipe}
+                  variant="yellow"
+                  size="sm"
+                  label="Mentsük el"
+                  disabled={!recipeName || !steps.length || !ingredients.length}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -209,7 +291,6 @@ console.log("User UUID:", user?.id);
 };
 
 export default memo(Recipe);
-
 
 /* mutation {
   addRecipe(

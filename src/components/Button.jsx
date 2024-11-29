@@ -13,8 +13,8 @@ export default function Button({
 
   const variantStyles = {
     primary: "text-sky hover:bg-[#fafafa]0 hover:text-white focus:ring-sky-700 bg-[#fafafa] my-[2px] font-opensans uppercase",
-    secondary:
-      "bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-300",
+    yellow:
+      "bg-[#fff] text-gray-700 hover:bg-gray-200 focus:ring-black ring-[2px] ring-[#fccb62]",
     danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-400",
   };
 

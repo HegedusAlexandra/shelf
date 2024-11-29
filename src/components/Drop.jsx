@@ -35,7 +35,7 @@ export default function Drop({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        {selectedOption ? selectedOption.name : placeholder}
+        {selectedOption ? selectedOption : placeholder}
       </button>
 
       {/* Dropdown Options */}
@@ -57,7 +57,7 @@ export default function Drop({
                 aria-selected={selectedOption?.name === option.name}
                 onClick={() => handleOptionClick(option)}
               >
-                {option.name}
+                {option}
               </li>
             ))
           ) : (
