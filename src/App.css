@@ -24,7 +24,7 @@
 }
 
 /* Hide scrollbar for all browsers */
-.hide-scrollbar {
+.hide-scrollbar-scrollable {
   overflow: hidden; /* Prevents scrollbars from being visible */
 }
 
@@ -38,7 +38,7 @@
 }
 
 /* Hide scrollbar for Firefox */
-.hide-scrollbar-scrollable {
+.hide-scrollbar {
   scrollbar-width: none; /* Hides the scrollbar in Firefox */
 }
 

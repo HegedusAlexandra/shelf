@@ -30,7 +30,7 @@ export default function Drop({
         </label>
       )}
       <button
-        className="w-[100%] bg-stone-100 text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
+        className="w-[100%] bg-stone-100 text-left px-4 py-0.5 m-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
         onClick={handleToggle}
         aria-haspopup="listbox"
         aria-expanded={isOpen}

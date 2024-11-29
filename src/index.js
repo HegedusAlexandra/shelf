@@ -9,8 +9,9 @@ import "../src/utils/i18n/i18n";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { LanguageNavProvider } from "./contexts/LanguageContext";
 import { Sitemap } from "./utils/Enum";
-import { ApolloProvider } from '@apollo/client';
-import client from './utils/ApolloClient';
+import { ApolloProvider } from "@apollo/client";
+import client from "./utils/ApolloClient";
+import { UserProvider } from "./contexts/UserProvider";
 
 const router = createBrowserRouter([
   {
@@ -23,18 +24,18 @@ const router = createBrowserRouter([
   },
   {
     path: `/${Sitemap.DASHBOARD}`,
-    element: (
-        <DashboardPage />
-    )
+    element: <DashboardPage />
   }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ApolloProvider client={client}>
-    <LanguageNavProvider>
-      <RouterProvider router={router} />
-    </LanguageNavProvider>
+    <UserProvider>
+      <LanguageNavProvider>
+        <RouterProvider router={router} />
+      </LanguageNavProvider>
+    </UserProvider>
   </ApolloProvider>
 );
 
