@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-export default function IngredientDrop({
+export default function AmountDropDown({
   options = [],
   label,
   onSelect,
@@ -22,7 +22,7 @@ export default function IngredientDrop({
     <div className="flex flex-row items-end gap-[1vw] flex-1 my-1">
       <div className="flex flex-row items-end w-[100%] gap-[1vw] h-[4vh]">
         <button
-          className="flex-1 bg-white h-[100%] text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
+          className="flex-1 bg-stone-100 h-[100%] text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
           onClick={handleToggle}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
@@ -34,14 +34,14 @@ export default function IngredientDrop({
           value={recipeData?.getRecipeById?.name || recipeName} */
           type="number"
           placeholder="0"
-          className="px-3 py-0.5 w-[80px] bg-white rounded-md"
+          className="px-3 w-[80px] bg-stone-100 rounded-md"
         />
         <p>{selectedOption?.measurement || ' '}</p>
       </div>
       {/* Dropdown Options */}
       {isOpen && (
         <ul
-          className="absolute z-10 mt-1 w-[30vw] bg-white shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
+          className="absolute z-10 mt-1 w-[30vw] bg-stone-100 shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
           role="listbox"
         >
           {options.length > 0 ? (

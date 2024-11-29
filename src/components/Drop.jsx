@@ -20,7 +20,7 @@ export default function Drop({
   };
 
   return (
-    <div className="flex flex-col mb-2 w-[100%]">
+    <div className="flex flex-col mb-1 pr-4 w-[100%]">
       {label && (
         <label
           htmlFor="input-field"
@@ -30,7 +30,7 @@ export default function Drop({
         </label>
       )}
       <button
-        className="w-[100%] bg-white text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
+        className="w-[100%] bg-stone-100 text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
         onClick={handleToggle}
         aria-haspopup="listbox"
         aria-expanded={isOpen}

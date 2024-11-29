@@ -3,62 +3,45 @@ import TextInput from "./TextInput";
 import { useQuery } from "@apollo/client";
 import { GET_INGREDIENTS, GET_RECIPE_BY_ID } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
 import plus from "../assets/icons/plus.png";
-import IngredientDrop from "./IngredientDrop";
+import IngredientDrop from "./AmountDropDown";
+import Drop from '../components/Drop'
 
 const Recipe = () => {
   const cakeId = "1";
   const [recipeName, setRecipeName] = useState("");
-  const [steps, setSteps] = useState([""]); // Holds steps text inputs
-  const [ingredients, setIngredients] = useState([""]); // Holds ingredients dropdowns
-  const { loading, error, data } = useQuery(GET_INGREDIENTS);
-  const { data: recipeData, loading: recipeLoading } = useQuery(
-    GET_RECIPE_BY_ID,
-    {
-      variables: { id: cakeId },
-      skip: !cakeId // Skip query if no ID is provided
-    }
-  );
+  const [steps, setSteps] = useState([""]);
+  const [ingredients, setIngredients] = useState([""]);
+  const [phases, setPhases] = useState([""]);
+  const [tags, setTags] = useState([""]);
+  const { data: allIngredient } = useQuery(GET_INGREDIENTS);
+  const { data: recipeData } = useQuery(GET_RECIPE_BY_ID, {
+    variables: { id: cakeId },
+    skip: !cakeId
+  });
 
-  // Pre-fill data when cake ID is provided
   useEffect(() => {
     if (recipeData?.getRecipeById) {
-      setRecipeName(recipeData.getRecipeById.name || "");
-      setSteps(recipeData.getRecipeById.steps || [""]);
-      setIngredients(
-        recipeData.getRecipeById.ingredients.map((ing) => ing.id) || [""]
-      );
+      const recipe = recipeData.getRecipeById;
+      setRecipeName(recipe.name || "");
+      setSteps(recipe.steps || [""]);
+      setIngredients(recipe.ingredients.map((ing) => ing.id) || [""]);
+      setPhases(recipe.phases || [""]);
+      setTags(recipe.tags || [""]);
     }
   }, [recipeData]);
 
-  const addStep = () => setSteps([...steps, ""]);
-  const addIngredient = () => setIngredients([...ingredients, ""]);
-
-  const deleteIngredient = (index) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
-
-  const deleteStep = (index) => {
-    setSteps(steps.filter((_, i) => i !== index));
-  };
-
-  const handleStepChange = (index, value) => {
-    const updatedSteps = [...steps];
-    updatedSteps[index] = value;
-    setSteps(updatedSteps);
-  };
-
-  const handleIngredientChange = (index, value) => {
-    const updatedIngredients = [...ingredients];
-    updatedIngredients[index] = value;
-    setIngredients(updatedIngredients);
-  };
-
-  const handleChangeName = (value) => {
-    setRecipeName(value);
-  };
+  const addField = (stateSetter) => stateSetter((prev) => [...prev, ""]);
+  const removeField = (stateSetter, index) =>
+    stateSetter((prev) => prev.filter((_, i) => i !== index));
+  const updateField = (stateSetter, index, value) =>
+    stateSetter((prev) => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
 
   return (
-    <div className="flex flex-col p-[2vw] bg-slate-300 h-[100vh]">
+    <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg">
       <div className="h-[20vh] w-full flex flex-row">
         <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
           Receptek
@@ -77,8 +60,8 @@ const Recipe = () => {
               Név
             </label>
             <TextInput
-              onChange={(e) => handleChangeName(e.target.value)}
-              value={recipeData?.getRecipeById?.name || recipeName}
+              value={recipeName}
+              onChange={(e) => setRecipeName(e.target.value)}
             />
           </div>
           <div className="w-'1/3' flex flex-col items-start">
@@ -94,20 +77,21 @@ const Recipe = () => {
                 className="flex flex-row items-end gap-[2px] w-[100%]"
               >
                 <IngredientDrop
-                  label={index < 1 && `Hozzávalók`}
-                  options={data?.getIngredients || []}
+                  options={allIngredient?.getIngredients || []}
                   value={ingredient}
-                  onChange={(value) => handleIngredientChange(index, value)}
+                  onChange={(value) =>
+                    updateField(setIngredients, index, value)
+                  }
                 />
                 <button
-                  className="w-[30px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                  onClick={addIngredient}
+                  className="w-[22px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                  onClick={() => addField(setIngredients)}
                 >
                   <img src={plus} alt="plus" />
                 </button>
                 <button
-                  className="w-[30px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                  onClick={() => deleteIngredient(index)}
+                  className="w-[22px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                  onClick={() => removeField(setIngredients, index)}
                 >
                   <img src={plus} alt="plus" />
                 </button>
@@ -127,17 +111,17 @@ const Recipe = () => {
               <TextInput
                 label={index < 1 && `Lépések`}
                 defaultValue={step}
-                onChange={(e) => handleStepChange(index, e.target.value)}
+                onChange={(e) => updateField(setSteps, index, e.target.value)}
               />
               <button
-                className="w-[30px] h-[30px] flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                onClick={addStep}
+                className="w-[22px] h-[22px] flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                onClick={() => addField(setSteps)}
               >
                 <img src={plus} alt="plus" />
               </button>
               <button
-                className="w-[30px] rotate-45 h-[30px] flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                onClick={() => deleteStep(index)}
+                className="w-[22px] rotate-45 h-[22px] flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                onClick={() => removeField(setSteps, index)}
               >
                 <img src={plus} alt="plus" />
               </button>
@@ -151,26 +135,25 @@ const Recipe = () => {
               >
                 Fázisok
               </label>
-              {ingredients.map((ingredient, index) => (
+              {phases.map((phase, index) => (
                 <div
                   key={index}
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
                   <IngredientDrop
-                    label={index < 1 && `Hozzávalók`}
-                    options={data?.getIngredients || []}
-                    value={ingredient}
-                    onChange={(value) => handleIngredientChange(index, value)}
+                    options={[]}
+                    value={phase}
+                    onChange={(e) => updateField(setPhases, index, e.target.value)}
                   />
                   <button
-                    className="w-[30px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                    onClick={addIngredient}
+                    className="w-[22px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                    onClick={() => addField(setPhases)}
                   >
                     <img src={plus} alt="plus" />
                   </button>
                   <button
-                    className="w-[30px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                    onClick={() => deleteIngredient(index)}
+                    className="w-[22px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                    onClick={() => removeField(setPhases, index)}
                   >
                     <img src={plus} alt="plus" />
                   </button>
@@ -184,26 +167,25 @@ const Recipe = () => {
               >
                 Tagek
               </label>
-              {ingredients.map((ingredient, index) => (
+              {tags.map((tag, index) => (
                 <div
                   key={index}
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
-                  <IngredientDrop
-                    label={index < 1 && `Hozzávalók`}
-                    options={data?.getIngredients || []}
-                    value={ingredient}
-                    onChange={(value) => handleIngredientChange(index, value)}
+                  <Drop
+                    options={[]}
+                    value={tag}
+                    onChange={(e) => updateField(setTags, index, e.target.value)}
                   />
                   <button
-                    className="w-[30px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                    onClick={addIngredient}
+                    className="w-[22px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                    onClick={() => addField(setTags)}
                   >
                     <img src={plus} alt="plus" />
                   </button>
                   <button
-                    className="w-[30px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                    onClick={() => deleteIngredient(index)}
+                    className="w-[22px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+                    onClick={() => removeField(setTags, index)}
                   >
                     <img src={plus} alt="plus" />
                   </button>

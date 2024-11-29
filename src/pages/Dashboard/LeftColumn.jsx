@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import NavButton from "../../components/NavButton";
 import plus from "../../assets/icons/plus.png";
 import menu from "../../assets/icons/menu.png";
-import Logout from "../../components/Logout";
 
 export default function LeftColumn() {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,7 +11,7 @@ export default function LeftColumn() {
   };
 
   return (
-    <div className="relative h-[100%] bg-black">
+    <div className="relative z-20 h-[100%] bg-black">
       {/* Button to toggle the LeftColumn */}
       <button
         onClick={toggleLeftColumn}
@@ -41,7 +40,8 @@ export default function LeftColumn() {
         {[
           ["készlet", "stock"],
           ["naptár", "uprightarrow"],
-          ["recept", "plus"]
+          ["recept", "plus"],
+          ["kijelentkezés", "logout"]
         ].map((el) => (
           <NavButton
             setIsVisible={setIsVisible}
@@ -50,7 +50,6 @@ export default function LeftColumn() {
             icon={el[1]}
           />
         ))}
-        <Logout />
       </div>
     </div>
   );
