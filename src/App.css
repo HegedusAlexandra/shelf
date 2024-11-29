@@ -46,3 +46,7 @@
 .smooth-scroll {
   scroll-behavior: smooth; /* Enables smooth scrolling */
 }
+
+.box-shadow{
+  box-shadow: rgb(156, 118, 13) 0px 18px 30px -12px;
+}

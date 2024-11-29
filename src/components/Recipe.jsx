@@ -41,7 +41,7 @@ const Recipe = () => {
     });
 
   return (
-    <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg">
+    <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row">
         <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
           Receptek
