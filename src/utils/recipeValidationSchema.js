@@ -27,7 +27,6 @@ const RecipeValidationSchema = Yup.object().shape({
         preparationMethod: Yup.string().required(
           "Preparation method is required."
         ),
-        bakingMethod: Yup.string().required("Baking method is required."),
         time: Yup.number()
           .positive("Time must be greater than zero.")
           .required("Time is required."),

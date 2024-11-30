@@ -1,17 +1,19 @@
+/* same ingredient multiply times, minus ingredient, error handling */
+
 import React, { memo, useState, useEffect } from "react";
 import TextInput from "./TextInput";
 import { useQuery } from "@apollo/client";
 import { GET_INGREDIENTS, GET_RECIPE_BY_ID } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
-import { ADD_RECIPE } from "../utils/graphql/mutations"; 
+import { ADD_RECIPE } from "../utils/graphql/mutations";
 import plus from "../assets/icons/plus.png";
 import IngredientDrop from "./IngredientDropDown";
 import AmountDropDown from "./AmountDropDown";
 import Drop from "../components/Drop";
 import { useUser } from "../contexts/UserProvider";
 import Button from "./Button";
-import RecipeValidationSchema from '../utils/recipeValidationSchema'
+import RecipeValidationSchema from "../utils/recipeValidationSchema";
 import { useMutation } from "@apollo/client";
-import { BakingMethod, PreparationMethod, TagType } from "../utils/Enum";
+import {  PreparationMethod, TagType } from "../utils/Enum";
 
 const Recipe = () => {
   const cakeId = "1";
@@ -56,16 +58,11 @@ const Recipe = () => {
       recipeName,
       steps,
       ingredients,
-      phases: phases.map((phase) => ({
-        preparationMethod: phase.preparationMethod || "",
-        bakingMethod: phase.bakingMethod || "",
-        time: phase.time || 0,
-        temperature: phase.temperature || 0
-      })),
+      phases,
       tags
     };
 
-    console.log(recipeData)
+    console.log(recipeData);
 
     try {
       await RecipeValidationSchema.validate(recipeData, { abortEarly: false }); // Validates the entire data structure
@@ -138,7 +135,7 @@ const Recipe = () => {
             >
               Hozzávalók
             </label>
-            {ingredients.map((ingredient,index) => (
+            {ingredients.map((ingredient, index) => (
               <div
                 key={index}
                 className="flex flex-row items-end gap-[2px] w-[100%] "
@@ -208,20 +205,14 @@ const Recipe = () => {
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
                   <div className="w-full">
-                  <AmountDropDown
-                    options={Object.values(PreparationMethod)}
-                    value={phase}
-                    onChange={(e) =>
-                      updateField(setPhases, index, e.target.value)
-                    }
-                  />
-                  <AmountDropDown
-                    options={Object.values(BakingMethod)}
-                    value={phase}
-                    onChange={(e) =>
-                      updateField(setPhases, index, e.target.value)
-                    }
-                  /></div>
+                    <AmountDropDown
+                      options={Object.values(PreparationMethod)}
+                      value={phase}
+                      onChange={(value) =>
+                        updateField(setPhases, index, value)
+                      }
+                    />
+                  </div>
                   <button
                     className="w-[22px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
                     onClick={() => addField(setPhases)}

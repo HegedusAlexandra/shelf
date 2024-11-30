@@ -21,18 +21,15 @@ const TagType = Object.freeze({
 });
 
 const PreparationMethod = Object.freeze({
-  PASSIVE_TIME: "PASSIVE_TIME",
-  SHAPING: "SHAPING",
-  RESTING: "RESTING",
-  DECORATION: "DECORATION",
-  BAKING: "BAKING",
-});
-
-const BakingMethod = Object.freeze({
-  NONE: "NONE",
-  DRY_BAKING: "DRY_BAKING",
-  STEAM_BAKING: "STEAM_BAKING",
-  STEAM_AND_DRY_BAKING: "STEAM_AND_DRY_BAKING",
+  PASSIVE_TIME: 'PASSIVE_TIME',
+  SHAPING: 'SHAPING',
+  MIXING: 'MIXING',
+  RESTING:'RESTING',
+  DECORATION: 'DECORATION',
+  BAKING: 'BAKING',
+  OTHER: 'OTHER',
+  STEAMING: 'STEAMING',
+  STEAMBAKING: 'STEAMBAKING'
 });
 
 // Language and Navigation Constants
@@ -53,4 +50,4 @@ const Sitemap = Object.freeze({
 });
 
 // Exporting all constants
-export { TagType, PreparationMethod, BakingMethod, Language, Sitemap, Navigation };
+export { TagType, PreparationMethod, Language, Sitemap, Navigation };
