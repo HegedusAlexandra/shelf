@@ -138,13 +138,14 @@ const Recipe = () => {
             >
               Hozzávalók
             </label>
-            {ingredients.map((index) => (
+            {ingredients.map((ingredient,index) => (
               <div
                 key={index}
                 className="flex flex-row items-end gap-[2px] w-[100%] "
               >
                 <IngredientDrop
                   options={allIngredient?.getIngredients || []}
+                  value={ingredient}
                   onChange={(value) =>
                     updateField(setIngredients, index, value)
                   }
@@ -165,7 +166,7 @@ const Recipe = () => {
             ))}
           </div>
         </div>
-        <div className="w-1/2 h-[72vh] flex flex-col items-start p-[1vw] overflow-y-scroll hide-scrollbar">
+        <div className="w-2/3 h-[72vh] flex flex-col items-start p-[1vw] overflow-y-scroll hide-scrollbar">
           <label
             htmlFor="input-field"
             className="text-xs font-medium text-gray-700 mb-2"

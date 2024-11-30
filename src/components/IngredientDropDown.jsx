@@ -5,21 +5,24 @@ export default function IngredientDropDown({
   onChange,
   placeholder = "Select an option",
 }) {
-  const [isOpen, setIsOpen] = useState(false); 
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedAmount, setSelectedAmount] = useState(null);
+  const [isOpen, setIsOpen] = useState(false); // Dropdown open/close state
+  const [selectedOption, setSelectedOption] = useState(null); // Selected option
+  const [selectedAmount, setSelectedAmount] = useState(""); // Selected amount
 
   const handleToggle = () => setIsOpen((prev) => !prev);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    // Clear amount when a new option is selected
+    setSelectedAmount("");
   };
 
   const handleSave = (amount) => {
-    setSelectedAmount(amount)
-    if (onChange && selectedOption) {
-      onChange({ id: selectedOption.id, amount: amount });
+    setSelectedAmount(amount);
+    // Validate and pass data to parent
+    if (onChange && selectedOption && amount) {
+      onChange({ id: selectedOption.id, amount: parseFloat(amount) });
     }
   };
 
@@ -40,9 +43,7 @@ export default function IngredientDropDown({
           placeholder="0"
           className="px-3 w-[80px] bg-stone-100 rounded-md border border-gray-300"
           value={selectedAmount || ""}
-          onChange={(e) =>
-            handleSave(e.target.value)
-          }
+          onChange={(e) => handleSave(e.target.value)}
         />
         <p>{selectedOption?.measurement || "No unit"}</p>
       </div>
