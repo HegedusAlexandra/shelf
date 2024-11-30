@@ -14,7 +14,7 @@ export default function DropTag({
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     if (onChange) {
-      onChange(option);
+      onChange({tag_type:option.toLowerCase()});
       setIsOpen(false);
     }
   };

@@ -1,14 +1,17 @@
 import * as Yup from "yup";
 
 const RecipeValidationSchema = Yup.object().shape({
-  recipeName: Yup.string()
-    .trim()
-    .required("Recipe name is required."),
+  recipeName: Yup.string().required("Recipe name is required."),
   steps: Yup.array()
     .of(
-      Yup.string()
-        .trim()
-        .required("Each step must have a description.")
+      Yup.object().shape({
+        order: Yup.number()
+          .required("Step order is required.")
+          .typeError("Step order must be a number."),
+        description: Yup.string()
+          .required("Step description is required.")
+          .typeError("Step description must be a string."),
+      })
     )
     .min(1, "At least one step is required."),
   ingredients: Yup.array()
@@ -20,11 +23,18 @@ const RecipeValidationSchema = Yup.object().shape({
           .required("Ingredient amount is required."),
       })
     )
-    .min(1, "At least one ingredient is required."),
+    .min(1, "At least one ingredient is required.")
+    .test(
+      "unique-ingredients",
+      "Ingredients must be unique.",
+      (ingredients) =>
+        Array.isArray(ingredients) &&
+        ingredients.length === new Set(ingredients.map((i) => i.id)).size
+    ),
   phases: Yup.array()
     .of(
       Yup.object().shape({
-        preparationMethod: Yup.string().required(
+        preparation_method: Yup.string().required(
           "Preparation method is required."
         ),
         time: Yup.number()
@@ -38,11 +48,14 @@ const RecipeValidationSchema = Yup.object().shape({
     .min(1, "At least one phase is required."),
   tags: Yup.array()
     .of(
-      Yup.string()
-        .trim()
-        .required("Tag cannot be empty.")
+      Yup.object().shape({
+        tag_type: Yup.string()
+          .required("Tag name is required.")
+          .typeError("Tag name must be a string."),
+      })
     )
     .min(1, "At least one tag is required."),
 });
+
 
 export default RecipeValidationSchema;

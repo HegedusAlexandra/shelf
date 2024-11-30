@@ -20,7 +20,7 @@ const TagType = Object.freeze({
   VEGETARIAN: "vegetarian",
 });
 
-const PreparationMethod = Object.freeze({
+const preparation_method = Object.freeze({
   PASSIVE_TIME: 'PASSIVE_TIME',
   SHAPING: 'SHAPING',
   MIXING: 'MIXING',
@@ -50,4 +50,4 @@ const Sitemap = Object.freeze({
 });
 
 // Exporting all constants
-export { TagType, PreparationMethod, Language, Sitemap, Navigation };
+export { TagType, preparation_method, Language, Sitemap, Navigation };

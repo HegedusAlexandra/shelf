@@ -30,7 +30,7 @@ export default function DropAmount({
 
   useEffect(() => {
     onChange({
-      preparationMethod: selectedOption,
+      preparation_method: selectedOption,
       time: selectedMin,
       temperature: selectedDegree,
     });

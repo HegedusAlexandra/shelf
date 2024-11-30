@@ -13,7 +13,8 @@ import { useUser } from "../contexts/UserProvider";
 import Button from "./Button";
 import RecipeValidationSchema from "../utils/recipeValidationSchema";
 import { useMutation } from "@apollo/client";
-import {  PreparationMethod, TagType } from "../utils/Enum";
+import {  preparation_method, TagType } from "../utils/Enum";
+import NameInput from "./NameInput";
 
 const Recipe = () => {
   const cakeId = "1";
@@ -30,7 +31,6 @@ const Recipe = () => {
     skip: !cakeId
   });
   const user = useUser();
-  console.log("User UUID:", user?.id);
 
   useEffect(() => {
     if (recipeData?.getRecipeById) {
@@ -53,43 +53,42 @@ const Recipe = () => {
       return updated;
     });
 
-  const submitRecipe = async () => {
-    const recipeData = {
-      recipeName,
-      steps,
-      ingredients,
-      phases,
-      tags
-    };
-
-    console.log(recipeData);
-
-    try {
-      await RecipeValidationSchema.validate(recipeData, { abortEarly: false }); // Validates the entire data structure
-      console.log("Validation successful:", recipeData);
-
-      addRecipe({
-        variables: recipeData
-      })
-        .then((response) => {
-          console.log("Recipe added successfully:", response.data.addRecipe);
-          alert("Recipe added successfully!");
-        })
-        .catch((err) => {
-          console.error("Error adding recipe:", err);
+    const submitRecipe = async () => {
+      const recipeData = {
+        userId: user.id,
+        recipeName,
+        steps,
+        ingredients,
+        phases,
+        tags,
+      };
+    
+      try {
+        // Validate the recipe data
+        await RecipeValidationSchema.validate(recipeData, { abortEarly: false });
+        console.log("Validation successful:", recipeData);
+    
+        // Add the recipe
+        const response = await addRecipe({
+          variables: recipeData,
         });
-    } catch (validationErrors) {
-      console.error("Validation failed:", validationErrors.inner);
-      const formattedErrors = validationErrors.inner.reduce(
-        (acc, err) => ({
-          ...acc,
-          [err.path]: err.message
-        }),
-        {}
-      );
-      setErrors(formattedErrors); // Map Yup errors to your component state
-    }
-  };
+        console.log("Recipe added successfully:", response.data.addRecipe);
+        alert("Recipe added successfully!");
+      } catch (err) {
+        if (err.name === "ValidationError") {
+          const validationErrors = {};
+          err.inner.forEach((error) => {
+            validationErrors[error.path] = error.message;
+          });
+          setErrors(validationErrors);
+          console.error("Validation errors:", validationErrors);
+        } else {
+          console.error("Error submitting recipe:", err);
+          alert("An unexpected error occurred.");
+        }
+      }
+    };
+    
 
   return (
     <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg box-shadow">
@@ -122,7 +121,7 @@ const Recipe = () => {
               Név
             </label>
             <div className="w-full pb-3">
-              <TextInput
+              <NameInput
                 value={recipeName}
                 onChange={(e) => setRecipeName(e.target.value)}
               />
@@ -174,8 +173,9 @@ const Recipe = () => {
             <div key={index} className="flex flex-row items-end w-full">
               <TextInput
                 label={index < 1 && `Lépések`}
+                index={index}
                 value={step}
-                onChange={(e) => updateField(setSteps, index, e.target.value)}
+                onChange={(value) => updateField(setSteps, index, value )}
               />
               <button
                 className="w-[22px] h-[22px] flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
@@ -206,7 +206,7 @@ const Recipe = () => {
                 >
                   <div className="w-full">
                     <DropAmount
-                      options={Object.values(PreparationMethod)}
+                      options={Object.values(preparation_method)}
                       value={phase}
                       onChange={(value) =>
                         updateField(setPhases, index, value)
@@ -316,19 +316,16 @@ export default memo(Recipe);
      phases: [
        {
         preparation_method: SHAPING, # Use exact enum values (case-sensitive, unquoted)
-        baking_method: NONE,         # Enum value for no baking method
         time: 10,
         temperature: 0
       },
       {
         preparation_method: BAKING,
-        baking_method: DRY_BAKING,
         time: 10,
         temperature: 180
       },
       {
         preparation_method: DECORATION,
-        baking_method: NONE,
         time: 10,
         temperature: 0
       }
