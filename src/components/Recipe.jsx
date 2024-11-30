@@ -1,4 +1,4 @@
-/* same ingredient multiply times, minus ingredient, error handling */
+/* same ingredient multiply times, minus ingredient, error handling , null it if sent and give feedback*/
 
 import React, { memo, useState, useEffect } from "react";
 import TextInput from "./TextInput";
@@ -89,7 +89,9 @@ const Recipe = () => {
       }
     };
     
-
+console.log('====================================');
+console.log(tags);
+console.log('====================================');
   return (
     <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row pb-2">

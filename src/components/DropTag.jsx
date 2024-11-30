@@ -14,7 +14,7 @@ export default function DropTag({
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     if (onChange) {
-      onChange({tag_type:option.toLowerCase()});
+      onChange({ tag_type: option });
       setIsOpen(false);
     }
   };
@@ -37,8 +37,6 @@ export default function DropTag({
       >
         {selectedOption ? selectedOption : placeholder}
       </button>
-
-      {/* Dropdown Options */}
       {isOpen && (
         <ul
           className="absolute z-10 mt-1 w-[30vw] bg-white shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
