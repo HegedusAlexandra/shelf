@@ -35,7 +35,7 @@ const Recipe = () => {
       const recipe = recipeData.getRecipeById;
       setRecipeName(recipe.name || "");
       setSteps(recipe.steps || [""]);
-      setIngredients(recipe.ingredients.map((ing) => ing.id) || [""]);
+      setIngredients([""]);
       setPhases(recipe.phases || [""]);
       setTags(recipe.tags || [""]);
     }
@@ -55,10 +55,7 @@ const Recipe = () => {
     const recipeData = {
       recipeName,
       steps,
-      ingredients: ingredients.map((ing) => ({
-        id: ing, // Ensure this matches the actual `id` format from your state
-        amount: 100 // Add a default or dynamic value for amount
-      })),
+      ingredients,
       phases: phases.map((phase) => ({
         preparationMethod: phase.preparationMethod || "",
         bakingMethod: phase.bakingMethod || "",
@@ -119,7 +116,7 @@ const Recipe = () => {
         </div>
       </div>
       <div className="w-full flex flex-row">
-        <div className="w-1/3 p-[1vw] h-[72vh] overflow-y-scroll hide-scrollbar">
+        <div className="w-1/2 p-[1vw] h-[72vh] overflow-y-scroll hide-scrollbar">
           <div className="w-[100%] flex flex-col items-start">
             <label
               htmlFor="input-field"
@@ -141,14 +138,13 @@ const Recipe = () => {
             >
               Hozzávalók
             </label>
-            {ingredients.map((ingredient, index) => (
+            {ingredients.map((index) => (
               <div
                 key={index}
                 className="flex flex-row items-end gap-[2px] w-[100%] "
               >
                 <IngredientDrop
                   options={allIngredient?.getIngredients || []}
-                  value={ingredient}
                   onChange={(value) =>
                     updateField(setIngredients, index, value)
                   }
@@ -169,7 +165,7 @@ const Recipe = () => {
             ))}
           </div>
         </div>
-        <div className="w-2/3 h-[72vh] flex flex-col items-start p-[1vw] overflow-y-scroll hide-scrollbar">
+        <div className="w-1/2 h-[72vh] flex flex-col items-start p-[1vw] overflow-y-scroll hide-scrollbar">
           <label
             htmlFor="input-field"
             className="text-xs font-medium text-gray-700 mb-2"

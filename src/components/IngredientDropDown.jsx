@@ -2,20 +2,25 @@ import React, { useState } from "react";
 
 export default function IngredientDropDown({
   options = [],
-  onSelect,
+  onChange,
   placeholder = "Select an option",
 }) {
-  const [isOpen, setIsOpen] = useState(false); // Dropdown open/close state
-  const [selectedOption, setSelectedOption] = useState(null); // Current selection
+  const [isOpen, setIsOpen] = useState(false); 
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedAmount, setSelectedAmount] = useState(null);
 
   const handleToggle = () => setIsOpen((prev) => !prev);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option); // Update selected option
-    if (onSelect) {
-      onSelect(option); // Notify parent with the entire option object
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
+  const handleSave = (amount) => {
+    setSelectedAmount(amount)
+    if (onChange && selectedOption) {
+      onChange({ id: selectedOption.id, amount: amount });
     }
-    setIsOpen(false); // Close dropdown
   };
 
   return (
@@ -34,19 +39,13 @@ export default function IngredientDropDown({
           type="number"
           placeholder="0"
           className="px-3 w-[80px] bg-stone-100 rounded-md border border-gray-300"
+          value={selectedAmount || ""}
           onChange={(e) =>
-            setSelectedOption((prev) => ({
-              ...prev,
-              amount: e.target.value, // Update amount dynamically
-            }))
+            handleSave(e.target.value)
           }
         />
-
-        {/* Measurement Unit */}
-        <p>{selectedOption?.measurement || " "}</p>
+        <p>{selectedOption?.measurement || "No unit"}</p>
       </div>
-
-      {/* Dropdown Options */}
       {isOpen && (
         <ul
           className="absolute z-10 mt-1 w-[30vw] bg-stone-100 shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
