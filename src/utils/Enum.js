@@ -18,6 +18,7 @@ const TagType = Object.freeze({
   NUT_FREE: "NUT_FREE",
   VEGAN: "VEGAN",
   VEGETARIAN: "VEGETARIAN",
+  NEW:"NEW"
 });
 
 const preparation_method = Object.freeze({
