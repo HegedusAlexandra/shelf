@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function IngredientDropDown({
+export default function DropIngredient({
   options = [],
   onChange,
   placeholder = "Select an option",

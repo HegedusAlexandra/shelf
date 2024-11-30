@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-export default function Drop({
+export default function DropTag({
   options = [],
   label,
-  onSelect,
+  onChange,
   placeholder = "Select an option"
 }) {
   const [isOpen, setIsOpen] = useState(false); // Dropdown open/close state
@@ -12,11 +12,11 @@ export default function Drop({
   const handleToggle = () => setIsOpen((prev) => !prev);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option); // Update selected option
-    if (onSelect) {
-      onSelect(option); // Notify parent of the selection
+    setSelectedOption(option);
+    if (onChange) {
+      onChange(option);
+      setIsOpen(false);
     }
-    setIsOpen(false); // Close dropdown
   };
 
   return (

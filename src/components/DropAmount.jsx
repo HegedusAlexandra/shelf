@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { PreparationMethod } from "../utils/Enum";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-export default function IngredientDropDown({
+export default function DropAmount({
   options = [],
   onChange,
   placeholder = "Select an option",
 }) {
-  const [isOpen, setIsOpen] = useState(false); // Dropdown open/close state
-  const [selectedOption, setSelectedOption] = useState(null); // Selected option
-  const [selectedDegree, setSelectedDegree] = useState(""); // Selected Degree
-  const [selectedMin, setSelectedMin] = useState(""); // Selected Degree
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedDegree, setSelectedDegree] = useState(0);
+  const [selectedMin, setSelectedMin] = useState(0);
 
   const handleToggle = () => setIsOpen((prev) => !prev);
 
@@ -18,56 +18,66 @@ export default function IngredientDropDown({
     setIsOpen(false);
   };
 
-  const handleSave = (value) => {
-    setSelectedMin(value);
-    if (onChange && selectedOption && selectedDegree && selectedMin) {
-      onChange({ preparationMethod: selectedOption, time: selectedMin, temperature: selectedDegree });
-    }
+  const handleDegreeChange = (e) => {
+    const value = e.target.value;
+    setSelectedDegree(value === "" ? 0 : parseFloat(value));
   };
+
+  const handleTimeChange = (e) => {
+    const value = e.target.value;
+    setSelectedMin(value === "" ? 0 : parseFloat(value));
+  };
+
+  useEffect(() => {
+    onChange({
+      preparationMethod: selectedOption,
+      time: selectedMin,
+      temperature: selectedDegree,
+    });
+  }, [selectedOption, selectedDegree, selectedMin]);
 
   return (
     <div className="relative flex flex-row items-center gap-[1vw] flex-1 my-1">
       <div className="flex flex-row items-center w-[100%] gap-[1vw] h-[4vh]">
-        {/* Dropdown button */}
         <button
           className="flex-1 bg-stone-100 h-[100%] text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
           onClick={handleToggle}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
         >
-          {selectedOption ? selectedOption : placeholder}
+          {selectedOption ? selectedOption.toLowerCase() : placeholder}
         </button>
         <input
           type="number"
           placeholder="0"
           className="px-3 w-[80px] bg-stone-100 rounded-md border border-gray-300"
-          value={selectedDegree || ""}
-          onChange={e => setSelectedDegree(e.target.value)}
+          value={selectedDegree}
+          onChange={handleDegreeChange}
         />
         <p>°C</p>
         <input
           type="number"
           placeholder="0"
           className="px-3 w-[80px] bg-stone-100 rounded-md border border-gray-300"
-          value={selectedMin || ""}
-          onChange={(e) => handleSave(e.target.value)}
+          value={selectedMin}
+          onChange={handleTimeChange}
         />
         <p className="pr-[20px]">perc</p>
       </div>
       {isOpen && (
         <ul
-          className="absolute z-10 mt-1 w-[30vw] bg-stone-100 shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
+          className="absolute z-10 mt-1 w-[44vw] text-gray-600 bg-stone-100 shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
           role="listbox"
         >
           {options.length > 0 ? (
             options.map((option, index) => (
               <li
-                key={option.id || index} // Ensure unique keys
+                key={index}
                 className={`px-4 py-2 cursor-pointer hover:bg-white ${
-                  selectedOption?.id === option.id ? "bg-sky-200 font-bold" : ""
+                  selectedOption === option ? "bg-stone-100 font-bold" : ""
                 }`}
                 role="option"
-                aria-selected={selectedOption?.id === option.id}
+                aria-selected={selectedOption === option}
                 onClick={() => handleOptionClick(option)}
               >
                 {option}
@@ -81,3 +91,9 @@ export default function IngredientDropDown({
     </div>
   );
 }
+
+DropAmount.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+};

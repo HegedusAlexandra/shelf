@@ -6,9 +6,9 @@ import { useQuery } from "@apollo/client";
 import { GET_INGREDIENTS, GET_RECIPE_BY_ID } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
 import { ADD_RECIPE } from "../utils/graphql/mutations";
 import plus from "../assets/icons/plus.png";
-import IngredientDrop from "./IngredientDropDown";
-import AmountDropDown from "./AmountDropDown";
-import Drop from "../components/Drop";
+import DropIngredient from "./DropIngredient";
+import DropAmount from "./DropAmount";
+import DropTag from "./DropTag";
 import { useUser } from "../contexts/UserProvider";
 import Button from "./Button";
 import RecipeValidationSchema from "../utils/recipeValidationSchema";
@@ -140,7 +140,7 @@ const Recipe = () => {
                 key={index}
                 className="flex flex-row items-end gap-[2px] w-[100%] "
               >
-                <IngredientDrop
+                <DropIngredient
                   options={allIngredient?.getIngredients || []}
                   value={ingredient}
                   onChange={(value) =>
@@ -205,7 +205,7 @@ const Recipe = () => {
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
                   <div className="w-full">
-                    <AmountDropDown
+                    <DropAmount
                       options={Object.values(PreparationMethod)}
                       value={phase}
                       onChange={(value) =>
@@ -240,11 +240,11 @@ const Recipe = () => {
                   key={index}
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
-                  <Drop
+                  <DropTag
                     options={Object.keys(TagType)}
                     value={tag}
-                    onChange={(e) =>
-                      updateField(setTags, index, e.target.value)
+                    onChange={(value) =>
+                      updateField(setTags, index, value)
                     }
                   />
                   <button
