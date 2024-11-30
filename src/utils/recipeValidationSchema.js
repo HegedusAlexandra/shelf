@@ -41,7 +41,6 @@ const RecipeValidationSchema = Yup.object().shape({
           .positive("Time must be greater than zero.")
           .required("Time is required."),
         temperature: Yup.number()
-          .min(0, "Temperature cannot be negative.")
           .required("Temperature is required."),
       })
     )
