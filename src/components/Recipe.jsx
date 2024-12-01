@@ -89,23 +89,9 @@ const Recipe = () => {
       }
     };
     
-console.log('====================================');
-console.log(tags);
-console.log('====================================');
   return (
-    <div className="flex flex-col p-[2vw] bg-[#fff] backdrop-blur-lg h-[92vh] m-[4vh] rounded-lg box-shadow">
+    <div className="flex flex-col w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row pb-2">
-        <div
-          style={{
-            position: "absolute",
-            width: 0,
-            height: 0,
-            borderLeft: "100px solid transparent",
-            borderRight: "100px solid transparent",
-            borderTop: "100px solid #fccb62",
-            transform: "translate(-40%, -50%)"
-          }}
-        ></div>
         <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
           Receptek
         </h1>
@@ -113,8 +99,8 @@ console.log('====================================');
           kép feltöltése
         </div>
       </div>
-      <div className="w-full flex flex-row">
-        <div className="w-1/2 p-[1vw] h-[72vh] overflow-y-scroll hide-scrollbar">
+      <div className="w-full flex flex-col">
+        <div className="w-full p-[1vw]">
           <div className="w-[100%] flex flex-col items-start">
             <label
               htmlFor="input-field"
@@ -164,7 +150,7 @@ console.log('====================================');
             ))}
           </div>
         </div>
-        <div className="w-2/3 h-[72vh] flex flex-col items-start p-[1vw] overflow-y-scroll hide-scrollbar">
+        <div className="w-full flex flex-col items-start p-[1vw]">
           <label
             htmlFor="input-field"
             className="text-xs font-medium text-gray-700 mb-2"
@@ -263,7 +249,7 @@ console.log('====================================');
                   </button>
                 </div>
               ))}
-              <div className="w-[20%] fixed bottom-[6vh] right-[4vw]">
+              <div className="w-[20%]">
                 <Button
                   onClick={submitRecipe}
                   variant="yellow"

@@ -11,11 +11,11 @@ export default function LeftColumn() {
   };
 
   return (
-    <div className="relative z-20 h-[100%] bg-black">
+    <div className="fixed z-20 left-[2vw] top-[2vh] h-[100%] bg-black">
       <button
         onClick={toggleLeftColumn}
         className={`absolute top-4 left-4 z-50 text-lime-200 rounded-full hover:bg-gray-700 transition-all ${
-          isVisible ? "translate-x-[28vw]" : "translate-x-0"
+          isVisible ? "translate-x-[26vw]" : "translate-x-0"
         }`}
       >
         {isVisible ? (
@@ -29,7 +29,7 @@ export default function LeftColumn() {
         )}
       </button>
       <div
-        className={`fixed top-0 left-0 h-full w-1/3 bg-pink bg-cover bg-no-repeat bg-bottom flex flex-col justify-start items-center shadow-lg transform transition-transform duration-500 ${
+        className={`fixed top-0 left-0 h-full md:w-1/3 w-5/6 bg-pink bg-cover bg-no-repeat bg-bottom flex flex-col justify-start items-center shadow-lg transform transition-transform duration-500 ${
           isVisible ? "translate-x-0" : "-translate-x-full"
         }`}
       >

@@ -54,7 +54,7 @@ export default function NavButton({ title, icon, setIsVisible }) {
   return (
     <button
       onClick={title === "kijelentkezés" ? handleLogout : handleNavigation} // Trigger navigation update on click
-      className={`w-[100%] h-[8vh] bg-transparent flex flex-row justify-between items-center px-[2vw] hover:bg-white focus:bg-[#fafafa]`}
+      className={`w-[100%] h-[8vh] bg-transparent flex flex-row justify-between items-center px-[2vw] hover:bg-white/30 backdrop-blur-lg focus:bg-[#fafafa]`}
     >
       <p
         className="text-lg text-lime-300 drop-shadow-md pr-[1vw] uppercase"
