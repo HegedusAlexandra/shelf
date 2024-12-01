@@ -90,7 +90,7 @@ const Recipe = () => {
     };
     
   return (
-    <div className="flex flex-col w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+    <div className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row pb-2">
         <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
           Receptek

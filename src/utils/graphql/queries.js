@@ -21,6 +21,15 @@ export const GET_INGREDIENTS = gql`
   }
 `;
 
+export const GET_ALL_RECIPE = gql`
+  query ($userId: String!) {
+    getRecipes(userId: $userId) {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_RECIPE_BY_ID = gql`
   query ($id: ID!) {
     getRecipeById(id: $id) {
