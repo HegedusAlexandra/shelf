@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 export default function NameInput({
   type = "text",
   placeholder = "Enter text...",
-  value = "",
-  index,
   onChange,
   required = false,
   style = "",

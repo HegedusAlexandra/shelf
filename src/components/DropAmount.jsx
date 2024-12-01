@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useClickOutside } from "../utils/hooks/useClickOutside";
 
 export default function DropAmount({
   options = [],
   onChange,
-  placeholder = "Select an option",
+  placeholder = "Select an option"
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedDegree, setSelectedDegree] = useState(0);
-  const [selectedMin, setSelectedMin] = useState(0);
-
-  const handleToggle = () => setIsOpen((prev) => !prev);
+  const [selectedDegree, setSelectedDegree] = useState();
+  const [selectedMin, setSelectedMin] = useState();
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -31,17 +30,20 @@ export default function DropAmount({
   useEffect(() => {
     onChange({
       preparation_method: selectedOption,
-      time: selectedMin,
-      temperature: selectedDegree,
+      time: selectedMin || 0,
+      temperature: selectedDegree || 0
     });
   }, [selectedOption, selectedDegree, selectedMin]);
+
+  // Use the custom hook for click outside detection
+  const dropdownRef = useClickOutside(() => setIsOpen(false));
 
   return (
     <div className="relative flex flex-row items-center gap-[1vw] flex-1 my-1">
       <div className="flex flex-row items-center w-[100%] gap-[1vw] h-[4vh]">
         <button
           className="flex-1 bg-stone-200 h-[100%] text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
-          onClick={handleToggle}
+          onClick={() => setIsOpen((prev) => !prev)}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
         >
@@ -66,6 +68,7 @@ export default function DropAmount({
       </div>
       {isOpen && (
         <ul
+          ref={dropdownRef} // Attach the ref returned by the hook
           className="absolute z-10 mt-1 w-[44vw] text-gray-600 bg-stone-200 shadow-lg rounded-md max-h-40 overflow-y-auto border border-gray-300"
           role="listbox"
         >
@@ -95,5 +98,5 @@ export default function DropAmount({
 DropAmount.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
+  placeholder: PropTypes.string
 };
