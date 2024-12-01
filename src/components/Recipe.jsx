@@ -1,8 +1,8 @@
-/* same ingredient multiply times, minus ingredient, error handling , null it if sent and give feedback*/
+/* same ingredient multiply times, minus ingredient, error handling*/
 
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useRef } from "react";
 import TextInput from "./TextInput";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_INGREDIENTS, GET_RECIPE_BY_ID } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
 import { ADD_RECIPE } from "../utils/graphql/mutations";
 import plus from "../assets/icons/plus.png";
@@ -12,9 +12,9 @@ import DropTag from "./DropTag";
 import { useUser } from "../contexts/UserProvider";
 import Button from "./Button";
 import RecipeValidationSchema from "../utils/recipeValidationSchema";
-import { useMutation } from "@apollo/client";
-import {  preparation_method, TagType } from "../utils/Enum";
+import { preparation_method, TagType } from "../utils/Enum";
 import NameInput from "./NameInput";
+import Modal from "../components/Modal";
 
 const Recipe = () => {
   const cakeId = "1";
@@ -23,6 +23,7 @@ const Recipe = () => {
   const [ingredients, setIngredients] = useState([""]);
   const [phases, setPhases] = useState([""]);
   const [tags, setTags] = useState([""]);
+  const [modal, setModal] = useState("");
   const [errors, setErrors] = useState({});
   const [addRecipe] = useMutation(ADD_RECIPE);
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
@@ -53,42 +54,64 @@ const Recipe = () => {
       return updated;
     });
 
-    const submitRecipe = async () => {
-      const recipeData = {
-        userId: user.id,
-        recipeName,
-        steps,
-        ingredients,
-        phases,
-        tags,
-      };
-    
-      try {
-        // Validate the recipe data
-        await RecipeValidationSchema.validate(recipeData, { abortEarly: false });
-        console.log("Validation successful:", recipeData);
-    
-        // Add the recipe
-        const response = await addRecipe({
-          variables: recipeData,
-        });
-        console.log("Recipe added successfully:", response.data.addRecipe);
-        alert("Recipe added successfully!");
-      } catch (err) {
-        if (err.name === "ValidationError") {
-          const validationErrors = {};
-          err.inner.forEach((error) => {
-            validationErrors[error.path] = error.message;
-          });
-          setErrors(validationErrors);
-          console.error("Validation errors:", validationErrors);
-        } else {
-          console.error("Error submitting recipe:", err);
-          alert("An unexpected error occurred.");
-        }
-      }
+  const modalRef = useRef();
+
+  const openSuccessModal = () => {
+    setModal("success");
+    modalRef.current.open();
+  };
+  const openFailModal = () => {
+    setModal("failed");
+    modalRef.current.open();
+  };
+  const closeModal = () => modalRef.current.close();
+
+  const submitRecipe = async () => {
+    const recipeData = {
+      userId: user.id,
+      recipeName,
+      steps,
+      ingredients,
+      phases,
+      tags,
     };
-    
+  
+    try {
+      // Validate the recipe data
+      await RecipeValidationSchema.validate(recipeData, { abortEarly: false });
+      console.log("Validation successful:", recipeData);
+  
+      // Add the recipe
+      const response = await addRecipe({
+        variables: recipeData,
+      });
+      console.log("Recipe added successfully:", response.data.addRecipe);
+      openSuccessModal();
+  
+      // Reset all fields including the first field
+      setRecipeName(""); // Clear the recipe name
+      setSteps([""]); // Reset steps to a single empty field
+      setIngredients([""]); // Reset ingredients to a single empty field
+      setPhases([""]); // Reset phases to a single empty field
+      setTags([""]); // Reset tags to a single empty field
+      setErrors({}); // Clear any existing validation errors
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        const validationErrors = {};
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+        console.error("Validation errors:", validationErrors);
+        openFailModal();
+      } else {
+        console.error("Error submitting recipe:", err);
+        openFailModal();
+      }
+    }
+  };
+  
+
   return (
     <div className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row pb-2">
@@ -163,7 +186,7 @@ const Recipe = () => {
                 label={index < 1 && `Lépések`}
                 index={index}
                 value={step}
-                onChange={(value) => updateField(setSteps, index, value )}
+                onChange={(value) => updateField(setSteps, index, value)}
               />
               <button
                 className="w-[22px] h-[22px] flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
@@ -196,9 +219,7 @@ const Recipe = () => {
                     <DropAmount
                       options={Object.values(preparation_method)}
                       value={phase}
-                      onChange={(value) =>
-                        updateField(setPhases, index, value)
-                      }
+                      onChange={(value) => updateField(setPhases, index, value)}
                     />
                   </div>
                   <button
@@ -231,9 +252,7 @@ const Recipe = () => {
                   <DropTag
                     options={Object.keys(TagType)}
                     value={tag}
-                    onChange={(value) =>
-                      updateField(setTags, index, value)
-                    }
+                    onChange={(value) => updateField(setTags, index, value)}
                   />
                   <button
                     className="w-[22px] h-full flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
@@ -249,19 +268,35 @@ const Recipe = () => {
                   </button>
                 </div>
               ))}
-              <div className="w-[20%]">
-                <Button
-                  onClick={submitRecipe}
-                  variant="yellow"
-                  size="sm"
-                  label="Mentsük el"
-                  disabled={!recipeName || !steps.length || !ingredients.length}
-                />
+              <div className="w-[100%] flex justify-end mt-[10vh]">
+                <div className="w-[20%]">
+                  <Button
+                    onClick={submitRecipe}
+                    variant="yellow"
+                    size="sm"
+                    label="Mentsük el"
+                    disabled={
+                      !recipeName || !steps.length || !ingredients.length
+                    }
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Modal
+        ref={modalRef}
+        title={modal === "success" ? "Elmentve" : "Nem sikerült"}
+        message={
+          modal === "success"
+            ? "Sikeresen a polcra raktad a receptet! Ne felejtsd el néha elővenni"
+            : "Nem sikerült kérlek próbáld meg később"
+        }
+        buttons={[
+          { label: "Okay", onClick: closeModal, color: "bg-orange-500" }
+        ]}
+      />
     </div>
   );
 };
