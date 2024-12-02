@@ -3,40 +3,42 @@ import React, { useState, useEffect } from "react";
 export default function DropIngredient({
   options = [],
   onChange,
-  value = {}, // Ensure value has a default empty object
+  value = { id: null, amount: null, name: null, measurement: null },
   placeholder = "Select an option",
 }) {
-  const [isOpen, setIsOpen] = useState(false); // Dropdown open/close state
-  const [selectedOption, setSelectedOption] = useState(null); // Selected option
-  const [selectedAmount, setSelectedAmount] = useState(""); // Selected amount
-  const [searchTerm, setSearchTerm] = useState(""); // Search input
+  const [isOpen, setIsOpen] = useState(false);
+  const [localValue, setLocalValue] = useState(value); // Manage local state
 
-  // Update selectedOption and selectedAmount when value changes
   useEffect(() => {
-    if (value) {
-      setSelectedOption(value); // Set the selected option to match the value
-      setSelectedAmount(value.amount || ""); // Set the amount if present
-      setSearchTerm(value.name || ""); // Set the search term to match the value name
+    // Update local state when value prop changes
+    if (
+      value.id !== localValue.id ||
+      value.amount !== localValue.amount ||
+      value.name !== localValue.name
+    ) {
+      setLocalValue(value);
     }
   }, [value]);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setSearchTerm(option.name); // Update search term to show the selected option
+    const updatedValue = { ...localValue, id: option.id, name: option.name };
+    setLocalValue(updatedValue);
     setIsOpen(false);
-    setSelectedAmount(""); // Clear amount when a new option is selected
+    if (onChange) {
+      onChange(updatedValue);
+    }
   };
 
-  const handleSave = (amount) => {
-    setSelectedAmount(amount);
-    // Validate and pass data to parent
-    if (onChange && selectedOption && amount) {
-      onChange({ id: selectedOption.id, amount: parseFloat(amount) });
+  const handleAmountChange = (amount) => {
+    const updatedValue = { ...localValue, amount: parseFloat(amount) };
+    setLocalValue(updatedValue);
+    if (onChange) {
+      onChange(updatedValue);
     }
   };
 
   const filteredOptions = options.filter((option) =>
-    option.name.toLowerCase().includes(searchTerm.toLowerCase())
+    option.name.toLowerCase().includes(localValue.name?.toLowerCase() || "")
   );
 
   return (
@@ -47,10 +49,11 @@ export default function DropIngredient({
           type="text"
           placeholder={placeholder}
           className="flex-1 bg-stone-200 text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
-          value={searchTerm || ""}
+          value={localValue.name || ""}
           onClick={() => setIsOpen(true)}
           onChange={(e) => {
-            setSearchTerm(e.target.value);
+            const updatedValue = { ...localValue, name: e.target.value };
+            setLocalValue(updatedValue);
             setIsOpen(true); // Reopen dropdown while typing
           }}
         />
@@ -58,10 +61,12 @@ export default function DropIngredient({
           type="number"
           placeholder="0"
           className="px-3 py-0.5 w-[80px] bg-stone-200 rounded-md border border-gray-300"
-          value={selectedAmount}
-          onChange={(e) => handleSave(e.target.value)}
+          value={localValue.amount || ""}
+          onChange={(e) => handleAmountChange(e.target.value)}
         />
-        <p>{selectedOption?.measurement || value.measurement || " "}</p>
+        <p className="pr-[2vw]">
+          {localValue.measurement || value.measurement || " "}
+        </p>
       </div>
       {isOpen && (
         <div className="absolute top-[calc(100%+5px)] left-0 w-full bg-stone-200 shadow-lg rounded-md border border-gray-300 z-10">
@@ -71,10 +76,10 @@ export default function DropIngredient({
                 <li
                   key={option.id || index} // Ensure unique keys
                   className={`px-4 py-2 cursor-pointer hover:bg-white ${
-                    selectedOption?.id === option.id ? "bg-sky-200 font-bold" : ""
+                    localValue.id === option.id ? "bg-sky-200 font-bold" : ""
                   }`}
                   role="option"
-                  aria-selected={selectedOption?.id === option.id}
+                  aria-selected={localValue.id === option.id}
                   onClick={() => handleOptionClick(option)}
                 >
                   {option.name}

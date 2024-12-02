@@ -1,6 +1,6 @@
 /* same ingredient multiply times, minus ingredient, error handling*/
 
-import React, { memo, useState, useEffect, useRef } from "react";
+import React, { memo, useState, useEffect, useRef, useCallback } from "react";
 import TextInput from "./TextInput";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_INGREDIENTS } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
@@ -50,12 +50,19 @@ const Recipe = () => {
   };
   const closeModal = () => modalRef.current.close();
 
+const prepareIngredients = (ingredients) => {
+    return ingredients.map((ingredient) => ({
+      id: ingredient.id,
+      amount: ingredient.amount,
+    }));
+  };
+
   const submitRecipe = async () => {
     const recipeData = {
       userId: user.id,
       recipeName,
       steps,
-      ingredients,
+     ingredients: prepareIngredients(ingredients),
       phases,
       tags
     };
@@ -92,6 +99,8 @@ const Recipe = () => {
     }
   };
 
+  
+
   const createNewRecipe = () => {
     setRecipeName("");
     setSteps([""]);
@@ -100,6 +109,29 @@ const Recipe = () => {
     setTags([""]);
     setErrors({});
   };
+
+  const plus_abort_button = useCallback(
+    (func1, func2, isPlus) => (
+      <>
+        {isPlus ? (
+          <button
+            className="w-[22px] h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+            onClick={func1}
+          >
+            <img src={plus} alt="plus" />
+          </button>
+        ) : (
+          <button
+            className="w-[22px] rotate-45 h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
+            onClick={func2}
+          >
+            <img src={plus} alt="plus" />
+          </button>
+        )}
+      </>
+    ),
+    []
+  );
 
   return (
     <div className="w-[100%] flex fle-row justify-center items-start">
@@ -157,18 +189,11 @@ const Recipe = () => {
                       updateField(setIngredients, index, value)
                     }
                   />
-                  <button
-                    className="w-[22px] h-full flex justify-center items-center mx-3 mb-1.5 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                    onClick={() => addField(setIngredients)}
-                  >
-                    <img src={plus} alt="plus" />
-                  </button>
-                  <button
-                    className="w-[22px] rotate-45 h-full flex justify-center items-center mb-1.5 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                    onClick={() => removeField(setIngredients, index)}
-                  >
-                    <img src={plus} alt="plus" />
-                  </button>
+                  {plus_abort_button(
+                    () => addField(setIngredients),
+                    () => removeField(setIngredients, index),
+                    index === ingredients.length - 1
+                  )}
                 </div>
               ))}
             </div>
@@ -188,18 +213,11 @@ const Recipe = () => {
                   value={step}
                   onChange={(value) => updateField(setSteps, index, value)}
                 />
-                <button
-                  className="w-[22px] h-[22px] flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                  onClick={() => addField(setSteps)}
-                >
-                  <img src={plus} alt="plus" />
-                </button>
-                <button
-                  className="w-[22px] rotate-45 h-[22px] flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                  onClick={() => removeField(setSteps, index)}
-                >
-                  <img src={plus} alt="plus" />
-                </button>
+                {plus_abort_button(
+                  () => addField(setSteps),
+                  () => removeField(setSteps, index),
+                  index === steps.length - 1
+                )}
               </div>
             ))}
             <div className="w-full py-[1vw]">
@@ -224,18 +242,11 @@ const Recipe = () => {
                         }
                       />
                     </div>
-                    <button
-                      className="w-[22px] h-full flex justify-center items-center mx-3 mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                      onClick={() => addField(setPhases)}
-                    >
-                      <img src={plus} alt="plus" />
-                    </button>
-                    <button
-                      className="w-[22px] rotate-45 h-full flex justify-center items-center mb-1 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                      onClick={() => removeField(setPhases, index)}
-                    >
-                      <img src={plus} alt="plus" />
-                    </button>
+                    {plus_abort_button(
+                      () => addField(setPhases),
+                      () => removeField(setPhases, index),
+                      index === phases.length - 1
+                    )}
                   </div>
                 ))}
               </div>
@@ -256,18 +267,11 @@ const Recipe = () => {
                       value={tag}
                       onChange={(value) => updateField(setTags, index, value)}
                     />
-                    <button
-                      className="w-[22px] h-full flex justify-center items-center mx-3 mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                      onClick={() => addField(setTags)}
-                    >
-                      <img src={plus} alt="plus" />
-                    </button>
-                    <button
-                      className="w-[22px] rotate-45 h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-                      onClick={() => removeField(setTags, index)}
-                    >
-                      <img src={plus} alt="plus" />
-                    </button>
+                    {plus_abort_button(
+                      () => addField(setTags),
+                      () => removeField(setTags, index),
+                      index === tags.length - 1
+                    )}
                   </div>
                 ))}
                 <div className="w-[100%] flex justify-end mt-[10vh]">
@@ -312,63 +316,3 @@ const Recipe = () => {
 };
 
 export default memo(Recipe);
-
-/* mutation {
-  addRecipe(
-    name: "Opera Cake",
-    userId: "874c30b6-5d95-4c1f-84a7-a8acabc2a463",
-    steps: [
-      { order: 1, description: "Preheat the oven to 180°C (350°F) and prepare two baking trays with parchment paper." },
-      { order: 2, description: "Make the Joconde sponge: In a large bowl, whisk 200g almond flour, 200g powdered sugar, and 50g all-purpose flour. Gradually fold in 6 whole eggs until smooth." },
-      { order: 3, description: "In a separate bowl, whisk 6 egg whites to soft peaks, adding 40g sugar gradually. Gently fold into the almond mixture." },
-      { order: 4, description: "Spread the batter evenly across the prepared baking trays and bake for 8-10 minutes until golden." },
-      { order: 5, description: "Prepare the coffee syrup: Dissolve 100g sugar into 150ml hot brewed coffee and set aside to cool." },
-      { order: 6, description: "Make the coffee buttercream: In a heatproof bowl, beat 6 egg yolks. Heat 200g sugar and 100ml water until it reaches 118°C (soft ball stage), then slowly pour into the yolks while whisking. Add 300g softened butter and 2 tbsp coffee extract until smooth." },
-      { order: 7, description: "Prepare the chocolate ganache: Heat 200ml heavy cream in a saucepan, then pour over 200g chopped dark chocolate. Stir until smooth and glossy, then let cool slightly." },
-      { order: 8, description: "Assemble the cake: Place the first layer of Joconde sponge on a board, brush with coffee syrup, and spread a layer of coffee buttercream. Repeat with the second and third sponge layers." },
-      { order: 9, description: "Spread a thin layer of ganache between the top layers. Finish with a chocolate glaze: Melt 100g dark chocolate with 50ml cream, and pour over the top for a smooth finish." },
-      { order: 10, description: "Chill the cake for at least 2 hours. Trim the edges for a clean presentation and cut into 10 equal portions to serve." }
-    ],
-    ingredients: [
-      { id: 91, amount: 200 },
-      { id: 92, amount: 200 },
-      { id: 93, amount: 50 },
-      { id: 94, amount: 6 },
-      { id: 95, amount: 6 },
-      { id: 96, amount: 40 },
-      { id: 97, amount: 150 },
-      { id: 98, amount: 100 },
-      { id: 99, amount: 300 },
-      { id: 100, amount: 200 },
-      { id: 101, amount: 2 },
-      { id: 102, amount: 200 },
-      { id: 103, amount: 200 },
-      { id: 104, amount: 100 },
-      { id: 105, amount: 50 }
-    ],
-     phases: [
-       {
-        preparation_method: SHAPING, # Use exact enum values (case-sensitive, unquoted)
-        time: 10,
-        temperature: 0
-      },
-      {
-        preparation_method: BAKING,
-        time: 10,
-        temperature: 180
-      },
-      {
-        preparation_method: DECORATION,
-        time: 10,
-        temperature: 0
-      }
-    ],
-    tags: [
-      { name: "dessert" },
-    ]
-  ) {
-    id
-    name
-  }
-}
- */

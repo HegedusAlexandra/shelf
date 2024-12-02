@@ -40,7 +40,7 @@ export default function ListofRecipes({
     }
   }, [oneRecipe, setIngredients, setPhases, setRecipeName, setSteps, setTags]);
 
-  const filteredRecipes =
+  const filteredRecipes = 
     recipes?.getRecipes?.filter((recipe) =>
       recipe?.name?.toLowerCase().includes(filter.toLowerCase())
     ) || [];
