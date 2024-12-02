@@ -31,23 +31,27 @@ export const GET_ALL_RECIPE = gql`
 `;
 
 export const GET_RECIPE_BY_ID = gql`
-  query ($id: ID!) {
-    getRecipeById(id: $id) {
+  query GetRecipe($userId: String!, $cakeId: Int!) {
+    getRecipeById(userId: $userId, cakeId: $cakeId) {
       id
       name
       ingredients {
         id
-        ingredient {
-          id
-          name
-          measurement
-        }
-        amount
+        amount        
+        name
+        measurement        
       }
       steps {
         id
-        order
-        value
+        description
+      }
+      phases {
+        preparation_method
+        time
+        temperature
+      }
+      tags {
+        tag_type
       }
     }
   }

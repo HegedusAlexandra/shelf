@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function DropIngredient({
   options = [],
   onChange,
+  value = {}, // Ensure value has a default empty object
   placeholder = "Select an option",
 }) {
   const [isOpen, setIsOpen] = useState(false); // Dropdown open/close state
@@ -10,7 +11,14 @@ export default function DropIngredient({
   const [selectedAmount, setSelectedAmount] = useState(""); // Selected amount
   const [searchTerm, setSearchTerm] = useState(""); // Search input
 
-  const handleToggle = () => setIsOpen((prev) => !prev);
+  // Update selectedOption and selectedAmount when value changes
+  useEffect(() => {
+    if (value) {
+      setSelectedOption(value); // Set the selected option to match the value
+      setSelectedAmount(value.amount || ""); // Set the amount if present
+      setSearchTerm(value.name || ""); // Set the search term to match the value name
+    }
+  }, [value]);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -38,8 +46,8 @@ export default function DropIngredient({
         <input
           type="text"
           placeholder={placeholder}
-          className="flex-1 bg-stone-100 text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
-          value={searchTerm || (selectedOption ? selectedOption.name : "")}
+          className="flex-1 bg-stone-200 text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
+          value={searchTerm || ""}
           onClick={() => setIsOpen(true)}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -49,11 +57,11 @@ export default function DropIngredient({
         <input
           type="number"
           placeholder="0"
-          className="px-3 py-0.5 w-[80px] bg-stone-100 rounded-md border border-gray-300"
-          value={selectedAmount || ""}
+          className="px-3 py-0.5 w-[80px] bg-stone-200 rounded-md border border-gray-300"
+          value={selectedAmount}
           onChange={(e) => handleSave(e.target.value)}
         />
-        <p>{selectedOption?.measurement || " "}</p>
+        <p>{selectedOption?.measurement || value.measurement || " "}</p>
       </div>
       {isOpen && (
         <div className="absolute top-[calc(100%+5px)] left-0 w-full bg-stone-200 shadow-lg rounded-md border border-gray-300 z-10">

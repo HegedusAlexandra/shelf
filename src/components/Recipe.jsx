@@ -3,11 +3,7 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 import TextInput from "./TextInput";
 import { useQuery, useMutation } from "@apollo/client";
-import {
-  GET_INGREDIENTS,
-  GET_RECIPE_BY_ID,
-  GET_ALL_RECIPE
-} from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
+import { GET_INGREDIENTS } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
 import { ADD_RECIPE } from "../utils/graphql/mutations";
 import plus from "../assets/icons/plus.png";
 import DropIngredient from "./DropIngredient";
@@ -19,9 +15,9 @@ import RecipeValidationSchema from "../utils/recipeValidationSchema";
 import { preparation_method, TagType } from "../utils/Enum";
 import NameInput from "./NameInput";
 import Modal from "../components/Modal";
+import ListofRecipes from "./ListofRecipes";
 
 const Recipe = () => {
-  const cakeId = "1";
   const [recipeName, setRecipeName] = useState("");
   const [steps, setSteps] = useState([""]);
   const [ingredients, setIngredients] = useState([""]);
@@ -31,25 +27,8 @@ const Recipe = () => {
   const [errors, setErrors] = useState({});
   const [addRecipe] = useMutation(ADD_RECIPE);
   const user = useUser();
+  const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
-  const { data: recipeData } = useQuery(GET_RECIPE_BY_ID, {
-    variables: { id: cakeId },
-    skip: !cakeId
-  });
-  const { data: recipes } = useQuery(GET_ALL_RECIPE, {
-    variables: { userId: user?.id }
-  });
-
-  useEffect(() => {
-    if (recipeData?.getRecipeById) {
-      const recipe = recipeData.getRecipeById;
-      setRecipeName(recipe.name || "");
-      setSteps(recipe.steps || [""]);
-      setIngredients([""]);
-      setPhases(recipe.phases || [""]);
-      setTags(recipe.tags || [""]);
-    }
-  }, [recipeData]);
 
   const addField = (stateSetter) => stateSetter((prev) => [...prev, ""]);
   const removeField = (stateSetter, index) =>
@@ -60,8 +39,6 @@ const Recipe = () => {
       updated[index] = value;
       return updated;
     });
-
-  const modalRef = useRef();
 
   const openSuccessModal = () => {
     setModal("success");
@@ -84,24 +61,21 @@ const Recipe = () => {
     };
 
     try {
-      // Validate the recipe data
       await RecipeValidationSchema.validate(recipeData, { abortEarly: false });
       console.log("Validation successful:", recipeData);
 
-      // Add the recipe
       const response = await addRecipe({
         variables: recipeData
       });
       console.log("Recipe added successfully:", response.data.addRecipe);
       openSuccessModal();
 
-      // Reset all fields including the first field
-      setRecipeName(""); // Clear the recipe name
-      setSteps([""]); // Reset steps to a single empty field
-      setIngredients([""]); // Reset ingredients to a single empty field
-      setPhases([""]); // Reset phases to a single empty field
-      setTags([""]); // Reset tags to a single empty field
-      setErrors({}); // Clear any existing validation errors
+      setRecipeName("");
+      setSteps([""]);
+      setIngredients([""]);
+      setPhases([""]);
+      setTags([""]);
+      setErrors({});
     } catch (err) {
       if (err.name === "ValidationError") {
         const validationErrors = {};
@@ -118,8 +92,17 @@ const Recipe = () => {
     }
   };
 
+  const createNewRecipe = () => {
+    setRecipeName("");
+    setSteps([""]);
+    setIngredients([""]);
+    setPhases([""]);
+    setTags([""]);
+    setErrors({});
+  };
+
   return (
-    <div className="w-[100%] flex fle-row justify-center items-center">
+    <div className="w-[100%] flex fle-row justify-center items-start">
       <div className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
         <div className="h-[20vh] w-full flex flex-row pb-2">
           <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
@@ -130,6 +113,16 @@ const Recipe = () => {
           </div>
         </div>
         <div className="w-full flex flex-col">
+          <div className="w-[100%] flex justify-end pr-[1vw]">
+            <div className="w-[20%]">
+              <Button
+                onClick={createNewRecipe}
+                variant="yellow"
+                size="sm"
+                label="Új receptet írok"
+              />
+            </div>
+          </div>
           <div className="w-full p-[1vw]">
             <div className="w-[100%] flex flex-col items-start">
               <label
@@ -307,13 +300,13 @@ const Recipe = () => {
           ]}
         />
       </div>
-      <div className="md:w-[18%] hidden h-dvh md:flex flex-col justify-center items-center">
-        {recipes?.getRecipes.map((recipe, index) => (
-          <p>
-            {index + 1} {recipe.name}
-          </p>
-        ))}
-      </div>
+      <ListofRecipes
+        setIngredients={setIngredients}
+        setPhases={setPhases}
+        setRecipeName={setRecipeName}
+        setSteps={setSteps}
+        setTags={setTags}
+      />
     </div>
   );
 };

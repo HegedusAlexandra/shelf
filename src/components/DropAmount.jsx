@@ -5,12 +5,22 @@ import { useClickOutside } from "../utils/hooks/useClickOutside";
 export default function DropAmount({
   options = [],
   onChange,
+  value = {}, // Ensure value has a default object
   placeholder = "Select an option"
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedDegree, setSelectedDegree] = useState();
   const [selectedMin, setSelectedMin] = useState();
+
+  // Initialize state based on the value prop
+  useEffect(() => {
+    if (value) {
+      setSelectedOption(value.preparation_method || null);
+      setSelectedDegree(value.temperature || 0);
+      setSelectedMin(value.time || 0);
+    }
+  }, []);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -27,6 +37,7 @@ export default function DropAmount({
     setSelectedMin(value === "" ? 0 : parseFloat(value));
   };
 
+  // Call onChange whenever the selected values change
   useEffect(() => {
     onChange({
       preparation_method: selectedOption,
@@ -98,5 +109,10 @@ export default function DropAmount({
 DropAmount.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  value: PropTypes.shape({
+    preparation_method: PropTypes.string,
+    time: PropTypes.number,
+    temperature: PropTypes.number
+  })
 };
