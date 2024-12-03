@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useClickOutside } from "../../utils/hooks/useClickOutside";
 
@@ -6,45 +6,48 @@ export default function DropAmount({
   options = [],
   onChange,
   value = {},
-  placeholder = "Select an option"
+  placeholder = "Select an option",
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedDegree, setSelectedDegree] = useState();
   const [selectedMin, setSelectedMin] = useState();
- 
+  const isInternalUpdate = useRef(false); // Ref to prevent update loop
+
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
   };
 
   const handleDegreeChange = (e) => {
-    const value = e.target.value;
-    setSelectedDegree(value === "" ? 0 : parseFloat(value));
+    const newValue = e.target.value;
+    setSelectedDegree(newValue === "" ? 0 : parseFloat(newValue));
   };
 
   const handleTimeChange = (e) => {
-    const value = e.target.value;
-    setSelectedMin(value === "" ? 0 : parseFloat(value));
+    const newValue = e.target.value;
+    setSelectedMin(newValue === "" ? 0 : parseFloat(newValue));
   };
 
   useEffect(() => {
+    if (isInternalUpdate.current) {
+      isInternalUpdate.current = false;
+      return; // Skip if the update comes from internal state
+    }
+    setSelectedOption(value.preparation_method || null);
+    setSelectedDegree(value.temperature || 0);
+    setSelectedMin(value.time || 0);
+  }, [value]);
+
+  useEffect(() => {
+    isInternalUpdate.current = true; // Mark the update as internal
     onChange({
       preparation_method: selectedOption,
       time: selectedMin || 0,
-      temperature: selectedDegree || 0
+      temperature: selectedDegree || 0,
     });
   }, [selectedOption, selectedDegree, selectedMin]);
 
-  useEffect(() => {
-    if (value === '') {
-      setSelectedOption(value.preparation_method || null);
-      setSelectedDegree(value.temperature || 0);
-      setSelectedMin(value.time || 0);
-    }
-  }, [value]);
-
-  // Use the custom hook for click outside detection
   const dropdownRef = useClickOutside(() => setIsOpen(false));
 
   return (
@@ -76,7 +79,7 @@ export default function DropAmount({
             type="number"
             placeholder="0"
             className="px-3 w-[80px]"
-            value={selectedDegree}
+            value={selectedDegree || ""}
             onChange={handleDegreeChange}
             onFocus={(e) => {
               e.target.nextElementSibling.classList.remove("bg-stone-300");
@@ -95,7 +98,7 @@ export default function DropAmount({
             type="number"
             placeholder="0"
             className="px-3 w-[80px] "
-            value={selectedMin}
+            value={selectedMin || ""}
             onChange={handleTimeChange}
             onFocus={(e) => {
               e.target.nextElementSibling.classList.remove("bg-stone-300");
@@ -112,7 +115,7 @@ export default function DropAmount({
       </div>
       {isOpen && (
         <ul
-          ref={dropdownRef} // Attach the ref returned by the hook
+          ref={dropdownRef}
           className="absolute top-[calc(100%+5px)] z-10 mt-1 w-[100%] text-gray-600 bg-stone-200 shadow-lg rounded-md max-h-40 overflow-y-auto"
           role="listbox"
         >
@@ -146,6 +149,6 @@ DropAmount.propTypes = {
   value: PropTypes.shape({
     preparation_method: PropTypes.string,
     time: PropTypes.number,
-    temperature: PropTypes.number
-  })
+    temperature: PropTypes.number,
+  }),
 };
