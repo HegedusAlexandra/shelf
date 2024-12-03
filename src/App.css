@@ -48,5 +48,11 @@
 }
 
 .box-shadow{
-  box-shadow: rgb(156, 118, 13) 0px 18px 30px -12px;
+  box-shadow: rgb(29, 29, 27) 0px 18px 30px -12px;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

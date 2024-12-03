@@ -9,7 +9,7 @@ export default function Center() {
   const { currentNavigation } = useLanguageNav();
 
   return (
-    <div className="w-[100%] flex flex-row justify-center items-center bg-orange-300">
+    <div className="w-[100%] flex flex-row justify-center items-center bg-teal-900">
       {currentNavigation === Navigation.MAIN && <Calendar />}
       {currentNavigation === Navigation.STOCK && <Stock />}
       {currentNavigation === Navigation.RECIPE && <Recipe />}

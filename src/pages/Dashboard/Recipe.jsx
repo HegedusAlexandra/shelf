@@ -15,7 +15,7 @@ const Recipe = () => {
   const user = useUser();
 
   return (
-    <div className="w-[100%] flex fle-row justify-center items-start">
+    <div className="w-[100%] flex flex-row justify-center items-start">
       <ListofFunctions />
       <EditRecipe
         setIngredients={setIngredients}

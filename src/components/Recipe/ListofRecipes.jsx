@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_RECIPE, GET_RECIPE_BY_ID } from "../../utils/graphql/queries";
 import Searchfield from "./Searchfield";
+import Button from "./Button";
 
 export default function ListofRecipes({
   setIngredients,
@@ -46,7 +47,7 @@ export default function ListofRecipes({
 
   return (
     <div
-      className={`h-[90vh] bg-stone-50 md:flex flex-col justify-start items-start rounded-r-sm mt-[10vh] p-[4vh] overflow-y-scroll hide-scrollbar`}
+      className={`h-[90vh] w-[20%] bg-stone-50 md:flex flex-col justify-start items-start rounded-r-sm mt-[10vh] p-[4vh] overflow-y-scroll hide-scrollbar`}
     >
       <div className="w-full">
         <Searchfield
@@ -61,13 +62,13 @@ export default function ListofRecipes({
         <p>Error loading recipes: {errorRecipes.message}</p>
       ) : filteredRecipes.length > 0 ? (
         filteredRecipes.map((recipe, index) => (
-          <button
+          <Button
+            label={recipe.name}
             key={recipe.id}
-            className="my-1 px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600"
+            variant='plain'
+            size="sm"
             onClick={() => setCakeId(recipe.id)}
-          >
-            {recipe.name}
-          </button>
+          />
         ))
       ) : (
         <p className="text-gray-500 mt-4">No recipes found.</p>
