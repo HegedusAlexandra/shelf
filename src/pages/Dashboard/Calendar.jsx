@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import moment from "moment";
-import Button from "./Button";
+import Button from "../../components/Recipe/Button";
 import i18next from "i18next";
-import TextInput from './TextInput'
+import TextInput from '../../components/Recipe/TextInput'
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(moment());

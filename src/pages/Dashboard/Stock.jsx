@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React from "react";
-import { GET_ALL_RECIPE } from "../utils/graphql/queries";
-import { useUser } from "../contexts/UserProvider";
+import { GET_ALL_RECIPE } from "../../utils/graphql/queries";
+import { useUser } from "../../contexts/UserProvider";
 
 export default function Stock() {
   const user = useUser()

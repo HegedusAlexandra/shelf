@@ -1,35 +1,44 @@
-/* same ingredient multiply times, minus ingredient, error handling*/
-
-import React, { memo, useState, useEffect, useRef, useCallback } from "react";
-import TextInput from "./TextInput";
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_INGREDIENTS } from "../utils/graphql/queries"; // Add GET_RECIPE_BY_ID query
-import { ADD_RECIPE } from "../utils/graphql/mutations";
-import plus from "../assets/icons/plus.png";
-import DropIngredient from "./DropIngredient";
-import DropAmount from "./DropAmount";
-import DropTag from "./DropTag";
-import { useUser } from "../contexts/UserProvider";
+import React, {
+  useCallback,
+  useRef,
+  useState
+} from "react";
+import { GET_INGREDIENTS } from "../../utils/graphql/queries";
+import { ADD_RECIPE } from "../../utils/graphql/mutations";
+import RecipeValidationSchema from '../../utils/recipeValidationSchema'
+import plus from '../../assets/icons/plus.png'
 import Button from "./Button";
-import RecipeValidationSchema from "../utils/recipeValidationSchema";
-import { preparation_method, TagType } from "../utils/Enum";
-import NameInput from "./NameInput";
-import Modal from "../components/Modal";
-import ListofRecipes from "./ListofRecipes";
-import { useMeasure } from "@uidotdev/usehooks";
+import NameInput from '../../components/Recipe/NameInput'
+import TextInput from '../../components/Recipe/TextInput'
+import DropIngredient from '../../components/Recipe/DropIngredient'
+import DropAmount from '../../components/Recipe/DropAmount'
+import DropTag from '../../components/Recipe/DropTag'
+import { preparation_method } from "../../utils/Enum";
+import { TagType } from "../../utils/Enum";
+import Modal from '../../components/Modal'
+import { useMutation, useQuery } from "@apollo/client";
 
-const Recipe = () => {
-  const [recipeName, setRecipeName] = useState("");
-  const [steps, setSteps] = useState([""]);
-  const [ingredients, setIngredients] = useState([""]);
-  const [phases, setPhases] = useState([""]);
-  const [tags, setTags] = useState([""]);
+
+export default function EditRecipe({
+  setIngredients,
+  setPhases,
+  setRecipeName,
+  setSteps,
+  setTags,
+  tags,
+  steps,
+  ingredients,
+  phases,
+  recipeName,
+  user
+}) {
   const [modal, setModal] = useState("");
   const [errors, setErrors] = useState({});
   const [addRecipe] = useMutation(ADD_RECIPE);
-  const user = useUser();
+
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
+
   const addField = (stateSetter) => stateSetter((prev) => [...prev, ""]);
   const removeField = (stateSetter, index) =>
     stateSetter((prev) => prev.filter((_, i) => i !== index));
@@ -56,7 +65,7 @@ const Recipe = () => {
       amount: ingredient.amount
     }));
   };
-  console.log(phases);
+
   const submitRecipe = async () => {
     const recipeData = {
       userId: user.id,
@@ -77,12 +86,7 @@ const Recipe = () => {
       console.log("Recipe added successfully:", response.data.addRecipe);
       openSuccessModal();
 
-      setRecipeName("");
-      setSteps([""]);
-      setIngredients([""]);
-      setPhases([""]);
-      setTags([""]);
-      setErrors({});
+      createNewRecipe();
     } catch (err) {
       if (err.name === "ValidationError") {
         const validationErrors = {};
@@ -108,10 +112,6 @@ const Recipe = () => {
     setErrors({});
   };
 
-console.log('====================================');
-console.log(steps);
-console.log('====================================');
-
   const plus_abort_button = useCallback(
     (func1, func2, isPlus) => (
       <>
@@ -136,10 +136,8 @@ console.log('====================================');
   );
 
   return (
-    <div className="w-[100%] flex fle-row justify-center items-start">
-      <div
-        className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow"
-      >
+    <div>
+      <div className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
         <div className="h-[20vh] w-full flex flex-row pb-2">
           <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
             Receptek
@@ -310,15 +308,6 @@ console.log('====================================');
           ]}
         />
       </div>
-        <ListofRecipes
-          setIngredients={setIngredients}
-          setPhases={setPhases}
-          setRecipeName={setRecipeName}
-          setSteps={setSteps}
-          setTags={setTags}
-        />
-      </div>
+    </div>
   );
-};
-
-export default memo(Recipe);
+}

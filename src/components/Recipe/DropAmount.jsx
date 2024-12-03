@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useClickOutside } from "../utils/hooks/useClickOutside";
+import { useClickOutside } from "../../utils/hooks/useClickOutside";
 
 export default function DropAmount({
   options = [],

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useUser } from "../contexts/UserProvider";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_RECIPE, GET_RECIPE_BY_ID } from "../utils/graphql/queries";
+import { GET_ALL_RECIPE, GET_RECIPE_BY_ID } from "../../utils/graphql/queries";
 import Searchfield from "./Searchfield";
 
 export default function ListofRecipes({
@@ -10,9 +9,8 @@ export default function ListofRecipes({
   setRecipeName,
   setSteps,
   setTags,
-  height
+  user
 }) {
-  const user = useUser();
   const [filter, setFilter] = useState("");
   const [cakeId, setCakeId] = useState("");
 
