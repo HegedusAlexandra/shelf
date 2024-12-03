@@ -16,6 +16,7 @@ import { preparation_method, TagType } from "../utils/Enum";
 import NameInput from "./NameInput";
 import Modal from "../components/Modal";
 import ListofRecipes from "./ListofRecipes";
+import { useMeasure } from "@uidotdev/usehooks";
 
 const Recipe = () => {
   const [recipeName, setRecipeName] = useState("");
@@ -29,7 +30,6 @@ const Recipe = () => {
   const user = useUser();
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
-
   const addField = (stateSetter) => stateSetter((prev) => [...prev, ""]);
   const removeField = (stateSetter, index) =>
     stateSetter((prev) => prev.filter((_, i) => i !== index));
@@ -50,19 +50,19 @@ const Recipe = () => {
   };
   const closeModal = () => modalRef.current.close();
 
-const prepareIngredients = (ingredients) => {
+  const prepareIngredients = (ingredients) => {
     return ingredients.map((ingredient) => ({
       id: ingredient.id,
-      amount: ingredient.amount,
+      amount: ingredient.amount
     }));
   };
-
+  console.log(phases);
   const submitRecipe = async () => {
     const recipeData = {
       userId: user.id,
       recipeName,
       steps,
-     ingredients: prepareIngredients(ingredients),
+      ingredients: prepareIngredients(ingredients),
       phases,
       tags
     };
@@ -99,8 +99,6 @@ const prepareIngredients = (ingredients) => {
     }
   };
 
-  
-
   const createNewRecipe = () => {
     setRecipeName("");
     setSteps([""]);
@@ -109,6 +107,10 @@ const prepareIngredients = (ingredients) => {
     setTags([""]);
     setErrors({});
   };
+
+console.log('====================================');
+console.log(steps);
+console.log('====================================');
 
   const plus_abort_button = useCallback(
     (func1, func2, isPlus) => (
@@ -135,7 +137,9 @@ const prepareIngredients = (ingredients) => {
 
   return (
     <div className="w-[100%] flex fle-row justify-center items-start">
-      <div className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+      <div
+        className="flex flex-col w-[90%] md:w-[70%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow"
+      >
         <div className="h-[20vh] w-full flex flex-row pb-2">
           <h1 className="text-[8vh] w-1/3 flex justify-center px-[2vw] text-stone-600">
             Receptek
@@ -179,7 +183,7 @@ const prepareIngredients = (ingredients) => {
               </label>
               {ingredients.map((ingredient, index) => (
                 <div
-                  key={index}
+                  key={index + "_ingredient"}
                   className="flex flex-row items-end gap-[2px] w-[100%] "
                 >
                   <DropIngredient
@@ -206,9 +210,11 @@ const prepareIngredients = (ingredients) => {
               Lépések
             </label>
             {steps.map((step, index) => (
-              <div key={index} className="flex flex-row items-end w-full">
+              <div
+                key={index + "_steps"}
+                className="flex flex-row items-end w-full"
+              >
                 <TextInput
-                  label={index < 1 && `Lépések`}
                   index={index}
                   value={step}
                   onChange={(value) => updateField(setSteps, index, value)}
@@ -230,7 +236,7 @@ const prepareIngredients = (ingredients) => {
                 </label>
                 {phases.map((phase, index) => (
                   <div
-                    key={index}
+                    key={index + "_phase"}
                     className="flex flex-row items-end gap-[2px] w-[100%]"
                   >
                     <div className="w-full">
@@ -259,7 +265,7 @@ const prepareIngredients = (ingredients) => {
                 </label>
                 {tags.map((tag, index) => (
                   <div
-                    key={index}
+                    key={index + "_tags"}
                     className="flex flex-row items-end gap-[2px] w-[100%]"
                   >
                     <DropTag
@@ -304,14 +310,14 @@ const prepareIngredients = (ingredients) => {
           ]}
         />
       </div>
-      <ListofRecipes
-        setIngredients={setIngredients}
-        setPhases={setPhases}
-        setRecipeName={setRecipeName}
-        setSteps={setSteps}
-        setTags={setTags}
-      />
-    </div>
+        <ListofRecipes
+          setIngredients={setIngredients}
+          setPhases={setPhases}
+          setRecipeName={setRecipeName}
+          setSteps={setSteps}
+          setTags={setTags}
+        />
+      </div>
   );
 };
 

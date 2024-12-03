@@ -13,15 +13,6 @@ export default function DropAmount({
   const [selectedDegree, setSelectedDegree] = useState();
   const [selectedMin, setSelectedMin] = useState();
 
-  // Initialize state based on the value prop
-  useEffect(() => {
-    if (value) {
-      setSelectedOption(value.preparation_method || null);
-      setSelectedDegree(value.temperature || 0);
-      setSelectedMin(value.time || 0);
-    }
-  }, []);
-
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
@@ -37,7 +28,6 @@ export default function DropAmount({
     setSelectedMin(value === "" ? 0 : parseFloat(value));
   };
 
-  // Call onChange whenever the selected values change
   useEffect(() => {
     onChange({
       preparation_method: selectedOption,
@@ -46,6 +36,15 @@ export default function DropAmount({
     });
   }, [selectedOption, selectedDegree, selectedMin]);
 
+  useEffect(() => {
+    if (value) {
+      setSelectedOption(value.preparation_method || null);
+      setSelectedDegree(value.temperature || 0);
+      setSelectedMin(value.time || 0);
+    }
+  }, []); 
+
+
   // Use the custom hook for click outside detection
   const dropdownRef = useClickOutside(() => setIsOpen(false));
 
@@ -53,7 +52,7 @@ export default function DropAmount({
     <div className="relative flex flex-row items-center gap-[1vw] flex-1 my-1">
       <div className="flex flex-row items-center w-[100%] gap-[1vw] h-[4vh]">
         <button
-          className="flex-1 bg-stone-200 h-[100%] text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400"
+          className={`${selectedOption ? 'text-black' : 'text-gray-400'} flex-1 bg-stone-200 h-[100%] text-left px-4 py-0.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-sky-400`}
           onClick={() => setIsOpen((prev) => !prev)}
           aria-haspopup="listbox"
           aria-expanded={isOpen}

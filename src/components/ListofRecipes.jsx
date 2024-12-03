@@ -9,7 +9,8 @@ export default function ListofRecipes({
   setPhases,
   setRecipeName,
   setSteps,
-  setTags
+  setTags,
+  height
 }) {
   const user = useUser();
   const [filter, setFilter] = useState("");
@@ -22,16 +23,16 @@ export default function ListofRecipes({
   } = useQuery(GET_ALL_RECIPE, {
     variables: { userId: user?.id }
   });
-  const {
-    data: oneRecipe,
-  } = useQuery(GET_RECIPE_BY_ID, {
-    variables: { userId: user?.id,cakeId: Number(cakeId) },
+  const { data: oneRecipe } = useQuery(GET_RECIPE_BY_ID, {
+    variables: { userId: user?.id, cakeId: Number(cakeId) },
     skip: !cakeId
   });
 
   useEffect(() => {
     if (oneRecipe?.getRecipeById) {
       const recipe = oneRecipe.getRecipeById;
+      console.log(recipe);
+
       setRecipeName(recipe.name || "");
       setSteps(recipe.steps || [""]);
       setIngredients(recipe.ingredients || [""]);
@@ -40,13 +41,15 @@ export default function ListofRecipes({
     }
   }, [oneRecipe, setIngredients, setPhases, setRecipeName, setSteps, setTags]);
 
-  const filteredRecipes = 
+  const filteredRecipes =
     recipes?.getRecipes?.filter((recipe) =>
       recipe?.name?.toLowerCase().includes(filter.toLowerCase())
     ) || [];
 
   return (
-    <div className="bg-stone-50 h-dvh md:flex flex-col justify-start items-start rounded-r-sm mt-[10vh] p-[4vh] overflow-y-scroll hide-scrollbar">
+    <div
+      className={`h-[90vh] bg-stone-50 md:flex flex-col justify-start items-start rounded-r-sm mt-[10vh] p-[4vh] overflow-y-scroll hide-scrollbar`}
+    >
       <div className="w-full">
         <Searchfield
           placeholder="Search recipes..."
