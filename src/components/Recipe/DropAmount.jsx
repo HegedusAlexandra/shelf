@@ -12,7 +12,7 @@ export default function DropAmount({
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedDegree, setSelectedDegree] = useState();
   const [selectedMin, setSelectedMin] = useState();
-
+ 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
@@ -37,12 +37,12 @@ export default function DropAmount({
   }, [selectedOption, selectedDegree, selectedMin]);
 
   useEffect(() => {
-    if (value) {
+    if (value === '') {
       setSelectedOption(value.preparation_method || null);
       setSelectedDegree(value.temperature || 0);
       setSelectedMin(value.time || 0);
     }
-  }, []);
+  }, [value]);
 
   // Use the custom hook for click outside detection
   const dropdownRef = useClickOutside(() => setIsOpen(false));
