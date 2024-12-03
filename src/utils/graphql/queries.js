@@ -42,7 +42,7 @@ export const GET_RECIPE_BY_ID = gql`
         measurement        
       }
       steps {
-        id
+        order
         description
       }
       phases {

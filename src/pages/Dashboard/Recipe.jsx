@@ -16,10 +16,18 @@ const Recipe = () => {
   const [tags, setTags] = useState([""]);
   const user = useUser();
 
+  const createNewRecipe = () => {
+    setRecipeName("");
+    setSteps([""]);
+    setIngredients([""]);
+    setPhases([""]);
+    setTags([""]);
+  };
+
   return (
     <div className="w-[100%] flex flex-row justify-center items-start">
-      <ListofFunctions setCurrentView={setCurrentView} />
-      {currentView === "read" && (
+      <ListofFunctions createNewRecipe={createNewRecipe} setCurrentView={setCurrentView} />
+      {(currentView === "read") && (
         <ReadRecipe
           ingredients={ingredients}
           phases={phases}
@@ -29,7 +37,7 @@ const Recipe = () => {
           user={user}
         />
       )}
-      {currentView === "edit" && (
+      {(currentView === "edit" || currentView === "add") && (
         <EditRecipe
           setIngredients={setIngredients}
           setPhases={setPhases}
@@ -42,6 +50,8 @@ const Recipe = () => {
           steps={steps}
           tags={tags}
           user={user}
+          currentView={currentView}
+          createNewRecipe={createNewRecipe}
         />
       )}
       <ListofRecipes

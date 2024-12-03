@@ -25,11 +25,13 @@ export default function EditRecipe({
   ingredients,
   phases,
   recipeName,
-  user
+  user,
+  createNewRecipe,
+  currentView
 }) {
   const [modal, setModal] = useState("");
   const [errors, setErrors] = useState({});
-  const [addRecipe] = useMutation(ADD_RECIPE);
+  const [addRecipe] = useMutation(ADD_RECIPE); 
 
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
@@ -76,7 +78,7 @@ export default function EditRecipe({
       console.log("Validation successful:", recipeData);
 
       const response = await addRecipe({
-        variables: recipeData
+            variables: recipeData
       });
       console.log("Recipe added successfully:", response.data.addRecipe);
       openSuccessModal();
@@ -96,15 +98,6 @@ export default function EditRecipe({
         openFailModal();
       }
     }
-  };
-
-  const createNewRecipe = () => {
-    setRecipeName("");
-    setSteps([""]);
-    setIngredients([""]);
-    setPhases([""]);
-    setTags([""]);
-    setErrors({});
   };
 
   const plus_abort_button = useCallback(
@@ -130,14 +123,13 @@ export default function EditRecipe({
     []
   );
 
-  console.log('phases',phases);
-  
-
   return (
     <div className="flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row mt-[2vh] pt-[1vh]">
         <h1 className="text-[6vh] w-1/3 flex justify-center px-[1vw] text-stone-600">
-          Receptek Szerkesztése
+          {currentView === "add"
+            ? "Recept Hozzáadása"
+            : "Receptek Szerkesztése"}
         </h1>
         <div className="-translate-y-[3vh] flex-1 mx-[1vw] bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
           kép feltöltése
@@ -146,7 +138,7 @@ export default function EditRecipe({
       <div className="w-full flex flex-col">
         <div className="w-full p-[1vw]">
           <div className="w-[100%] flex justify-center items-center gap-2 mt-[6vh]">
-            <div className="w-[80%] flex flex-col items-start ">
+            <div className="w-[100%] flex flex-col items-start ">
               <label
                 htmlFor="input-field"
                 className="text-xs font-medium text-gray-700 mb-2"
@@ -160,14 +152,6 @@ export default function EditRecipe({
                   onChange={(e) => setRecipeName(e.target.value)}
                 />
               </div>
-            </div>
-            <div className="w-[20%] pt-[2vh]">
-              <Button
-                onClick={createNewRecipe}
-                variant="yellow"
-                size="sm"
-                label="Új receptet írok"
-              />
             </div>
           </div>
           <div className="w-[1/3] flex flex-col items-start ">
@@ -239,7 +223,7 @@ export default function EditRecipe({
                 >
                   <div className="w-full">
                     <DropAmount
-                    placeholder="Select the phases"
+                      placeholder="Select the phases"
                       options={Object.values(preparation_method)}
                       value={phase}
                       onChange={(value) => updateField(setPhases, index, value)}
@@ -266,7 +250,7 @@ export default function EditRecipe({
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
                   <DropTag
-                  placeholder="Add tags"
+                    placeholder="Add tags"
                     options={Object.keys(TagType)}
                     value={tag}
                     onChange={(value) => updateField(setTags, index, value)}
