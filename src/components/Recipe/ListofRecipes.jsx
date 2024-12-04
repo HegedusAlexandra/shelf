@@ -30,15 +30,38 @@ export default function ListofRecipes({
   useEffect(() => {
     if (oneRecipe?.getRecipeById) {
       const recipe = oneRecipe.getRecipeById;
-      console.log(recipe);
 
+      const groupedIngredients = recipe.ingredients.reduce((acc, ingredient) => {
+        if (!acc[ingredient.type]) {
+          acc[ingredient.type] = []; // Initialize the array for the category
+        }
+        acc[ingredient.type].push({
+          id:ingredient.id || "",
+          name: ingredient.name || "",
+          measurement: ingredient.measurement || "",
+          amount: ingredient.amount || "",
+          type: ingredient.type || ""
+        });
+        return acc;
+      }, {});
+
+      const filteredSteps = recipe.steps.map((el) => ({
+        order: el.order,
+        description: el.description,
+      }));
+      
+      const filteredTags = recipe.tags.map((el) => ({
+        tag_type: el.tag_type,
+      }));
+  
+      setIngredients(Object.values(groupedIngredients));
       setRecipeName(recipe.name || "");
-      setSteps(recipe.steps || [""]);
-      setIngredients(recipe.ingredients || [""]);
+      setSteps(filteredSteps || [""]);
       setPhases(recipe.phases || [""]);
-      setTags(recipe.tags || [""]);
+      setTags(filteredTags || [""]);
     }
   }, [oneRecipe, setIngredients, setPhases, setRecipeName, setSteps, setTags]);
+
 
   const filteredRecipes =
     recipes?.getRecipes?.filter((recipe) =>

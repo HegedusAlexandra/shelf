@@ -1,27 +1,24 @@
 import React from "react";
-import { isNil } from "lodash";
+
 
 export default function CategoryInput({
   type = "text",
   placeholder = "Enter text...",
-  value = "", // Default to an empty string if value is undefined
+  value = "", 
   onChange,
   required = false,
   style = "",
 }) {
-  const notifyChange = (e) => {
-    onChange({ type: e.target.value, ingredients: [] }); // Notify the parent with the new type and an empty ingredient array
-  };
 
   return (
     <div className="flex flex-col mb-2 flex-1 pr-5">
       <input
         id="input-field"
-        className={`px-4 py-0.5 placeholder-gray-400 text-gray-900 transition duration-200 ${style}`}
+        className={`px-4 py-0.5 placeholder-gray-400 text-gray-900 transition duration-200 bg-transparent`}
         type={type}
         placeholder={placeholder}
         value={value !== 'undefined' ? value.toUpperCase() : ""}
-        onChange={notifyChange}
+        onChange={onChange}
         required={required}
         onFocus={(e) => {
           e.target.nextElementSibling.classList.remove("bg-stone-300");

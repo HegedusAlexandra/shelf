@@ -37,7 +37,8 @@ export default function EditRecipe({
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
 
-  const addField = (stateSetter) => stateSetter((prev) => [...prev, ""]);
+  const addFieldIngredient = (stateSetter) => stateSetter((prev) => [...prev, [{name:'',amount:'',measurement:"",type:''}]]);
+  const addField = (stateSetter) => stateSetter((prev) => [...prev, []]);
   const removeField = (stateSetter, index) =>
     stateSetter((prev) => prev.filter((_, i) => i !== index));
   const updateField = (stateSetter, index, value) =>
@@ -56,20 +57,14 @@ export default function EditRecipe({
     modalRef.current.open();
   };
   const closeModal = () => modalRef.current.close();
-
-  const prepareIngredients = (ingredients) => {
-    return ingredients.map((ingredient) => ({
-      id: ingredient.id,
-      amount: ingredient.amount
-    }));
-  };
+console.log(ingredients.flat());
 
   const submitRecipe = async () => {
     const recipeData = {
       userId: user.id,
       recipeName,
       steps,
-      ingredients: prepareIngredients(ingredients),
+      ingredients: ingredients.flat(),
       phases,
       tags
     };
@@ -124,18 +119,8 @@ export default function EditRecipe({
     []
   );
 
-  const groupByType = (ingredients) => {
-    return Object.entries(
-      ingredients.reduce((acc, ingredient) => {
-        if (!acc[ingredient.type]) acc[ingredient.type] = [];
-        acc[ingredient.type].push(ingredient);
-        return acc;
-      }, {})
-    ).map(([type, ingredientList]) => ({
-      type: type,
-      ingredients: ingredientList
-    }));
-  };
+  console.log(ingredients);
+  
 
   return (
     <div className="flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
@@ -172,46 +157,26 @@ export default function EditRecipe({
             <label className="text-xs font-medium text-gray-700 mb-2">
               Hozzávalók
             </label>
-            <div className="w-full flex flex-row justify-center items-center">
-              {groupByType(ingredients).map((group, index) => (
+            <div className="w-full flex flex-wrap flex-row justify-center items-start gap-2">
+              {ingredients.map((ingredient, index) => (
                 <div
-                  key={group.type + "_ingredient"}
-                  className="flex-1 flex flex-col"
+                  key={ingredient.type + "_ingredient"}
+                  className="flex-1 flex flex-row items-start"
                 >
-                  <div className="flex flex-row justify-center">
-                    <CategoryInput
-                      placeholder="Add new category"
-                      value={group.type}
-                      onChange={(value) =>
-                        updateField(setIngredients, index, value)
-                      }
-                    />
-                    {plus_abort_button(
-                        () => addField(setIngredients),
-                        () => removeField(setIngredients, index),
-                        index === ingredients.length - 1
-                      )}
-                  </div>
-                  {group.ingredients.map((ingredient, index) => (
-                    <div
-                      key={ingredient.type + index}
-                      className="flex flex-row items-end gap-[2px] w-[100%] "
-                    >
-                      <DropIngredient
-                        placeholder={"Select the ingredient"}
-                        options={allIngredient?.getIngredients || []}
-                        value={ingredient}
-                        onChange={(value) =>
-                          updateField(setIngredients, index, value, group.type)
-                        }
-                      />
-                      {plus_abort_button(
-                        () => addField(setIngredients),
-                        () => removeField(setIngredients, index),
-                        index === ingredients.length - 1
-                      )}
-                    </div>
-                  ))}
+                  <DropIngredient
+                    placeholder={"Select the ingredient"}
+                    options={allIngredient?.getIngredients || []}
+                    value={ingredient}
+                    onChange={(value) =>
+                      updateField(setIngredients, index, value)
+                    }
+                    plus_abort_button={plus_abort_button}
+                  />
+                  {plus_abort_button(
+                    () => addFieldIngredient(setIngredients),
+                    () => removeField(setIngredients, index),
+                    index === ingredients.length - 1
+                  )}
                 </div>
               ))}
             </div>

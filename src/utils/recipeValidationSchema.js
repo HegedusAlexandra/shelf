@@ -23,14 +23,7 @@ const RecipeValidationSchema = Yup.object().shape({
           .required("Ingredient amount is required."),
       })
     )
-    .min(1, "At least one ingredient is required.")
-    .test(
-      "unique-ingredients",
-      "Ingredients must be unique.",
-      (ingredients) =>
-        Array.isArray(ingredients) &&
-        ingredients.length === new Set(ingredients.map((i) => i.id)).size
-    ),
+    .min(1, "At least one ingredient is required."),
   phases: Yup.array()
     .of(
       Yup.object().shape({

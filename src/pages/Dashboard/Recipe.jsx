@@ -11,8 +11,7 @@ const Recipe = () => {
   const [currentView, setCurrentView] = useState("read");
   const [recipeName, setRecipeName] = useState("");
   const [steps, setSteps] = useState([""]);
-  const [ingredients, setIngredients] = useState([""]);
-  /* { name: "", ingredients: [{ name: "", measurement: "", amount: "", type: "" }] } */
+  const [ingredients, setIngredients] = useState([{name:'',amount:'',measurement:"",type:''}]);
   const [phases, setPhases] = useState([""]);
   const [tags, setTags] = useState([""]);
   const user = useUser();
@@ -20,7 +19,7 @@ const Recipe = () => {
   const createNewRecipe = () => {
     setRecipeName("");
     setSteps([""]);
-    setIngredients([""]);
+    setIngredients([{name:'',amount:'',measurement:"",type:''}]);
     setPhases([""]);
     setTags([""]);
   };
