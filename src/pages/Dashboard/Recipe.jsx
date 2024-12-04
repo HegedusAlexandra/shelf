@@ -6,6 +6,7 @@ import EditRecipe from "../../components/Recipe/EditRecipe";
 import ReadRecipe from "../../components/Recipe/ReadRecipe";
 import ListofFunctions from "../../components/Recipe/ListofFunctions";
 import { useUser } from "../../contexts/UserProvider";
+import SearchRecipe from "../../components/Recipe/SearchRecipe";
 
 const Recipe = () => {
   const [currentView, setCurrentView] = useState("read");
@@ -15,6 +16,7 @@ const Recipe = () => {
   const [phases, setPhases] = useState([""]);
   const [tags, setTags] = useState([""]);
   const user = useUser();
+  const [cakeId, setCakeId] = useState("");
 
   const createNewRecipe = () => {
     setRecipeName("");
@@ -27,7 +29,7 @@ const Recipe = () => {
   return (
     <div className="w-[100%] flex flex-row justify-center items-start">
       <ListofFunctions createNewRecipe={createNewRecipe} setCurrentView={setCurrentView} />
-      {(currentView === "read") && (
+      {(currentView === "read" && cakeId) && (
         <ReadRecipe
           ingredients={ingredients}
           phases={phases}
@@ -35,6 +37,17 @@ const Recipe = () => {
           steps={steps}
           tags={tags}
           user={user}
+        />
+      )}
+      {(currentView === "read" && !cakeId) && (
+        <SearchRecipe
+          ingredients={ingredients}
+          phases={phases}
+          recipeName={recipeName}
+          steps={steps}
+          tags={tags}
+          user={user}
+          setCakeId={setCakeId}
         />
       )}
       {(currentView === "edit" || currentView === "add") && (
@@ -61,6 +74,8 @@ const Recipe = () => {
         setSteps={setSteps}
         setTags={setTags}
         user={user}
+        cakeId={cakeId}
+        setCakeId={setCakeId}
       />
     </div>
   );

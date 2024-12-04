@@ -6,15 +6,23 @@ import RenderDayView from "../../components/Calendar/RenderDayView";
 import RenderWeekView from "../../components/Calendar/RenderWeekView";
 import RenderMonthView from "../../components/Calendar/RenderMonthView";
 
+// Set locale globally if needed
+moment.updateLocale("en", {
+  week: {
+    dow: 1, // Monday is the first day of the week
+    doy: 4, // The week that contains Jan 4th is the first week of the year
+  },
+});
+
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(moment());
   const [viewMode, setViewMode] = useState("month");
   const [tasks, setTasks] = useState({});
-  const [newTask, setNewTask] = useState("");
   const language = i18next.language.toLowerCase();
 
-  const startOfWeek = currentDate.clone().startOf("week");
-  const endOfWeek = currentDate.clone().endOf("week");
+  // Calculate start and end of the week based on ISO week
+  const startOfWeek = currentDate.clone().startOf("isoWeek");
+  const endOfWeek = currentDate.clone().endOf("isoWeek");
 
   const handlePrevious = () => {
     const unit = viewMode === "month" ? "month" : "week";

@@ -10,10 +10,11 @@ export default function ListofRecipes({
   setRecipeName,
   setSteps,
   setTags,
-  user
+  user,
+  cakeId,
+  setCakeId
 }) {
   const [filter, setFilter] = useState("");
-  const [cakeId, setCakeId] = useState("");
 
   const {
     data: recipes,
