@@ -8,7 +8,7 @@ module.exports = {
         'opensans': ['OpenSans', 'sans-serif'],
       },
       backgroundImage: {
-        'ab1': "url('./assets/abstract_1.jpg')",    
+        'leaf': "url('./assets/leaf.jpg')",    
         'ab2': "url('./assets/abstract_2.jpg')",    
         'pink': "url('./assets/pink.jpg')",    
       },
