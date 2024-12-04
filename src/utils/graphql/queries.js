@@ -39,7 +39,8 @@ export const GET_RECIPE_BY_ID = gql`
         id
         amount        
         name
-        measurement        
+        measurement
+        type        
       }
       steps {
         order

@@ -13,6 +13,7 @@ import { preparation_method } from "../../utils/Enum";
 import { TagType } from "../../utils/Enum";
 import Modal from "../../components/Modal";
 import { useMutation, useQuery } from "@apollo/client";
+import CategoryInput from "../../components/Recipe/CategoryInput";
 
 export default function EditRecipe({
   setIngredients,
@@ -31,7 +32,7 @@ export default function EditRecipe({
 }) {
   const [modal, setModal] = useState("");
   const [errors, setErrors] = useState({});
-  const [addRecipe] = useMutation(ADD_RECIPE); 
+  const [addRecipe] = useMutation(ADD_RECIPE);
 
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
@@ -78,7 +79,7 @@ export default function EditRecipe({
       console.log("Validation successful:", recipeData);
 
       const response = await addRecipe({
-            variables: recipeData
+        variables: recipeData
       });
       console.log("Recipe added successfully:", response.data.addRecipe);
       openSuccessModal();
@@ -123,6 +124,19 @@ export default function EditRecipe({
     []
   );
 
+  const groupByType = (ingredients) => {
+    return Object.entries(
+      ingredients.reduce((acc, ingredient) => {
+        if (!acc[ingredient.type]) acc[ingredient.type] = [];
+        acc[ingredient.type].push(ingredient);
+        return acc;
+      }, {})
+    ).map(([type, ingredientList]) => ({
+      type: type,
+      ingredients: ingredientList
+    }));
+  };
+
   return (
     <div className="flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row mt-[2vh] pt-[1vh]">
@@ -155,31 +169,52 @@ export default function EditRecipe({
             </div>
           </div>
           <div className="w-[1/3] flex flex-col items-start ">
-            <label
-              className="text-xs font-medium text-gray-700 mb-2"
-            >
+            <label className="text-xs font-medium text-gray-700 mb-2">
               Hozzávalók
             </label>
-            {ingredients.map((ingredient, index) => (
-              <div
-                key={index + "_ingredient"}
-                className="flex flex-row items-end gap-[2px] w-[100%] "
-              >
-                <DropIngredient
-                  placeholder={"Select the ingredient"}
-                  options={allIngredient?.getIngredients || []}
-                  value={ingredient}
-                  onChange={(value) =>
-                    updateField(setIngredients, index, value)
-                  }
-                />
-                {plus_abort_button(
-                  () => addField(setIngredients),
-                  () => removeField(setIngredients, index),
-                  index === ingredients.length - 1
-                )}
-              </div>
-            ))}
+            <div className="w-full flex flex-row justify-center items-center">
+              {groupByType(ingredients).map((group, index) => (
+                <div
+                  key={group.type + "_ingredient"}
+                  className="flex-1 flex flex-col"
+                >
+                  <div className="flex flex-row justify-center">
+                    <CategoryInput
+                      placeholder="Add new category"
+                      value={group.type}
+                      onChange={(value) =>
+                        updateField(setIngredients, index, value)
+                      }
+                    />
+                    {plus_abort_button(
+                        () => addField(setIngredients),
+                        () => removeField(setIngredients, index),
+                        index === ingredients.length - 1
+                      )}
+                  </div>
+                  {group.ingredients.map((ingredient, index) => (
+                    <div
+                      key={ingredient.type + index}
+                      className="flex flex-row items-end gap-[2px] w-[100%] "
+                    >
+                      <DropIngredient
+                        placeholder={"Select the ingredient"}
+                        options={allIngredient?.getIngredients || []}
+                        value={ingredient}
+                        onChange={(value) =>
+                          updateField(setIngredients, index, value, group.type)
+                        }
+                      />
+                      {plus_abort_button(
+                        () => addField(setIngredients),
+                        () => removeField(setIngredients, index),
+                        index === ingredients.length - 1
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <div className="w-full flex flex-col items-start px-[1vw]">

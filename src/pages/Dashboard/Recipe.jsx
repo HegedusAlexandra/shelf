@@ -12,6 +12,7 @@ const Recipe = () => {
   const [recipeName, setRecipeName] = useState("");
   const [steps, setSteps] = useState([""]);
   const [ingredients, setIngredients] = useState([""]);
+  /* { name: "", ingredients: [{ name: "", measurement: "", amount: "", type: "" }] } */
   const [phases, setPhases] = useState([""]);
   const [tags, setTags] = useState([""]);
   const user = useUser();
