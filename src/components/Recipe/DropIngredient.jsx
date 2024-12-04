@@ -103,7 +103,7 @@ export default function DropIngredient({
               filteredOptions.map((option, index) => (
                 <li
                   key={option.id || index} // Ensure unique keys
-                  className={`px-4 py-2 cursor-pointer hover:bg-lime-300 ${
+                  className={`px-4 py-2 cursor-pointer hover:bg-green-300 ${
                     localValue.id === option.id ? "bg-transparent font-bold" : ""
                   }`}
                   role="option"

@@ -29,7 +29,7 @@ export default function Menu() {
         )}
       </button>
       <div
-        className={`fixed top-0 left-0 h-full md:w-1/3 w-5/6 pt-[20vh] bg-white/10 backdrop-blur-lg flex flex-col justify-start items-center shadow-lg transform transition-transform duration-500 ${
+        className={`fixed top-0 left-0 h-full md:w-1/3 w-5/6 pt-[20vh] bg-white/20 backdrop-blur-xl flex flex-col justify-start items-center shadow-lg transform transition-transform duration-500 ${
           isVisible ? "translate-x-0" : "-translate-x-full"
         }`}
       >

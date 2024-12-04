@@ -66,7 +66,7 @@ export default function DropTag({
             options.map((option, index) => (
               <li
                 key={option.id || index} // Use a unique ID if available
-                className={`px-4 py-2 cursor-pointer hover:bg-lime-300 ${
+                className={`px-4 py-2 cursor-pointer hover:bg-green-300 ${
                   selectedOption === option ? "bg-transparent font-bold" : ""
                 }`}
                 role="option"

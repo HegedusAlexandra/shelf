@@ -156,7 +156,6 @@ export default function EditRecipe({
           </div>
           <div className="w-[1/3] flex flex-col items-start ">
             <label
-              htmlFor="input-field"
               className="text-xs font-medium text-gray-700 mb-2"
             >
               Hozzávalók
