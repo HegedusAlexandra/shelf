@@ -61,6 +61,7 @@ export default function DropIngredient({
     setLocalValue(updatedValues);
     onChange && onChange(updatedValues);
   };
+  console.log(value,localValue);
 
   const handleNameChange = (name, index) => {
     const updatedValues = [...localValue];
@@ -98,6 +99,17 @@ export default function DropIngredient({
     options.filter((option) =>
       option.name.toLowerCase().includes(name?.toLowerCase() || "")
     );
+
+    useEffect(() => {
+      if (Array.isArray(value)) {
+        console.log('fired');
+        
+        setLocalValue(
+          value.length > 0 ? value : [{ name: "", amount: "", measurement: "", type: "" }]
+        );
+      }
+    }, [value]);
+    
 
   return (
     <div className="w-full flex flex-col justify-start">

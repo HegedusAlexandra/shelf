@@ -19,7 +19,7 @@ const Recipe = () => {
   const createNewRecipe = () => {
     setRecipeName("");
     setSteps([""]);
-    setIngredients([{name:'',amount:'',measurement:"",type:''}]);
+    setIngredients([""]);
     setPhases([""]);
     setTags([""]);
   };

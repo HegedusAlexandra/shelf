@@ -37,6 +37,9 @@ export default function EditRecipe({
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
 
+
+  
+
   const addFieldIngredient = (stateSetter) => stateSetter((prev) => [...prev, [{name:'',amount:'',measurement:"",type:''}]]);
   const addField = (stateSetter) => stateSetter((prev) => [...prev, []]);
   const removeField = (stateSetter, index) =>
