@@ -1,15 +1,32 @@
 import React from "react";
+import Button from "./Button";
 
-export default function ReadRecipe({ ingredients, phases, recipeName, steps }) {
+export default function ReadRecipe({
+  ingredients,
+  phases,
+  recipeName,
+  steps,
+  setCakeId
+}) {
   return (
-    <div className=" text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen  p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+    <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen  p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[40vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
         <div className="-translate-y-[3vh] flex-1 bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
           kép feltöltése
         </div>
-        <h1 className="text-[6vh] w-full flex justify-start py-[2vw] text-stone-600">
-          {recipeName}
-        </h1>
+        <div className="w-full flex flex-row items-center">
+          <h1 className="text-[6vh] w-full flex justify-start py-[2vw] text-stone-600">
+            {recipeName}
+          </h1>
+          <Button
+            label="vissza a receptekhez"
+            size="sm"
+            variant="primary"
+            onClick={() => setCakeId("")}
+          >
+            search
+          </Button>
+        </div>
       </div>
       <div className="flex flex-col">
         <div className="flex flex-row gap-1">

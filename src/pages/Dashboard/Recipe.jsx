@@ -12,11 +12,15 @@ const Recipe = () => {
   const [currentView, setCurrentView] = useState("read");
   const [recipeName, setRecipeName] = useState("");
   const [steps, setSteps] = useState([""]);
-  const [ingredients, setIngredients] = useState([{name:'',amount:'',measurement:"",type:''}]);
+  const [ingredients, setIngredients] = useState([
+    { name: "", amount: "", measurement: "", type: "" }
+  ]);
   const [phases, setPhases] = useState([""]);
   const [tags, setTags] = useState([""]);
   const user = useUser();
   const [cakeId, setCakeId] = useState("");
+  const [showLeftSidebars, setshowLeftSidebars] = useState(true);
+  const [showRightSidebars, setshowRightSidebars] = useState(true);
 
   const createNewRecipe = () => {
     setRecipeName("");
@@ -28,8 +32,21 @@ const Recipe = () => {
 
   return (
     <div className="w-[100%] flex flex-row justify-center items-start">
-      <ListofFunctions createNewRecipe={createNewRecipe} setCurrentView={setCurrentView} />
-      {(currentView === "read" && cakeId) && (
+      <div className="w-[18%]">
+        <div
+          className={`transition-transform duration-300 ${
+            showLeftSidebars ? "translate-x-0 w-full" : "translate-x-[78%]"
+          } overflow-hidden`}
+        >
+          <ListofFunctions
+            showLeftSidebars={showLeftSidebars}
+            setshowLeftSidebars={setshowLeftSidebars}
+            createNewRecipe={createNewRecipe}
+            setCurrentView={setCurrentView}
+          />
+        </div>
+      </div>
+      {currentView === "read" && cakeId && (
         <ReadRecipe
           ingredients={ingredients}
           phases={phases}
@@ -37,9 +54,10 @@ const Recipe = () => {
           steps={steps}
           tags={tags}
           user={user}
+          setCakeId={setCakeId}
         />
       )}
-      {(currentView === "read" && !cakeId) && (
+      {currentView === "read" && (!cakeId) && (
         <SearchRecipe
           ingredients={ingredients}
           phases={phases}
@@ -67,16 +85,26 @@ const Recipe = () => {
           createNewRecipe={createNewRecipe}
         />
       )}
-      <ListofRecipes
-        setIngredients={setIngredients}
-        setPhases={setPhases}
-        setRecipeName={setRecipeName}
-        setSteps={setSteps}
-        setTags={setTags}
-        user={user}
-        cakeId={cakeId}
-        setCakeId={setCakeId}
-      />
+      <div className="w-[18%] ">
+        <div
+          className={`transition-transform duration-300 ${
+            showRightSidebars ? "translate-x-0 w-full" : "-translate-x-[88%]"
+          } overflow-hidden`}
+        >
+          <ListofRecipes
+            setIngredients={setIngredients}
+            setPhases={setPhases}
+            setRecipeName={setRecipeName}
+            setSteps={setSteps}
+            setTags={setTags}
+            user={user}
+            cakeId={cakeId}
+            setCakeId={setCakeId}
+            setshowRightSidebars={setshowRightSidebars}
+            showRightSidebars={showRightSidebars}
+          />
+        </div>
+      </div>
     </div>
   );
 };

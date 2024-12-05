@@ -12,7 +12,9 @@ export default function ListofRecipes({
   setTags,
   user,
   cakeId,
-  setCakeId
+  setCakeId,
+  showRightSidebars,
+  setshowRightSidebars
 }) {
   const [filter, setFilter] = useState("");
 
@@ -71,15 +73,16 @@ export default function ListofRecipes({
 
   return (
     <div
-      className={`h-[90vh] w-[20%] bg-stone-50 md:flex flex-col justify-start items-start rounded-r-sm mt-[10vh] p-[4vh] overflow-y-scroll hide-scrollbar`}
+      className={`h-[73vh] bg-stone-50 md:flex flex-row justify-start items-start rounded-r-xl mt-[10vh] py-[4vh] pl-[1vw] overflow-y-scroll hide-scrollbar`}
     >
-      <div className="w-full">
+      
+      <div className="w-[92%] text-sm">
         <Searchfield
           placeholder="Search recipes..."
           value={filter}
           onChange={setFilter}
         />
-      </div>
+      
       {loadingRecipes ? (
         <p>Loading recipes...</p>
       ) : errorRecipes ? (
@@ -96,7 +99,8 @@ export default function ListofRecipes({
         ))
       ) : (
         <p className="text-gray-500 mt-4">No recipes found.</p>
-      )}
+      )}</div>
+      <button onClick={() => setshowRightSidebars(!showRightSidebars)} className="realtive w-[2vw] h-[4vw] bg-green-400 rounded-l-md"></button>
     </div>
   );
 }

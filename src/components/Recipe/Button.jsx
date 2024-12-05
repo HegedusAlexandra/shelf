@@ -13,14 +13,14 @@ export default function Button({
 
   const variantStyles = {
     primary:
-      "text-sky hover:bg-[#fafafa] hover:text-white focus:ring-sky-700 bg-[#fafafa] my-[2px] font-opensans uppercase inline-flex items-center justify-center font-medium",
+      "w-[20vw] text-black/60 hover:bg-stone-300 bg-stone-200 hover:text-black focus:ring-sky-700 bg-[#fafafa] my-[2px] py-2 font-opensans uppercase inline-flex items-center justify-center",
     yellow:
       "bg-[#fff] text-gray-700 hover:bg-orange-400 hover:text-white focus:ring-black ring-[2px] ring-orange-400 hover:ring-0 hover:font-bold inline-flex items-center justify-center font-medium" ,
     plain: "text-black/70 hover:text-orange-800 text-md flex justify-start uppercase flex justify-start items-start truncate focus:ring-transparent"
   };
 
   const sizeStyles = {
-    sm: "py-1 text-sm",
+    sm: "py-1 text-xs",
     md: "px-4 py-2 text-base",
     lg: "px-6 py-3 text-lg"
   };

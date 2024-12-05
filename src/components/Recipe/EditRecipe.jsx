@@ -13,7 +13,6 @@ import { preparation_method } from "../../utils/Enum";
 import { TagType } from "../../utils/Enum";
 import Modal from "../../components/Modal";
 import { useMutation, useQuery } from "@apollo/client";
-import CategoryInput from "../../components/Recipe/CategoryInput";
 
 export default function EditRecipe({
   setIngredients,
@@ -123,7 +122,7 @@ console.log(ingredients.flat());
   
 
   return (
-    <div className="flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+    <div className="z-10 flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row mt-[2vh] pt-[1vh]">
         <h1 className="text-[6vh] w-1/3 flex justify-center px-[1vw] text-stone-600">
           {currentView === "add"

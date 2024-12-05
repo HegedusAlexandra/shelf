@@ -26,6 +26,9 @@ export const GET_ALL_RECIPE = gql`
     getRecipes(userId: $userId) {
       id
       name
+      tags{
+      tag_type
+      }
     }
   }
 `;

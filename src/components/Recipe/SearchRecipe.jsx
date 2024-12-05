@@ -6,8 +6,11 @@ import print from "../../assets/icons/print.png";
 import event from "../../assets/icons/event.png";
 import trash from "../../assets/icons/delete.png";
 import edit from "../../assets/icons/edit.png";
+import DropFilter from "./DropFilter";
+
 export default function SearchRecipe({ recipeName, user, setCakeId }) {
   const [filter, setFilter] = useState("");
+  const [filterByTag, setFilterByTag] = useState("");
   const {
     data: recipes,
     loading: loadingRecipes,
@@ -16,21 +19,27 @@ export default function SearchRecipe({ recipeName, user, setCakeId }) {
     variables: { userId: user?.id }
   });
 
+
   const filteredRecipes =
-    recipes?.getRecipes?.filter((recipe) =>
-      recipe?.name?.toLowerCase().includes(filter.toLowerCase())
-    ) || [];
+  recipes?.getRecipes?.filter(
+    (recipe) =>
+      recipe?.name?.toLowerCase().includes(filter.toLowerCase()) &&
+      (!filterByTag || recipe?.tags?.some((tag) => tag.tag_type.toLowerCase().includes(filterByTag.toLowerCase())))
+  ) || [];
 
   const addToCalendar = () => {};
   const deleteRecipe = () => {};
 
   return (
-    <div className=" text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen  p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+    <div className="z-10 text-sm flex flex-col justify-start w-[90%] md:w-[60%] min-h-screen  p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[40vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
         <div className="-translate-y-[3vh] flex-1 bg-ab3 bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center" />
-        <h1 className="text-[6vh] w-full flex justify-start py-[2vw] text-stone-600">
-          {recipeName}
-        </h1>
+        <div className="w-full flex flex-row items-center mt-[1vw] pb-[2vw]">
+          <h1 className="text-[6vh] flex-1 flex justify-start text-stone-600">
+            Receptek
+          </h1>
+        <DropFilter onChange={setFilterByTag}/>
+        </div>
       </div>
 
       <div className="w-full translate-x-4">
@@ -48,12 +57,9 @@ export default function SearchRecipe({ recipeName, user, setCakeId }) {
         filteredRecipes.map((recipe, index) => (
           <div
             key={recipe.name + "_list_name"}
-            className="flex-1 flex flex-row justify-center items-between translate-x-2"
+            className="flex flex-row translate-x-2"
           >
-            
-            <button
-              className=" text-black/70 hover:text-orange-800 text-md flex justify-center uppercase items-start truncate focus:ring-transparent"
-            >
+            <button className=" text-black/70 hover:text-orange-800 text-md flex justify-center uppercase items-start truncate focus:ring-transparent">
               {recipe.name}
             </button>
             <hr className="flex-1 h-[1px] bg-black/20 m-3 ml-8" />

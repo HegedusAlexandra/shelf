@@ -35,7 +35,7 @@ function DropIngredient({
     };
     setLocalValue(updatedValues);
     setOpenDropdownIndex(null);
-    onChange && onChange(updatedValues);
+   onChange(updatedValues);
   };
 
   const handleAmountChange = (amount, index) => {
@@ -45,7 +45,7 @@ function DropIngredient({
       amount: parseFloat(amount) || null
     };
     setLocalValue(updatedValues);
-    onChange && onChange(updatedValues);
+    onChange(updatedValues);
   };
 
   const inputRefs = useRef([]);
@@ -59,7 +59,6 @@ function DropIngredient({
       setOpenDropdownIndex(index);
     }
 
-    // Maintain focus
     setTimeout(() => inputRefs.current[index]?.focus(), 0);
   };
 
@@ -69,7 +68,7 @@ function DropIngredient({
       type
     }));
     setLocalValue(updatedValues);
-    onChange && onChange(updatedValues);
+    onChange(updatedValues);
   };
 
   const handleAddRow = () => {
@@ -81,7 +80,7 @@ function DropIngredient({
     };
     const updatedValues = [...localValue, newRow];
     setLocalValue(updatedValues);
-    onChange && onChange(updatedValues);
+    onChange(updatedValues);
   };
 
   const handleRemoveRow = (index) => {
@@ -95,7 +94,7 @@ function DropIngredient({
       });
     }
     setLocalValue(updatedValues);
-    onChange && onChange(updatedValues);
+    onChange(updatedValues);
   };
 
   const filteredOptions = useCallback(

@@ -1,10 +1,12 @@
+/* Dropdown have to be changed very old package react-dropdown*/
+
+
 import React, { useEffect, useState } from "react";
 import Dropdown from "react-dropdown";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { useTranslation } from "react-i18next";
 import { Language,Sitemap } from "../../utils/Enum";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 
 export default function DropdownComp({ type }) {
   const {selectedLanguage, setSelectedLanguage } = useLanguage();
