@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./Button";
+import Button from "../Button";
 
 export default function ReadRecipe({
   ingredients,
@@ -9,7 +9,7 @@ export default function ReadRecipe({
   setCakeId
 }) {
   return (
-    <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen  p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+    <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[40vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
         <div className="-translate-y-[3vh] flex-1 bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
           kép feltöltése

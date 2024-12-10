@@ -22,6 +22,8 @@ const TagType = Object.freeze({
 });
 
 const preparation_method = Object.freeze({
+  COOKING:'COOKING',
+  DYRING:'DRYING',
   PASSIVE_TIME: 'PASSIVE_TIME',
   SHAPING: 'SHAPING',
   MIXING: 'MIXING',

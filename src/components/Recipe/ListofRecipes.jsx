@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_RECIPE, GET_RECIPE_BY_ID } from "../../utils/graphql/queries";
 import Searchfield from "./Searchfield";
-import Button from "./Button";
+import Button from "../Button";
 
 export default function ListofRecipes({
   setIngredients,

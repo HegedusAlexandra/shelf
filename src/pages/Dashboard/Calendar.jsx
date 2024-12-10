@@ -1,94 +1,181 @@
 import React, { useState } from "react";
-import moment from "moment";
-import Button from "../../components/Recipe/Button";
-import i18next from "i18next";
-import RenderDayView from "../../components/Calendar/RenderDayView";
-import RenderWeekView from "../../components/Calendar/RenderWeekView";
-import RenderMonthView from "../../components/Calendar/RenderMonthView";
-
-// Set locale globally if needed
-moment.updateLocale("en", {
-  week: {
-    dow: 1, // Monday is the first day of the week
-    doy: 4, // The week that contains Jan 4th is the first week of the year
-  },
-});
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_TODOS, GET_ALL_RECIPE } from "../../utils/graphql/queries";
+import { ADD_TODO } from "../../utils/graphql/mutations";
+import { useUser } from "../../contexts/UserProvider";
+import SidebarRight from "../../components/Calendar/SidebarRight";
+import SidebarLeft from "../../components/Calendar/SidebarLeft";
+import RenderEventContent from "../../components/Calendar/RenderEventContent";
 
 const Calendar = () => {
-  const [currentDate, setCurrentDate] = useState(moment());
-  const [viewMode, setViewMode] = useState("month");
-  const [tasks, setTasks] = useState({});
-  const language = i18next.language.toLowerCase();
+  const user = useUser();
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [showLeftSidebars, setshowLeftSidebars] = useState(true);
+  const [showRightSidebars, setshowRightSidebars] = useState(false);
+  const [newTodo, setNewTodo] = useState({
+    title: "",
+    description: "",
+    duration: 60,
+    recipeId: "",
+    portions: 0,
+    start: null
+  });
 
-  // Calculate start and end of the week based on ISO week
-  const startOfWeek = currentDate.clone().startOf("isoWeek");
-  const endOfWeek = currentDate.clone().endOf("isoWeek");
+  const [addTodo] = useMutation(ADD_TODO); // Destructure correctly
+  const { data: recipes } = useQuery(GET_ALL_RECIPE, {
+    variables: { userId: user?.id }
+  });
+  const {
+    data: todos,
+    loading,
+    error
+  } = useQuery(GET_TODOS, {
+    skip: !user?.id,
+    variables: { userId: user?.id }
+  });
 
-  const handlePrevious = () => {
-    const unit = viewMode === "month" ? "month" : "week";
-    setCurrentDate(currentDate.clone().subtract(1, unit));
+  const handleDateSelect = (selectInfo) => {
+    setshowRightSidebars(true);
+    console.log("Selected Date:", typeof selectInfo.start);
+    const calculatedDuration =
+      (selectInfo.end - selectInfo.start) / (1000 * 60);
+    const noendAdded = selectInfo.start + 60;
+
+    setNewTodo((prevTodo) => ({
+      ...prevTodo,
+      start: selectInfo.start.toISOString(),
+      end_time: selectInfo.end.toISOString() || noendAdded,
+      duration: calculatedDuration
+    }));
   };
 
-  const handleNext = () => {
-    const unit = viewMode === "month" ? "month" : "week";
-    setCurrentDate(currentDate.clone().add(1, unit));
+  const handleEventClick = (clickInfo) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the event '${clickInfo.event.title}'?`
+      )
+    ) {
+      clickInfo.event.remove();
+    }
   };
+
+  const handleEvents = (events) => {
+    setCurrentEvents(events);
+  };
+
+  const handleDateClick = (events) => {
+    console.log("====================================");
+    console.log(events);
+    console.log("====================================");
+  };
+
+  const handleSaveTodo = () => {
+    console.log("====================================");
+    console.log(newTodo);
+    console.log("====================================");
+
+    const variables = {
+      userId: user?.id,
+      title:
+        newTodo.title ||
+        (newTodo.recipeId &&
+          recipes?.getRecipes?.find((r) => r.id === newTodo.recipeId)?.name) ||
+        "Untitled",
+      iscompleted: newTodo.iscompleted || false,
+      start: newTodo.start,
+      end_time: newTodo.end_time,
+      duration: newTodo.duration || 60,
+      description: newTodo.description || "",
+      recipeId: Number(newTodo.recipeId) || ""
+    };
+
+    addTodo({ variables })
+      .then(() => {
+        alert("Todo added successfully!");
+        setNewTodo({
+          title: "",
+          description: "",
+          duration: 60,
+          recipeId: "",
+          portions: 0,
+          start: null,
+          end_time: null
+        }); // Reset newTodo
+      })
+      .catch((err) => {
+        console.error("Error adding todo:", err);
+        alert("Failed to add todo!");
+      });
+  };
+
+  const handleDropRecipesChange = (value) => {
+    setNewTodo((prevTodo) => ({
+      ...prevTodo,
+      recipeId: value.recipeId,
+      portions: value.portions,
+      title:
+        prevTodo.title ||
+        recipes?.getRecipes?.find((r) => r.id === value.recipeId)?.name ||
+        ""
+    }));
+  };
+
+  const headerToolbarConfig = {
+    left: "prev,next today",
+    center: "title",
+    right: "dayGridMonth,timeGridWeek,timeGridDay"
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="flex flex-col justify-between items-stretch text-opensans text-[3vh] w-[90%] h-[92vh] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
-      <div className="flex-1 flex flex-row justify-between items-center bg-ab2 bg-no-repeat bg-cover rounded-md">
-        <button onClick={handlePrevious}>◀</button>
-        <h2>{currentDate.format("MMMM YYYY")}</h2>
-        <button onClick={handleNext}>▶</button>
-      </div>
-      <div className="flex flex-row gap-[2px]">
-        <Button variant="plain" label="day" onClick={() => setViewMode("day")}>
-          Day
-        </Button>
-        <Button
-          variant="plain"
-          label="week"
-          onClick={() => setViewMode("week")}
+    <div className="w-[100%] flex flex-row justify-center items-start">
+      <div className="w-[18%]">
+        <div
+          className={`transition-transform duration-300 ${
+            showRightSidebars ? "translate-x-0" : "translate-x-[78%]"
+          } overflow-hidden`}
         >
-          Week
-        </Button>
-        <Button
-          variant="plain"
-          label="month"
-          onClick={() => setViewMode("month")}
-        >
-          Month
-        </Button>
+          <SidebarLeft />
+        </div>
       </div>
-      <hr className="w-full h-[3px] bg-black" />
-      {viewMode === "month" && (
-        <RenderMonthView
-          tasks={tasks}
-          setCurrentDate={setCurrentDate}
-          setViewMode={setViewMode}
-          language={language}
-          currentDate={currentDate}
+      <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={headerToolbarConfig}
+          initialView="dayGridMonth"
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          initialEvents={todos?.getTodos || []}
+          select={handleDateSelect}
+          eventContent={RenderEventContent}
+          eventClick={handleEventClick}
+          eventsSet={handleEvents}
+          dateClick={handleDateClick}
         />
-      )}
-      {viewMode === "week" && (
-        <RenderWeekView
-          tasks={tasks}
-          setCurrentDate={setCurrentDate}
-          setViewMode={setViewMode}
-          startOfWeek={startOfWeek}
-          endOfWeek={endOfWeek}
-        />
-      )}
-      {viewMode === "day" && (
-        <RenderDayView
-          tasks={tasks}
-          setCurrentDate={setCurrentDate}
-          setViewMode={setViewMode}
-          language={language}
-          currentDate={currentDate}
-          setTasks={setTasks}
-        />
-      )}
+      </div>
+      <div className="w-[18%]">
+        <div
+          className={`transition-transform duration-300 ${
+            showRightSidebars ? "translate-x-0" : "-translate-x-[78%]"
+          } overflow-hidden`}
+        >
+          <SidebarRight
+            currentEvents={currentEvents}
+            handleSaveTodo={handleSaveTodo}
+            setNewTodo={setNewTodo}
+            newTodo={newTodo}
+            options={recipes?.getRecipes}
+          />
+        </div>
+      </div>
     </div>
   );
 };

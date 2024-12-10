@@ -3,7 +3,7 @@ import { GET_INGREDIENTS } from "../../utils/graphql/queries";
 import { ADD_RECIPE } from "../../utils/graphql/mutations";
 import RecipeValidationSchema from "../../utils/recipeValidationSchema";
 import plus from "../../assets/icons/plus.png";
-import Button from "./Button";
+import Button from "../Button";
 import NameInput from "../../components/Recipe/NameInput";
 import TextInput from "../../components/Recipe/TextInput";
 import DropIngredient from "../../components/Recipe/DropIngredient";
@@ -56,7 +56,6 @@ export default function EditRecipe({
     modalRef.current.open();
   };
   const closeModal = () => modalRef.current.close();
-console.log(ingredients.flat());
 
   const submitRecipe = async () => {
     const recipeData = {
