@@ -31,7 +31,7 @@ function SidebarRight({
       <div>
         <h2 className="font-bold text-xl mb-[4vh]">Add Todo</h2>
         <h2 className="text-sm">from: {newTodo?.start}</h2>
-        <h2 className="text-sm">to: {newTodo?.end}</h2>
+        <h2 className="text-sm">to: {newTodo?.end_time}</h2>
         <p className="text-xs">Add a title or use the recipe's name automatically</p>
       </div>
       <div className="flex flex-col flex-1 gap-4">

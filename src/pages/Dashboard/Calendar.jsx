@@ -25,7 +25,7 @@ const Calendar = () => {
     start: null
   });
 
-  const [addTodo] = useMutation(ADD_TODO); // Destructure correctly
+  const [addTodo] = useMutation(ADD_TODO);
   const { data: recipes } = useQuery(GET_ALL_RECIPE, {
     variables: { userId: user?.id }
   });
@@ -153,7 +153,11 @@ const Calendar = () => {
           selectable={true}
           selectMirror={true}
           dayMaxEvents={true}
-          initialEvents={todos?.getTodos || []}
+          initialEvents={todos?.getTodos.map((todo) => ({
+            title: todo.title,
+            start: todo.start, // Ensure start is set
+            end: todo.end_time, // Use end_time from your data
+          })) || []}
           select={handleDateSelect}
           eventContent={RenderEventContent}
           eventClick={handleEventClick}
