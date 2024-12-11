@@ -1,6 +1,6 @@
 import React, {memo} from "react";
 function SidebarLeft({}) {
-    /* ADD todo, update todo ,delete todo*/
+    /* update todo ,delete todo*/
   
     return (
       <div className={`w-[100%] h-[84vh] my-[8vh] bg-white transition-transform duration-300 p-[1vw] rounded-l-md`}>

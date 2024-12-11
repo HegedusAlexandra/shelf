@@ -173,6 +173,8 @@ const Calendar = () => {
           } overflow-hidden`}
         >
           <SidebarRight
+          setshowRightSidebars={setshowRightSidebars}
+          showRightSidebars={showRightSidebars}
             currentEvents={currentEvents}
             handleSaveTodo={handleSaveTodo}
             setNewTodo={setNewTodo}
