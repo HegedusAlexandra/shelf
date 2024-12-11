@@ -9,6 +9,7 @@ export default function ReadRecipe({
   setCakeId
 }) {
 
+console.log(ingredients);
 
   return (
     <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
@@ -17,9 +18,10 @@ export default function ReadRecipe({
           kép feltöltése
         </div>
         <div className="w-full flex flex-row items-center">
-          <h1 className="text-[4vh] w-full flex justify-start py-[2vw] text-stone-600">
+          <h1 className="text-[5vh] flex-1 flex justify-start py-[2vw] text-stone-600">
             {recipeName}
           </h1>
+          <div className="w-[30%] flex flex-row items-center">
           <Button
             label="vissza a receptekhez"
             size="sm"
@@ -29,14 +31,16 @@ export default function ReadRecipe({
             search
           </Button>
         </div>
+        </div>
       </div>
       <div className="flex flex-col">
         <div className="flex flex-row gap-1">
           {ingredients?.map((el, index) => (
             <div key={el[0]?.type + "read"} className="flex-1">
               <h2 className="font-medium text-gray-700 mt-4">
-                {index === 0 && "Hozzávalók - "}
-                {el[0]?.type}
+                {index === 0 && "Hozzávalók"}
+                <br/>
+                {el[0]?.type.toUpperCase()}
               </h2>
               <hr className="w-[100%] mx-auto h-[3px] bg-black" />
               {Array.isArray(el) ? (
@@ -56,7 +60,7 @@ export default function ReadRecipe({
       <hr className="w-[100%] mx-auto h-[3px] bg-black" />
       {steps?.map((el) => (
         <p key={el?.description?.slice(0,10)+el.order} >
-          {el.order}. {el.description}
+          {el.order + 1}. {el.description}
         </p>
       ))}
       <div className="w-[100%]">

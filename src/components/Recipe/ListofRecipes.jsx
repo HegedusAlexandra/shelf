@@ -14,7 +14,8 @@ export default function ListofRecipes({
   cakeId,
   setCakeId,
   showRightSidebars,
-  setshowRightSidebars
+  setshowRightSidebars,
+  createNewRecipe
 }) {
   const [filter, setFilter] = useState("");
 
@@ -27,7 +28,8 @@ export default function ListofRecipes({
   });
   const { data: oneRecipe } = useQuery(GET_RECIPE_BY_ID, {
     variables: { userId: user?.id, cakeId: Number(cakeId) },
-    skip: !cakeId
+    skip: !cakeId,
+    fetchPolicy: "network-only"
   });
 
   useEffect(() => {
@@ -96,7 +98,10 @@ export default function ListofRecipes({
               key={recipe.id}
               variant="plain"
               size="sm"
-              onClick={() => setCakeId(recipe.id)}
+              onClick={() => {
+                createNewRecipe();
+                setCakeId(recipe.id);
+              }}
             />
           ))
         ) : (
@@ -105,8 +110,18 @@ export default function ListofRecipes({
       </div>
       <button
         onClick={() => setshowRightSidebars(!showRightSidebars)}
-        className="realtive w-[2vw] h-[4vw] bg-green-400 rounded-l-md"
-      ></button>
+        className="w-[2vw] h-[20vh] flex items-center justify-center bg-green-400 rounded-l-md font-playwrite py-4 px-auto hover:bg-green-600"
+      >
+        <div
+          className="text-center text-sm"
+          style={{
+            writingMode: "vertical-rl",
+            whiteSpace: "nowrap"
+          }}
+        >
+          list of recipes
+        </div>
+      </button>
     </div>
   );
 }

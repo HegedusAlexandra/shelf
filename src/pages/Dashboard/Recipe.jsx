@@ -102,6 +102,7 @@ const Recipe = () => {
             setCakeId={setCakeId}
             setshowRightSidebars={setshowRightSidebars}
             showRightSidebars={showRightSidebars}
+            createNewRecipe={createNewRecipe}
           />
         </div>
       </div>

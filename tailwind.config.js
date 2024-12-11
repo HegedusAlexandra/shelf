@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'didone': ['AnticDidone', 'serif'],
+        'playwrite': ['Playwrite HU', 'cursive'],
         'opensans': ['OpenSans', 'sans-serif'],
       },
       backgroundImage: {
