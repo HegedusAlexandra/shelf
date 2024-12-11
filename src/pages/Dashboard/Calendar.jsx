@@ -138,13 +138,13 @@ const Calendar = () => {
       <div className="w-[18%]">
         <div
           className={`transition-transform duration-300 ${
-            showRightSidebars ? "translate-x-0" : "translate-x-[78%]"
+            showLeftSidebars ? "translate-x-0" : "translate-x-[78%]"
           } overflow-hidden`}
         >
           <SidebarLeft />
         </div>
       </div>
-      <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+      <div className="z-10 text-sm flex flex-col  w-[90%] md:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={headerToolbarConfig}
@@ -163,6 +163,7 @@ const Calendar = () => {
           eventClick={handleEventClick}
           eventsSet={handleEvents}
           dateClick={handleDateClick}
+          height={"90vh"}
         />
       </div>
       <div className="w-[18%]">

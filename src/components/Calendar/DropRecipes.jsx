@@ -52,7 +52,7 @@ export default function DropRecipes({
         ref={divRef}
         className={`${
           selectedOption ? "text-black" : "text-gray-400"
-            } w-[100%] h-[100%] text-left px-3 focus:outline-none`}
+            } w-[100%] h-[100%] text-left px-4 focus:outline-none`}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -69,7 +69,7 @@ export default function DropRecipes({
             <input
               type="number"
               placeholder="0"
-              className="px-3 w-[80px]"
+              className="px-4 w-[80px]"
               value={selectedPortion || ""}
               onChange={handlePortionChange}
             />
@@ -81,7 +81,7 @@ export default function DropRecipes({
       {isOpen && (
         <ul
           ref={dropdownRef}
-          className="absolute z-10 mt-1 w-[100%] text-gray-600 bg-stone-200 shadow-lg rounded-md max-h-40 overflow-y-auto"
+          className="absolute z-10 mt-1 top-[calc(100%)] w-[100%] text-gray-600 bg-stone-200 shadow-lg rounded-md max-h-40 overflow-y-auto"
           role="listbox"
         >
           {options.length > 0 ? (

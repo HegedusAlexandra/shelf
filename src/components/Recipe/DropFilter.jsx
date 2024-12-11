@@ -8,15 +8,11 @@ export default function DropFilter({
   placeholder = "Select an option"
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(value || null);
   const dropdownRef = useClickOutside(() => setIsOpen(false));
   const handleToggle = () => setIsOpen((prev) => !prev);
 
-  useEffect(() => setSelectedOption(value), [value]);
-
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    onChange(option)
+    onChange(() => option)
     setIsOpen(false);
   };
   
@@ -36,7 +32,7 @@ export default function DropFilter({
       <div>
         <button
           className={`${
-            selectedOption ? "text-black" : "text-gray-400"
+            value ? "text-black" : "text-gray-400"
           } w-full text-left px-4 py-1`}
           onClick={handleToggle}
           aria-haspopup="listbox"
@@ -50,7 +46,7 @@ export default function DropFilter({
             e.target.nextElementSibling.classList.add("bg-stone-300");
           }}
         >
-          {selectedOption?.toLowerCase() || placeholder}
+          {value || placeholder}
         </button>
         <hr className="w-[100%] mx-auto h-[0.5px] bg-stone-300" />
       </div>
@@ -64,10 +60,10 @@ export default function DropFilter({
             <li
               key={option.id || index} // Use a unique ID if available
               className={`px-4 py-2 cursor-pointer hover:bg-green-300 ${
-                selectedOption === option ? "bg-transparent font-bold" : ""
+                value === option ? "bg-transparent font-bold" : ""
               }`}
               role="option"
-              aria-selected={selectedOption === option}
+              aria-selected={value === option}
               tabIndex={0} // Allow keyboard navigation
               onClick={() => handleOptionClick(option)}
             >
