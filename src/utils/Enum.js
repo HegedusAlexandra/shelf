@@ -1,5 +1,6 @@
 // Enums for Recipe Properties
 const TagType = Object.freeze({
+  ELEMENT:"ELEMENT",
   DESSERT: "DESSERT",
   COOKIE: "COOKIE",
   DECORATION: "DECORATION",

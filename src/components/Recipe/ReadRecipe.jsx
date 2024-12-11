@@ -8,6 +8,8 @@ export default function ReadRecipe({
   steps,
   setCakeId
 }) {
+
+
   return (
     <div className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[40vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
@@ -15,7 +17,7 @@ export default function ReadRecipe({
           kép feltöltése
         </div>
         <div className="w-full flex flex-row items-center">
-          <h1 className="text-[6vh] w-full flex justify-start py-[2vw] text-stone-600">
+          <h1 className="text-[4vh] w-full flex justify-start py-[2vw] text-stone-600">
             {recipeName}
           </h1>
           <Button
@@ -40,8 +42,7 @@ export default function ReadRecipe({
               {Array.isArray(el) ? (
                 el.map((ingredient) => (
                   <p key={ingredient.name} className="text-sm">
-                    {ingredient.amount} {ingredient.measurement}{" "}
-                    {ingredient.name}
+                    {ingredient.amount} {ingredient.measurement} {ingredient.name}
                   </p>
                 ))
               ) : (
@@ -54,7 +55,7 @@ export default function ReadRecipe({
       <h2 className=" font-medium text-gray-700 mt-4">Lépések</h2>
       <hr className="w-[100%] mx-auto h-[3px] bg-black" />
       {steps?.map((el) => (
-        <p>
+        <p key={el?.description?.slice(0,10)+el.order} >
           {el.order}. {el.description}
         </p>
       ))}

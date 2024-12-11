@@ -55,7 +55,7 @@ export const GET_TODOS = gql`
       start
       end_time
       duration
-      recipeId
+      recipe_id
       iscompleted
     }
   }

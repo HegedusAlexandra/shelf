@@ -10,7 +10,9 @@ function SidebarRight({
   newTodo = {},
   options,
   setshowRightSidebars,
-  showRightSidebars
+  showRightSidebars,
+  handleDeleteTodo,
+  emptyTodoForm
 }) {
   const [filterValue, setFilterValue] = useState("");
   const handleDropRecipesChange = (value) => {
@@ -32,7 +34,7 @@ function SidebarRight({
   };
 
   return (
-    <div className="w-[100%] h-[84vh] my-[8vh] bg-white rounded-r-md p-[1vw] text-black/70 flex flex-col justify-start gap-[4vh]">
+    <div className="w-[100%] h-[84vh] my-[8vh]  bg-white rounded-r-md p-[1vw] text-black/70 flex flex-col justify-start gap-[4vh]">
       <div>
         <div className="flex flex-row justify-between">
           <h2 className="font-bold text-xl mb-[4vh]">Add Todo</h2>
@@ -58,7 +60,7 @@ function SidebarRight({
           Add a title or use the recipe's name automatically
         </p>
       </div>
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="flex flex-col flex-1 gap-4 ">
         <div>
           <div className="w-[100%] flex flex-row justify-start">
             <input
@@ -115,14 +117,31 @@ function SidebarRight({
           <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
         </div>
       </div>
-      <Button
-        variant="yellow"
-        size="sm"
-        label="Hozzáadás"
-        onClick={() => handleSaveTodo()}
-      />
+
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="yellowFull"
+            size="sm"
+            label="Mégse"
+            onClick={() => emptyTodoForm()}
+          />
+          <Button
+            variant="yellow"
+            size="sm"
+            label="Hozzáadás"
+            onClick={() => handleSaveTodo()}
+          />
+        </div>{" "}
+        <Button
+          variant="red"
+          size="sm"
+          label="Törlés"
+          onClick={() => handleDeleteTodo()}
+        />
+      </div>
     </div>
   );
 }
 
-export default React.memo(SidebarRight);
+export default SidebarRight;

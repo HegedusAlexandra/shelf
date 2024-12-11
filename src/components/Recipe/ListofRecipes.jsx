@@ -31,40 +31,43 @@ export default function ListofRecipes({
   });
 
   useEffect(() => {
+    const recipe = oneRecipe?.getRecipeById;
+    const groupedIngredients = [];
+
+    recipe?.ingredients.forEach((el) => {
+      const index = groupedIngredients.findIndex(
+        (group) => group[0]?.type === el.type
+      );
+
+      if (index !== -1) {
+        groupedIngredients[index].push(el);
+      } else {
+        groupedIngredients.push([el]);
+      }
+    });
+
+    setIngredients(Object.values(groupedIngredients));
+  }, [oneRecipe, setIngredients]);
+
+  useEffect(() => {
     if (oneRecipe?.getRecipeById) {
       const recipe = oneRecipe.getRecipeById;
 
-      const groupedIngredients = recipe.ingredients.reduce((acc, ingredient) => {
-        if (!acc[ingredient.type]) {
-          acc[ingredient.type] = []; // Initialize the array for the category
-        }
-        acc[ingredient.type].push({
-          id:ingredient.id || "",
-          name: ingredient.name || "",
-          measurement: ingredient.measurement || "",
-          amount: ingredient.amount || "",
-          type: ingredient.type || ""
-        });
-        return acc;
-      }, {});
-
       const filteredSteps = recipe.steps.map((el) => ({
         order: el.order,
-        description: el.description,
+        description: el.description
       }));
-      
+
       const filteredTags = recipe.tags.map((el) => ({
-        tag_type: el.tag_type,
+        tag_type: el.tag_type
       }));
-  
-      setIngredients(Object.values(groupedIngredients));
+
       setRecipeName(recipe.name || "");
       setSteps(filteredSteps || [""]);
       setPhases(recipe.phases || [""]);
       setTags(filteredTags || [""]);
     }
-  }, [oneRecipe, setIngredients, setPhases, setRecipeName, setSteps, setTags]);
-
+  }, [oneRecipe, setPhases, setRecipeName, setSteps, setTags]);
 
   const filteredRecipes =
     recipes?.getRecipes?.filter((recipe) =>
@@ -75,32 +78,35 @@ export default function ListofRecipes({
     <div
       className={`h-[73vh] bg-stone-50 md:flex flex-row justify-start items-start rounded-r-xl mt-[10vh] py-[4vh] pl-[1vw] overflow-y-scroll hide-scrollbar`}
     >
-      
       <div className="w-[92%] text-sm">
         <Searchfield
           placeholder="Search recipes..."
           value={filter}
           onChange={setFilter}
         />
-      
-      {loadingRecipes ? (
-        <p>Loading recipes...</p>
-      ) : errorRecipes ? (
-        <p>Error loading recipes: {errorRecipes.message}</p>
-      ) : filteredRecipes.length > 0 ? (
-        filteredRecipes.map((recipe, index) => (
-          <Button
-            label={recipe.name}
-            key={recipe.id}
-            variant='plain'
-            size="sm"
-            onClick={() => setCakeId(recipe.id)}
-          />
-        ))
-      ) : (
-        <p className="text-gray-500 mt-4">No recipes found.</p>
-      )}</div>
-      <button onClick={() => setshowRightSidebars(!showRightSidebars)} className="realtive w-[2vw] h-[4vw] bg-green-400 rounded-l-md"></button>
+
+        {loadingRecipes ? (
+          <p>Loading recipes...</p>
+        ) : errorRecipes ? (
+          <p>Error loading recipes: {errorRecipes.message}</p>
+        ) : filteredRecipes.length > 0 ? (
+          filteredRecipes.map((recipe, index) => (
+            <Button
+              label={recipe.name}
+              key={recipe.id}
+              variant="plain"
+              size="sm"
+              onClick={() => setCakeId(recipe.id)}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500 mt-4">No recipes found.</p>
+        )}
+      </div>
+      <button
+        onClick={() => setshowRightSidebars(!showRightSidebars)}
+        className="realtive w-[2vw] h-[4vw] bg-green-400 rounded-l-md"
+      ></button>
     </div>
   );
 }

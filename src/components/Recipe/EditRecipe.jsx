@@ -116,10 +116,7 @@ export default function EditRecipe({
     ),
     []
   );
-
-  console.log(ingredients);
-  
-
+ 
   return (
     <div className="z-10 flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row mt-[2vh] pt-[1vh]">

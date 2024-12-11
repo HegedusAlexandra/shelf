@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_TODOS, GET_ALL_RECIPE } from "../../utils/graphql/queries";
-import { ADD_TODO } from "../../utils/graphql/mutations";
+import { ADD_TODO, DELETE_TODO } from "../../utils/graphql/mutations";
 import { useUser } from "../../contexts/UserProvider";
 import SidebarRight from "../../components/Calendar/SidebarRight";
 import SidebarLeft from "../../components/Calendar/SidebarLeft";
@@ -13,9 +13,10 @@ import RenderEventContent from "../../components/Calendar/RenderEventContent";
 
 const Calendar = () => {
   const user = useUser();
-  const [currentEvents, setCurrentEvents] = useState([]);
-  const [showLeftSidebars, setshowLeftSidebars] = useState(true);
+  const [events, setEvents] = useState([]);
+  const [showLeftSidebars, setshowLeftSidebars] = useState(false);
   const [showRightSidebars, setshowRightSidebars] = useState(false);
+  const [changeTodo, setchangeTodo] = useState("");
   const [newTodo, setNewTodo] = useState({
     title: "",
     description: "",
@@ -24,29 +25,71 @@ const Calendar = () => {
     portions: 0,
     start: null
   });
-
-  const [addTodo] = useMutation(ADD_TODO);
-  const { data: recipes } = useQuery(GET_ALL_RECIPE, {
+  const [addTodo] = useMutation(ADD_TODO, {
+    refetchQueries: [{ query: GET_TODOS, variables: { userId: user?.id } }],
+    awaitRefetchQueries: true
+  });
+  const {
+    data: recipes,
+    loading: recipesLoading,
+    error: RecipesError
+  } = useQuery(GET_ALL_RECIPE, {
     variables: { userId: user?.id }
   });
   const {
     data: todos,
+    refetch: refetchTodos,
     loading,
     error
   } = useQuery(GET_TODOS, {
     skip: !user?.id,
     variables: { userId: user?.id }
   });
+  const [deleteTodo] = useMutation(DELETE_TODO, {
+    refetchQueries: [GET_TODOS]
+  });
+
+  useEffect(() => {
+    if (todos?.getTodos) {
+      const updatedEvents = todos.getTodos.map((todo) => ({
+        title: todo.title,
+        start: todo.start,
+        end: todo.end_time,
+        extendedProps: {
+          todoId: todo.id,
+          recipeId: String(todo.recipe_id),
+          description: todo.description,
+          duration: todo.duration
+        }
+      }));
+      setEvents(updatedEvents);
+    }
+  }, [todos]);
+
+  const emptyTodoForm = () =>
+    {setNewTodo({
+      title: "",
+      description: "",
+      duration: 60,
+      recipeId: "",
+      portions: 0,
+      start: null,
+      end_time: null
+    });}
 
   const handleDateSelect = (selectInfo) => {
+    emptyTodoForm();
     setshowRightSidebars(true);
-    console.log("Selected Date:", typeof selectInfo.start);
+
     const calculatedDuration =
       (selectInfo.end - selectInfo.start) / (1000 * 60);
     const noendAdded = selectInfo.start + 60;
 
-    setNewTodo((prevTodo) => ({
-      ...prevTodo,
+    setNewTodo(() => ({
+      title: "",
+      description: "",
+      recipeId: "",
+      portions: 0,
       start: selectInfo.start.toISOString(),
       end_time: selectInfo.end.toISOString() || noendAdded,
       duration: calculatedDuration
@@ -54,30 +97,35 @@ const Calendar = () => {
   };
 
   const handleEventClick = (clickInfo) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'?`
-      )
-    ) {
-      clickInfo.event.remove();
-    }
+    /* when exactly clicking on the already existing event */
+
+    emptyTodoForm();
+    const event = clickInfo.event;
+
+    setNewTodo({
+      title: event.title || "",
+      description: event.extendedProps.description || "",
+      duration: event.extendedProps.duration || 60,
+      recipeId: event.extendedProps.recipeId || "",
+      portions: event.extendedProps.portions || 0,
+      start: event.start?.toISOString() || null,
+      end_time: event.end?.toISOString() || null
+    });
+    setchangeTodo(() => event.extendedProps.todoId);
+    setshowRightSidebars(true);
   };
 
-  const handleEvents = (events) => {
-    setCurrentEvents(events);
+  const handleEvents = () => {
+    /* when change to day tab  */
+    /*  console.log("handleEvents", events); */
   };
 
-  const handleDateClick = (events) => {
-    console.log("====================================");
-    console.log(events);
-    console.log("====================================");
+  const handleDateClick = () => {
+    /* when clicking on an empty part in the day view */
+    /* console.log("handleDateClick", events); */
   };
 
   const handleSaveTodo = () => {
-    console.log("====================================");
-    console.log(newTodo);
-    console.log("====================================");
-
     const variables = {
       userId: user?.id,
       title:
@@ -96,15 +144,8 @@ const Calendar = () => {
     addTodo({ variables })
       .then(() => {
         alert("Todo added successfully!");
-        setNewTodo({
-          title: "",
-          description: "",
-          duration: 60,
-          recipeId: "",
-          portions: 0,
-          start: null,
-          end_time: null
-        }); // Reset newTodo
+        emptyTodoForm();
+        refetchTodos();
       })
       .catch((err) => {
         console.error("Error adding todo:", err);
@@ -112,16 +153,21 @@ const Calendar = () => {
       });
   };
 
-  const handleDropRecipesChange = (value) => {
-    setNewTodo((prevTodo) => ({
-      ...prevTodo,
-      recipeId: value.recipeId,
-      portions: value.portions,
-      title:
-        prevTodo.title ||
-        recipes?.getRecipes?.find((r) => r.id === value.recipeId)?.name ||
-        ""
-    }));
+  const handleDeleteTodo = () => {
+    const variables = {
+      userId: user?.id,
+      todoId: changeTodo
+    };
+    deleteTodo({ variables })
+      .then(() => {
+        alert("Todo deleted successfully!");
+        emptyTodoForm();
+        refetchTodos();
+      })
+      .catch((err) => {
+        console.error("Error deleting todo:", err);
+        alert("Failed to delete todo!");
+      });
   };
 
   const headerToolbarConfig = {
@@ -130,18 +176,22 @@ const Calendar = () => {
     right: "dayGridMonth,timeGridWeek,timeGridDay"
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading || recipesLoading) return <p>Loading...</p>;
+  if (error || RecipesError)
+    return <p>Error: {error.message || RecipesError.message}</p>;
 
   return (
     <div className="w-[100%] flex flex-row justify-center items-start">
       <div className="w-[18%]">
         <div
           className={`transition-transform duration-300 ${
-            showLeftSidebars ? "translate-x-0" : "translate-x-[78%]"
+            showLeftSidebars ? "translate-x-0" : "translate-x-[78%] opacity-40"
           } overflow-hidden`}
         >
-          <SidebarLeft />
+          <SidebarLeft
+            showLeftSidebars={showLeftSidebars}
+            setshowLeftSidebars={setshowLeftSidebars}
+          />
         </div>
       </div>
       <div className="z-10 text-sm flex flex-col  w-[90%] md:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
@@ -153,11 +203,7 @@ const Calendar = () => {
           selectable={true}
           selectMirror={true}
           dayMaxEvents={true}
-          initialEvents={todos?.getTodos.map((todo) => ({
-            title: todo.title,
-            start: todo.start, // Ensure start is set
-            end: todo.end_time, // Use end_time from your data
-          })) || []}
+          events={events}
           select={handleDateSelect}
           eventContent={RenderEventContent}
           eventClick={handleEventClick}
@@ -169,17 +215,20 @@ const Calendar = () => {
       <div className="w-[18%]">
         <div
           className={`transition-transform duration-300 ${
-            showRightSidebars ? "translate-x-0" : "-translate-x-[78%]"
+            showRightSidebars
+              ? "translate-x-0"
+              : "-translate-x-[78%] opacity-40"
           } overflow-hidden`}
         >
           <SidebarRight
-          setshowRightSidebars={setshowRightSidebars}
-          showRightSidebars={showRightSidebars}
-            currentEvents={currentEvents}
+            setshowRightSidebars={setshowRightSidebars}
+            showRightSidebars={showRightSidebars}
             handleSaveTodo={handleSaveTodo}
             setNewTodo={setNewTodo}
             newTodo={newTodo}
             options={recipes?.getRecipes}
+            handleDeleteTodo={handleDeleteTodo}
+            emptyTodoForm={emptyTodoForm}
           />
         </div>
       </div>
