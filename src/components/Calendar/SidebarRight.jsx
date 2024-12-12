@@ -15,16 +15,6 @@ function SidebarRight({
   emptyTodoForm
 }) {
   const [filterValue, setFilterValue] = useState("");
-  const handleDropRecipesChange = (value) => {
-    setNewTodo((prevTodo) => ({
-      ...prevTodo,
-      ...value,
-      title:
-        options?.find((option) => option.id === value.recipeId)?.name ||
-        prevTodo?.title ||
-        ""
-    }));
-  };
 
   const handleInputChange = (field, value) => {
     setNewTodo((prevTodo) => ({
@@ -91,15 +81,16 @@ function SidebarRight({
         />
         <DropRecipes
           placeholder="Válassz egy sütit"
-          options={
+          options={options.filter((el) =>
             filterValue
-              ? options?.filter((el) =>
-                  el.tags.find((tag) => tag.tag_type === filterValue)
-                )
-              : options
-          }
+              ? el.tags.some((tag) => tag.tag_type === filterValue)
+              : true
+          )}
           value={newTodo}
-          onChange={handleDropRecipesChange}
+          onChangeDropdown={(value) => handleInputChange("recipeId", value)}
+          onChangeInput={(value) =>
+            handleInputChange("portions", parseInt(value))
+          }
         />
         <div>
           <div className="w-[100%] flex flex-row justify-between">
@@ -117,7 +108,6 @@ function SidebarRight({
           <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
         </div>
       </div>
-
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2">
           <Button

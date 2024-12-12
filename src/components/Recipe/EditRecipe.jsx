@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { GET_INGREDIENTS } from "../../utils/graphql/queries";
+import { GET_INGREDIENTS, GET_ALL_RECIPE } from "../../utils/graphql/queries";
 import { ADD_RECIPE } from "../../utils/graphql/mutations";
 import RecipeValidationSchema from "../../utils/recipeValidationSchema";
 import plus from "../../assets/icons/plus.png";
@@ -36,7 +36,11 @@ export default function EditRecipe({
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
 
-  const addFieldIngredient = (stateSetter) => stateSetter((prev) => [...prev, [{name:'',amount:'',measurement:"",type:''}]]);
+  const addFieldIngredient = (stateSetter) =>
+    stateSetter((prev) => [
+      ...prev,
+      [{ name: "", amount: "", measurement: "", type: "" }]
+    ]);
   const addField = (stateSetter) => stateSetter((prev) => [...prev, []]);
   const removeField = (stateSetter, index) =>
     stateSetter((prev) => prev.filter((_, i) => i !== index));
@@ -51,6 +55,7 @@ export default function EditRecipe({
     setModal("success");
     modalRef.current.open();
   };
+  
   const openFailModal = () => {
     setModal("failed");
     modalRef.current.open();
@@ -72,7 +77,11 @@ export default function EditRecipe({
       console.log("Validation successful:", recipeData);
 
       const response = await addRecipe({
-        variables: recipeData
+        variables: recipeData,
+        refetchQueries: [
+          { query: GET_ALL_RECIPE, variables: { userId: user?.id } }
+        ],
+        awaitRefetchQueries: true
       });
       console.log("Recipe added successfully:", response.data.addRecipe);
       openSuccessModal();
@@ -116,7 +125,7 @@ export default function EditRecipe({
     ),
     []
   );
- 
+
   return (
     <div className="z-10 flex flex-col w-[90%] md:w-[60%] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
       <div className="h-[20vh] w-full flex flex-row mt-[2vh] pt-[1vh]">

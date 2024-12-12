@@ -60,3 +60,11 @@ export const DELETE_TODO = gql`
     )
   }
 `;
+export const DELETE_RECIPE = gql`
+  mutation DeleteRecipe($userId: ID!, $recipeId: ID!) {
+    deleteRecipe(
+      recipeId:$recipeId
+      userId: $userId
+    )
+  }
+`;
