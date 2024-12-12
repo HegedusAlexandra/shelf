@@ -6,7 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_TODOS, GET_ALL_RECIPE } from "../../utils/graphql/queries";
 import { ADD_TODO, DELETE_TODO } from "../../utils/graphql/mutations";
-import { useUser } from "../../contexts/UserProvider";
+import { useUser } from "../../contexts/UserContext";
 import SidebarRight from "../../components/Calendar/SidebarRight";
 import SidebarLeft from "../../components/Calendar/SidebarLeft";
 import RenderEventContent from "../../components/Calendar/RenderEventContent";

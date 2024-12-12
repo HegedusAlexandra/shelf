@@ -46,6 +46,7 @@ const Navigation = Object.freeze({
   MAIN: "main",
   RECIPE: "recipe",
   STOCK: "stock",
+  CALENDAR: "calendar",
 });
 
 const Sitemap = Object.freeze({

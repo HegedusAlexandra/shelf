@@ -7,8 +7,9 @@ import event from "../../assets/icons/event.png";
 import trash from "../../assets/icons/delete.png";
 import edit from "../../assets/icons/edit.png";
 import DropFilter from "./DropFilter";
+import { useNavigate } from "react-router-dom";
 
-export default function SearchRecipe({ recipeName, user, setCakeId }) {
+export default function SearchRecipe({ recipeName, user, setCakeId ,setCurrentView}) {
   const [filter, setFilter] = useState("");
   const [filterByTag, setFilterByTag] = useState("");
   const {
@@ -18,7 +19,7 @@ export default function SearchRecipe({ recipeName, user, setCakeId }) {
   } = useQuery(GET_ALL_RECIPE, {
     variables: { userId: user?.id }
   });
-
+const navigate= useNavigate()
 
   const filteredRecipes =
   recipes?.getRecipes?.filter(
@@ -27,8 +28,10 @@ export default function SearchRecipe({ recipeName, user, setCakeId }) {
       (!filterByTag || recipe?.tags?.some((tag) => tag.tag_type.toLowerCase().includes(filterByTag.toLowerCase())))
   ) || [];
 
-  const addToCalendar = () => {};
-  const deleteRecipe = () => {};
+  const printRecipe = (value) => {setCakeId(value); setCurrentView('print');}
+  const handleEdit = (value) => {setCurrentView('edit');setCakeId(() =>   value)}
+  const addToCalendar = (value) => {navigate('/dashboard/calendar');setCakeId(value)};
+  const deleteRecipe = (value) => {/* here comes the recipe delete logic */ setCakeId(value)};
 
   return (
     <div className="z-10 text-sm flex flex-col justify-start w-[90%] md:w-[60%] min-h-screen  p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
@@ -41,7 +44,6 @@ export default function SearchRecipe({ recipeName, user, setCakeId }) {
         <DropFilter onChange={setFilterByTag}/>
         </div>
       </div>
-
       <div className="w-full translate-x-4">
         <Searchfield
           placeholder="Search recipes..."
@@ -54,36 +56,36 @@ export default function SearchRecipe({ recipeName, user, setCakeId }) {
       ) : errorRecipes ? (
         <p>Error loading recipes: {errorRecipes.message}</p>
       ) : filteredRecipes.length > 0 ? (
-        filteredRecipes.map((recipe, index) => (
+        filteredRecipes.map((recipe) => (
           <div
             key={recipe.name + "_list_name"}
             className="flex flex-row translate-x-2"
           >
-            <button className=" text-black/70 hover:text-orange-800 text-md flex justify-center uppercase items-start truncate focus:ring-transparent">
+            <button onClick={() => {setCakeId(recipe.id);setCurrentView('read')}} className=" text-black/70 hover:text-orange-800 text-md flex justify-center uppercase items-start truncate focus:ring-transparent">
               {recipe.name}
             </button>
             <hr className="flex-1 h-[1px] bg-black/20 m-3 ml-8" />
             <button
               className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full hover:bg-white/50"
-              onClick={addToCalendar}
+              onClick={() => printRecipe(recipe.id)}
             >
-              <img src={print} alt="plus" />
+              <img src={print} alt="print" />
             </button>
             <button
               className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full hover:bg-white/50"
-              onClick={deleteRecipe}
+              onClick={() => addToCalendar(recipe.id)}
             >
-              <img src={event} alt="plus" />
+              <img src={event} alt="event" />
             </button>
             <button
               className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full hover:bg-white/50"
-              onClick={() => setCakeId(recipe.id)}
+              onClick={() => handleEdit(recipe.id)}
             >
               <img src={edit} alt="plus" />
             </button>
             <button
               className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full hover:bg-white/50"
-              onClick={deleteRecipe}
+              onClick={() => deleteRecipe(recipe.id)}
             >
               <img src={trash} alt="plus" />
             </button>

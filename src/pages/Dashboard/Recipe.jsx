@@ -1,11 +1,11 @@
 /* same ingredient multiply times, minus ingredient, error handling*/
 
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import ListofRecipes from "../../components/Recipe/ListofRecipes";
 import EditRecipe from "../../components/Recipe/EditRecipe";
 import ReadRecipe from "../../components/Recipe/ReadRecipe";
 import ListofFunctions from "../../components/Recipe/ListofFunctions";
-import { useUser } from "../../contexts/UserProvider";
+import { useUser } from "../../contexts/UserContext";
 import SearchRecipe from "../../components/Recipe/SearchRecipe";
 
 const Recipe = () => {
@@ -19,8 +19,10 @@ const Recipe = () => {
   const [tags, setTags] = useState([""]);
   const user = useUser();
   const [cakeId, setCakeId] = useState("");
-  const [showLeftSidebars, setshowLeftSidebars] = useState(true);
-  const [showRightSidebars, setshowRightSidebars] = useState(true);
+  const [showLeftSidebars, setshowLeftSidebars] = useState(false);
+  const [showRightSidebars, setshowRightSidebars] = useState(false);
+
+  useEffect(() => setCurrentView('search'),[])
 
   const createNewRecipe = () => {
     setRecipeName("");
@@ -29,6 +31,7 @@ const Recipe = () => {
     setPhases([""]);
     setTags([""]);
   };
+
 
   return (
     <div className="w-[100%] flex flex-row justify-center items-start">
@@ -43,10 +46,12 @@ const Recipe = () => {
             setshowLeftSidebars={setshowLeftSidebars}
             createNewRecipe={createNewRecipe}
             setCurrentView={setCurrentView}
+            cakeId={cakeId}
+            setCakeId={setCakeId}
           />
         </div>
       </div>
-      {currentView === "read" && cakeId && (
+      {(currentView === "read" || currentView === 'print') && cakeId && (
         <ReadRecipe
           ingredients={ingredients}
           phases={phases}
@@ -55,9 +60,10 @@ const Recipe = () => {
           tags={tags}
           user={user}
           setCakeId={setCakeId}
+          setCurrentView={setCurrentView}
         />
       )}
-      {currentView === "read" && (!cakeId) && (
+      {currentView === "search"  && !cakeId && (
         <SearchRecipe
           ingredients={ingredients}
           phases={phases}
@@ -66,6 +72,7 @@ const Recipe = () => {
           tags={tags}
           user={user}
           setCakeId={setCakeId}
+          setCurrentView={setCurrentView}
         />
       )}
       {(currentView === "edit" || currentView === "add") && (
@@ -88,7 +95,7 @@ const Recipe = () => {
       <div className="w-[18%] ">
         <div
           className={`transition-transform duration-300 ${
-            showRightSidebars ? "translate-x-0 w-full" : "-translate-x-[88%]"
+            showRightSidebars ? "translate-x-0 w-full" : "-translate-x-[90%]"
           } overflow-hidden`}
         >
           <ListofRecipes
@@ -103,6 +110,7 @@ const Recipe = () => {
             setshowRightSidebars={setshowRightSidebars}
             showRightSidebars={showRightSidebars}
             createNewRecipe={createNewRecipe}
+            setCurrentView={setCurrentView}
           />
         </div>
       </div>
