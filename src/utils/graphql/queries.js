@@ -57,6 +57,7 @@ export const GET_TODOS = gql`
       duration
       recipe_id
       iscompleted
+      portions
     }
   }
 `;

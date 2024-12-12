@@ -32,6 +32,7 @@ export const ADD_TODO = gql`
     $duration: Int!
     $description: String
     $recipeId: Int
+    $portions: Int
   ) {
     addTodo(
       userId: $userId
@@ -42,6 +43,7 @@ export const ADD_TODO = gql`
       duration: $duration
       description: $description
       recipeId: $recipeId
+      portions: $portions
     ) {
       id
       title

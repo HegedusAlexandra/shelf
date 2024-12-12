@@ -50,6 +50,9 @@ const Calendar = () => {
   });
 
   useEffect(() => {
+console.log(todos?.getTodos);
+
+
     if (todos?.getTodos) {
       const updatedEvents = todos.getTodos.map((todo) => ({
         title: todo.title,
@@ -59,7 +62,8 @@ const Calendar = () => {
           todoId: todo.id,
           recipeId: String(todo.recipe_id),
           description: todo.description,
-          duration: todo.duration
+          duration: todo.duration,
+          portions:todo.portions
         }
       }));
       setEvents(updatedEvents);
@@ -101,6 +105,7 @@ const Calendar = () => {
 
     emptyTodoForm();
     const event = clickInfo.event;
+console.log(event.extendedProps);
 
     setNewTodo({
       title: event.title || "",
@@ -138,7 +143,8 @@ const Calendar = () => {
       end_time: newTodo.end_time,
       duration: newTodo.duration || 60,
       description: newTodo.description || "",
-      recipeId: Number(newTodo.recipeId) || ""
+      recipeId: Number(newTodo.recipeId) || "",
+      portions: newTodo.portions || 0
     };
 
     addTodo({ variables })
