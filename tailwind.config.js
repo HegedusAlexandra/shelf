@@ -12,6 +12,8 @@ module.exports = {
         'ab2': "url('./assets/abstract_2.jpg')",    
         'ab3': "url('./assets/abstract_3.jpg')",    
         'pink': "url('./assets/pink.jpg')",    
+        'cake1': "url('./assets/cake1.jpg')",    
+        'cake2': "url('./assets/cake2.jpg')",    
       },
     },
   },

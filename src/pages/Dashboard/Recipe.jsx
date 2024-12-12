@@ -7,6 +7,7 @@ import ReadRecipe from "../../components/Recipe/ReadRecipe";
 import ListofFunctions from "../../components/Recipe/ListofFunctions";
 import { useUser } from "../../contexts/UserContext";
 import SearchRecipe from "../../components/Recipe/SearchRecipe";
+import ListforToday from "../../components/Recipe/ListforToday";
 
 const Recipe = () => {
   const [currentView, setCurrentView] = useState("read");
@@ -21,8 +22,9 @@ const Recipe = () => {
   const [cakeId, setCakeId] = useState("");
   const [showLeftSidebars, setshowLeftSidebars] = useState(false);
   const [showRightSidebars, setshowRightSidebars] = useState(false);
+  const [showLeftSidebarDays, setshowLeftSidebarDays] = useState(false);
 
-  useEffect(() => setCurrentView('search'),[])
+  useEffect(() => setCurrentView("search"), []);
 
   const createNewRecipe = () => {
     setRecipeName("");
@@ -31,14 +33,14 @@ const Recipe = () => {
     setPhases([""]);
     setTags([""]);
   };
-
+console.log(currentView, cakeId);
 
   return (
     <div className="w-[100%] flex flex-row justify-center items-start">
-      <div className="w-[18%]">
+      <div className="w-[18%] flex flex-col">
         <div
           className={`transition-transform duration-300 ${
-            showLeftSidebars ? "translate-x-0 w-full" : "translate-x-[78%]"
+            showLeftSidebars ? "translate-x-0 " : "translate-x-[78%]"
           } overflow-hidden`}
         >
           <ListofFunctions
@@ -50,8 +52,22 @@ const Recipe = () => {
             setCakeId={setCakeId}
           />
         </div>
+
+        <div
+          className={`transition-transform duration-300 ${
+            showLeftSidebarDays ? "translate-x-[78%]" : "translate-x-0"
+          } overflow-hidden`}
+        >
+          <ListforToday
+            showLeftSidebarDays={showLeftSidebarDays}
+            setshowLeftSidebarDays={setshowLeftSidebarDays}
+            createNewRecipe={createNewRecipe}
+            setCurrentView={setCurrentView}
+            setCakeId={setCakeId}
+          />
+        </div>
       </div>
-      {(currentView === "read" || currentView === 'print') && cakeId && (
+      {(currentView === "read" || currentView === "print") && cakeId && (
         <ReadRecipe
           ingredients={ingredients}
           phases={phases}
@@ -63,7 +79,7 @@ const Recipe = () => {
           setCurrentView={setCurrentView}
         />
       )}
-      {currentView === "search"  && !cakeId && (
+      {currentView === "search" && !cakeId && (
         <SearchRecipe
           ingredients={ingredients}
           phases={phases}
@@ -92,7 +108,7 @@ const Recipe = () => {
           createNewRecipe={createNewRecipe}
         />
       )}
-      <div className="w-[18%] ">
+      <div className="w-[18%]">
         <div
           className={`transition-transform duration-300 ${
             showRightSidebars ? "translate-x-0 w-full" : "-translate-x-[90%]"

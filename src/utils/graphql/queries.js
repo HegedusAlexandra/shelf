@@ -26,8 +26,8 @@ export const GET_ALL_RECIPE = gql`
     getRecipes(userId: $userId) {
       id
       name
-      tags{
-      tag_type
+      tags {
+        tag_type
       }
     }
   }
@@ -42,6 +42,18 @@ export const GET_TODO = gql`
       start
       end_time
       iscompleted
+    }
+  }
+`;
+
+export const GET_TODAY_RECIPES = gql`
+  query {
+    getRecipesForToday {
+      id
+      start
+      portions
+      name
+      recipe_id
     }
   }
 `;
@@ -62,7 +74,6 @@ export const GET_TODOS = gql`
   }
 `;
 
-
 export const GET_RECIPE_BY_ID = gql`
   query GetRecipe($userId: String!, $cakeId: Int!) {
     getRecipeById(userId: $userId, cakeId: $cakeId) {
@@ -70,10 +81,10 @@ export const GET_RECIPE_BY_ID = gql`
       name
       ingredients {
         id
-        amount        
+        amount
         name
         measurement
-        type        
+        type
       }
       steps {
         order
