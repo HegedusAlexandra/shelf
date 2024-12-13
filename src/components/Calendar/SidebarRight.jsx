@@ -24,25 +24,12 @@ function SidebarRight({
   };
 
   return (
-    <div className="w-[100%] h-[84vh] my-[8vh]  bg-white rounded-r-md p-[1vw] text-black/70 flex flex-col justify-start gap-[4vh]">
+    <div style={{
+      boxShadow: "1px 2px 16px rgba(0, 0, 0, 0.8)"
+    }} className="w-[100%] h-[84vh] my-[8vh] bg-white xl:rounded-r-md rounded-l-md p-[1vw] text-black/70 flex flex-col justify-start gap-[4vh]">
       <div>
         <div className="flex flex-row justify-between">
           <h2 className=" text-xl mb-[4vh]">Add Todo</h2>
-          {showRightSidebars ? (
-            <button
-              className="w-[22px] rotate-45 h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-              onClick={() => setshowRightSidebars(false)}
-            >
-              <img src={plus} alt="plus" />
-            </button>
-          ) : (
-            <button
-              className="w-[22px] h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-              onClick={() => setshowRightSidebars(true)}
-            >
-              <img src={plus} alt="plus" />
-            </button>
-          )}
         </div>
         <h2 className="text-sm">from: {newTodo?.start}</h2>
         <h2 className="text-sm">to: {newTodo?.end_time}</h2>

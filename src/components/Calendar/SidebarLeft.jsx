@@ -1,29 +1,15 @@
 import React, { memo } from "react";
-import plus from "../../assets/icons/plus.png";
 
-function SidebarLeft({ setshowLeftSidebars, showLeftSidebars }) {
-
+function SidebarLeft({ }) {
 
   return (
     <div
-      className={`w-[100%] h-[84vh] my-[8vh] text-black/70 bg-white transition-transform duration-300 p-[1vw] rounded-l-md`}
+      className={`w-[100%] h-[84vh] my-[8vh] text-black/70 bg-white transition-transform duration-300 p-[1vw] xl:rounded-l-md rounded-r-md`}
+      style={{
+        boxShadow: "1px 2px 16px rgba(0, 0, 0, 0.8)"
+      }}
     >
       <div className="flex flex-row justify-start gap-[1vw]">
-        {showLeftSidebars ? (
-          <button
-            className="w-[22px] rotate-45 h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-            onClick={() => setshowLeftSidebars(false)}
-          >
-            <img src={plus} alt="plus" />
-          </button>
-        ) : (
-          <button
-            className="w-[22px] h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"
-            onClick={() => setshowLeftSidebars(true)}
-          >
-            <img src={plus} alt="plus" />
-          </button>
-        )}
         <h2 className="text-xl mb-[4vh]">Add Todo</h2>
       </div>
       <div>
