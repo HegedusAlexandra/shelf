@@ -7,6 +7,7 @@ import printIcon from "../../assets/icons/print.png";
 import eventIcon from "../../assets/icons/event.png";
 import trashIcon from "../../assets/icons/delete.png";
 import editIcon from "../../assets/icons/edit.png";
+import plusIcon from "../../assets/icons/plus.png";
 import DropFilter from "./DropFilter";
 import { useNavigate } from "react-router-dom";
 
@@ -18,6 +19,7 @@ export default function SearchRecipe({
 }) {
   const [filter, setFilter] = useState("");
   const [filterByTag, setFilterByTag] = useState("");
+  const [activeRecipe, setActiveRecipe] = useState(null); // For toggling buttons
   const navigate = useNavigate();
 
   const {
@@ -42,6 +44,10 @@ export default function SearchRecipe({
         );
       return matchesFilter && matchesTag;
     }) || [];
+
+  const handleButtonClick = (recipeId) => {
+    setActiveRecipe((prev) => (prev === recipeId ? null : recipeId)); // Toggle visibility
+  };
 
   const printRecipe = (value) => {
     setCakeId(value);
@@ -83,53 +89,77 @@ export default function SearchRecipe({
           <DropFilter onChange={setFilterByTag} />
         </div>
       </div>
-      <div className="w-full xl:translate-x-4 pl-2">
+      <div className="w-full xl:translate-x-4 pl-2 mb-4">
         <Searchfield
           placeholder="Search recipes..."
           value={filter}
           onChange={setFilter}
         />
       </div>
-      <div className="pb-[10vw] overflow-y-scroll overflow-x-hidden">
+      <div className="overflow-y-scroll overflow-x-hidden">
         {loadingRecipes ? (
           <p>Loading recipes...</p>
         ) : errorRecipes ? (
           <p>Error loading recipes. Please try again later.</p>
         ) : filteredRecipes.length > 0 ? (
           filteredRecipes.map((recipe) => (
-            <div key={recipe.id} className="flex flex-row translate-x-2">
-              <button
-                onClick={() => {
-                  setCakeId(recipe.id);
-                  setCurrentView("read");
-                }}
-                className="text-black/70 hover:text-orange-800 xl:text-md flex justify-center uppercase items-start truncate focus:ring-transparent"
+            <div
+              key={recipe.id}
+              className={`relative flex flex-row translate-x-2 px-2 rounded-md ${
+                activeRecipe === recipe.id ? "bg-green-400" : "bg-white"
+              } transition-colors duration-300`}
+            >
+              <div
+                className={`flex flex-row w-[140vw] xl:w-[56vw] justify-between items-center transition-transform duration-300 ${
+                  activeRecipe === recipe.id ? "-translate-x-full" : "translate-x-0"
+                }`}
               >
-                <p> {recipe.name}</p>
-              </button>
-              <hr className="flex-1 h-[1px] bg-black/20 m-3 ml-8 xl:block hidden" />
-              <div className="flex flex-row hidden translate-x-[100vh]">
+                <p
+                  className={`xl:text-md text-sm md:w-[74vw] w-[66vw] font-medium ${
+                    activeRecipe === recipe.id ? "text-white" : "text-gray-800"
+                  }`}
+                >
+                  {recipe.name}
+                </p>
                 <button
-                  className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full "
+                  className={`w-6 flex justify-center items-center ${activeRecipe === recipe.id && 'hidden'}`}
+                  onClick={() => handleButtonClick(recipe.id)}
+                >
+                  <img src={plusIcon} alt="Toggle" />
+                </button>
+              </div>
+              <div
+                className={`flex flex-row justify-between gap-4 transition-transform duration-300 ${
+                  activeRecipe === recipe.id ? "-translate-x-full" : "translate-x-full"
+                }`}
+              >
+                <button
+                  className="w-6 flex justify-center items-center"
+                  onClick={() => handleButtonClick(recipe.id)}
+                >
+                  <img src={plusIcon} alt="Toggle" />
+                </button>
+                <button
+                  className="w-[24px] mx-2 h-full flex justify-center items-center mb-2 rounded-full "
                   onClick={() => printRecipe(recipe.id)}
                 >
                   <img src={printIcon} alt="print" />
                 </button>
                 <button
-                  className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full"
+                  className="w-[24px] mx-2 h-full flex justify-center items-center mb-2 rounded-full"
                   onClick={() => addToCalendar(recipe.id)}
                 >
                   <img src={eventIcon} alt="event" />
                 </button>
                 <button
-                  className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full"
+                  className="w-[24px] mx-2 h-full flex justify-center items-center mb-2 rounded-full"
                   onClick={() => handleEdit(recipe.id)}
                 >
                   <img src={editIcon} alt="edit" />
                 </button>
                 <button
-                  className="w-[24px] mx-4 h-full flex justify-center items-center mb-2 rounded-full "
-                  onClick={() => deleteRecipe(recipe.id)}
+                  className="w-[24px] mx-2 h-full flex justify-center items-center mb-2 rounded-full "
+                  onClick={() => deleteRecipe(recipe.id)}                
                 >
                   <img src={trashIcon} alt="delete" />
                 </button>
