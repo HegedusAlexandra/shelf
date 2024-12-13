@@ -6,7 +6,7 @@ export default function DropAmount({
   options = [],
   onChange,
   value = {},
-  placeholder = "Select an option",
+  placeholder = "Select an option"
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -44,74 +44,76 @@ export default function DropAmount({
     onChange({
       preparation_method: selectedOption,
       time: selectedMin || 0,
-      temperature: selectedDegree || 0,
+      temperature: selectedDegree || 0
     });
   }, [selectedOption, selectedDegree, selectedMin]);
 
   const dropdownRef = useClickOutside(() => setIsOpen(false));
 
   return (
-    <div className="relative flex flex-row items-center gap-[1vw] flex-1 my-1">
-      <div className="flex flex-row items-center w-[100%] gap-[1vw] h-[4vh]">
-        <div className="flex-1">
-          <button
-            className={`${
-              selectedOption ? "text-black" : "text-gray-400"
-            } w-[100%] h-[100%] text-left px-4 focus:outline-none`}
-            onClick={() => setIsOpen((prev) => !prev)}
-            onFocus={(e) => {
-              e.target.nextElementSibling.classList.remove("bg-stone-300");
-              e.target.nextElementSibling.classList.add("bg-black");
-            }}
-            onBlur={(e) => {
-              e.target.nextElementSibling.classList.remove("bg-black");
-              e.target.nextElementSibling.classList.add("bg-stone-300");
-            }}
-            aria-haspopup="listbox"
-            aria-expanded={isOpen}
-          >
-            {selectedOption ? selectedOption.toLowerCase() : placeholder}
-          </button>
-          <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
-        </div>
-        <div>
-          <input
-            type="number"
-            placeholder="0"
-            className="px-3 w-[80px]"
-            value={selectedDegree || ""}
-            onChange={handleDegreeChange}
-            onFocus={(e) => {
-              e.target.nextElementSibling.classList.remove("bg-stone-300");
-              e.target.nextElementSibling.classList.add("bg-black");
-            }}
-            onBlur={(e) => {
-              e.target.nextElementSibling.classList.remove("bg-black");
-              e.target.nextElementSibling.classList.add("bg-stone-300");
-            }}
-          />
-          <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
-        </div>
-        <p>°C</p>
-        <div>
-          <input
-            type="number"
-            placeholder="0"
-            className="px-3 w-[80px] "
-            value={selectedMin || ""}
-            onChange={handleTimeChange}
-            onFocus={(e) => {
-              e.target.nextElementSibling.classList.remove("bg-stone-300");
-              e.target.nextElementSibling.classList.add("bg-black");
-            }}
-            onBlur={(e) => {
-              e.target.nextElementSibling.classList.remove("bg-black");
-              e.target.nextElementSibling.classList.add("bg-stone-300");
-            }}
-          />
-          <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
-        </div>
-        <p className="pr-[20px]">perc</p>
+    <div className="relative flex flex-1 flex-row items-center gap-[1vw] my-1">
+      <div className="flex md:flex-row flex-col flex-1 items-center gap-[1vw]">
+          <div className="flex flex-col w-[100%]">
+            <button
+              className={`${
+                selectedOption ? "text-black" : "text-gray-400"
+              } flex-1 h-[100%] text-left px-4 focus:outline-none`}
+              onClick={() => setIsOpen((prev) => !prev)}
+              onFocus={(e) => {
+                e.target.nextElementSibling.classList.remove("bg-stone-300");
+                e.target.nextElementSibling.classList.add("bg-black");
+              }}
+              onBlur={(e) => {
+                e.target.nextElementSibling.classList.remove("bg-black");
+                e.target.nextElementSibling.classList.add("bg-stone-300");
+              }}
+              aria-haspopup="listbox"
+              aria-expanded={isOpen}
+            >
+              {selectedOption ? selectedOption.toLowerCase() : placeholder}
+            </button>
+            <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
+          </div>
+          <div className="flex flex-row w-[100%] md:w-[30%]">
+            <div>
+              <input
+                type="number"
+                placeholder="0"
+                className="px-3 w-[80px]"
+                value={selectedDegree || ""}
+                onChange={handleDegreeChange}
+                onFocus={(e) => {
+                  e.target.nextElementSibling.classList.remove("bg-stone-300");
+                  e.target.nextElementSibling.classList.add("bg-black");
+                }}
+                onBlur={(e) => {
+                  e.target.nextElementSibling.classList.remove("bg-black");
+                  e.target.nextElementSibling.classList.add("bg-stone-300");
+                }}
+              />
+              <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
+            </div>
+            <p>°C</p>
+            <div>
+              <input
+                type="number"
+                placeholder="0"
+                className="px-3 md:w-[80px] w-[120px]"
+                value={selectedMin || ""}
+                onChange={handleTimeChange}
+                onFocus={(e) => {
+                  e.target.nextElementSibling.classList.remove("bg-stone-300");
+                  e.target.nextElementSibling.classList.add("bg-black");
+                }}
+                onBlur={(e) => {
+                  e.target.nextElementSibling.classList.remove("bg-black");
+                  e.target.nextElementSibling.classList.add("bg-stone-300");
+                }}
+              />
+              <hr className="w-[100%] mx-auto h-[1px] bg-stone-300" />
+            </div>
+            <p className="pr-[20px]">perc</p>
+          </div>
       </div>
       {isOpen && (
         <ul
@@ -149,6 +151,6 @@ DropAmount.propTypes = {
   value: PropTypes.shape({
     preparation_method: PropTypes.string,
     time: PropTypes.number,
-    temperature: PropTypes.number,
-  }),
+    temperature: PropTypes.number
+  })
 };

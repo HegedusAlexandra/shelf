@@ -69,8 +69,8 @@ export default function SearchRecipe({
       variables: { recipeId: value, userId: user?.id },
       refetchQueries: [
         { query: GET_ALL_RECIPE, variables: { userId: user?.id } }
-      ], // Refetch the recipes query
-      awaitRefetchQueries: true // Ensure UI waits for the query refetch
+      ],
+      awaitRefetchQueries: true
     }).catch((error) => {
       console.error("Error deleting recipe:", error);
     });
@@ -86,7 +86,7 @@ export default function SearchRecipe({
           <h1 className="xl:text-[6vh] text-[4vh] flex-1 flex justify-start text-stone-600 px-2">
             Receptek
           </h1>
-          <DropFilter onChange={setFilterByTag} />
+          <DropFilter onChange={setFilterByTag} value={filterByTag} />
         </div>
       </div>
       <div className="w-full xl:translate-x-4 pl-2 mb-4">

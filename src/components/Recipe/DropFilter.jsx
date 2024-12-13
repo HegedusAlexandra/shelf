@@ -10,6 +10,7 @@ export default function DropFilter({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useClickOutside(() => setIsOpen(false));
   const handleToggle = () => setIsOpen((prev) => !prev);
+console.log(value);
 
   const handleOptionClick = (option) => {
     onChange(() => option)

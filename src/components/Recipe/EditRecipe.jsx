@@ -226,14 +226,12 @@ export default function EditRecipe({
                   key={index + "_phase"}
                   className="flex flex-row items-end gap-[2px] w-[100%]"
                 >
-                  <div className="w-full">
-                    <DropAmount
-                      placeholder="Select the phases"
-                      options={Object.values(preparation_method)}
-                      value={phase}
-                      onChange={(value) => updateField(setPhases, index, value)}
-                    />
-                  </div>
+                  <DropAmount
+                    placeholder="Select the phases"
+                    options={Object.values(preparation_method)}
+                    value={phase}
+                    onChange={(value) => updateField(setPhases, index, value)}
+                  />
                   {plus_abort_button(
                     () => addField(setPhases),
                     () => removeField(setPhases, index),
