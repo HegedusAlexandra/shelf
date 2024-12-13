@@ -178,7 +178,6 @@ const Calendar = () => {
 
   const headerToolbarConfig = {
     left: "prev,next today",
-    center: "title",
     right: "dayGridMonth,timeGridWeek,timeGridDay"
   };
 
@@ -189,89 +188,89 @@ const Calendar = () => {
   console.log(showLeftSidebars, showRightSidebars);
 
   return (
-      <div className="w-[100vw] h-[100vh] flex flex-row justify-center items-start overflow-hidden relative">
-        {/* Left Sidebar */}
-        <div className="xl:static absolute left-0 xl:w-[18%] w-[90%] h-full">
-          <div
-            className={`relative flex xl:flex-row flex-row-reverse justify-center items-center transition-transform duration-300 ${
-              showLeftSidebars
-                ? "xl:translate-x-0 translate-x-0 xl:z-0 z-20"
-                : "xl:translate-x-[90%] translate-x-[-92%] z-0"
-            }`}
+    <div className="w-[100vw] h-[100vh] flex flex-row justify-center items-start overflow-hidden relative">
+      {/* Left Sidebar */}
+      <div className="xl:static absolute left-0 xl:w-[18%] w-[90%] h-full">
+        <div
+          className={`relative flex xl:flex-row flex-row-reverse justify-center items-center transition-transform duration-300 ${
+            showLeftSidebars
+              ? "xl:translate-x-0 translate-x-0 xl:z-0 z-20"
+              : "xl:translate-x-[90%] translate-x-[-92%] z-0"
+          }`}
+        >
+          <button
+            onClick={() => setshowLeftSidebars(!showLeftSidebars)}
+            className="xl:w-[2vw] md:w-[4vw] w-[6vw] h-[20vh] flex items-center justify-center font-bold bg-green-400 xl:rounded-l-md rounded-r-md xl:rounded-r-none rounded-l-none font-playwrite xl:py-[30px] py-[10px] hover:bg-green-600"
           >
-            <button
-              onClick={() => setshowLeftSidebars(!showLeftSidebars)}
-              className="xl:w-[2vw] md:w-[4vw] w-[6vw] h-[20vh] flex items-center justify-center font-bold bg-green-400 xl:rounded-l-md rounded-r-md xl:rounded-r-none rounded-l-none font-playwrite xl:py-[30px] py-[10px] hover:bg-green-600"
+            <div
+              className="text-center text-sm rotate-180"
+              style={{
+                writingMode: "vertical-rl",
+                whiteSpace: "nowrap"
+              }}
             >
-              <div
-                className="text-center text-sm rotate-180"
-                style={{
-                  writingMode: "vertical-rl",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                empty
-              </div>
-            </button>
-            <SidebarLeft />
-          </div>
-        </div>
-    
-        {/* Calendar Center */}
-        <div className="z-10 text-sm flex flex-col w-[84%] xl:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg shadow-lg overflow-hidden">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={headerToolbarConfig}
-            initialView="dayGridMonth"
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            events={events}
-            select={handleDateSelect}
-            eventContent={RenderEventContent}
-            eventClick={handleEventClick}
-            eventsSet={handleEvents}
-            dateClick={handleDateClick}
-            height={"90vh"}
-          />
-        </div>
-    
-        {/* Right Sidebar */}
-        <div className="xl:static absolute right-0 xl:w-[18%] w-[90%] h-full">
-          <div
-            className={`relative flex xl:flex-row flex-row-reverse justify-center items-center transition-transform duration-300 ${
-              showRightSidebars
-                ? "xl:-translate-x-0 xl:z-0 z-50"
-                : "xl:-translate-x-[90%] translate-x-[92%] z-0"
-            } overflow-hidden`}
-          >
-            <SidebarRight
-              handleSaveTodo={handleSaveTodo}
-              setNewTodo={setNewTodo}
-              newTodo={newTodo}
-              options={recipes?.getRecipes}
-              handleDeleteTodo={handleDeleteTodo}
-              emptyTodoForm={emptyTodoForm}
-            />
-            <button
-              onClick={() => setshowRightSidebars(!showRightSidebars)}
-              className="xl:w-[2vw] md:w-[4vw] w-[6vw] h-[20vh] flex items-center justify-center font-bold bg-yellow-400 xl:rounded-r-md rounded-l-md xl:rounded-l-none rounded-r-none font-playwrite xl:py-[30px] py-[10px] hover:bg-yellow-600"
-            >
-              <div
-                className="text-center text-sm"
-                style={{
-                  writingMode: "vertical-rl",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                add todo
-              </div>
-            </button>
-          </div>
+              empty
+            </div>
+          </button>
+          <SidebarLeft />
         </div>
       </div>
-    );
+
+      {/* Calendar Center */}
+      <div className="z-10 text-sm flex flex-col w-[84%] xl:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg shadow-lg overflow-hidden">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={headerToolbarConfig}
+          initialView="dayGridMonth"
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          events={events}
+          select={handleDateSelect}
+          eventContent={RenderEventContent}
+          eventClick={handleEventClick}
+          eventsSet={handleEvents}
+          dateClick={handleDateClick}
+          height={"90vh"}
+        />
+      </div>
+
+      {/* Right Sidebar */}
+      <div className="xl:static absolute right-0 xl:w-[18%] w-[90%] h-full">
+        <div
+          className={`relative flex xl:flex-row flex-row-reverse justify-center items-center transition-transform duration-300 ${
+            showRightSidebars
+              ? "xl:-translate-x-0 xl:z-0 z-50"
+              : "xl:-translate-x-[90%] translate-x-[92%] z-0"
+          } overflow-hidden`}
+        >
+          <SidebarRight
+            handleSaveTodo={handleSaveTodo}
+            setNewTodo={setNewTodo}
+            newTodo={newTodo}
+            options={recipes?.getRecipes}
+            handleDeleteTodo={handleDeleteTodo}
+            emptyTodoForm={emptyTodoForm}
+          />
+          <button
+            onClick={() => setshowRightSidebars(!showRightSidebars)}
+            className="xl:w-[2vw] md:w-[4vw] w-[6vw] h-[20vh] flex items-center justify-center font-bold bg-yellow-400 xl:rounded-r-md rounded-l-md xl:rounded-l-none rounded-r-none font-playwrite xl:py-[30px] py-[10px] hover:bg-yellow-600"
+          >
+            <div
+              className="text-center text-sm"
+              style={{
+                writingMode: "vertical-rl",
+                whiteSpace: "nowrap"
+              }}
+            >
+              add todo
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Calendar;
