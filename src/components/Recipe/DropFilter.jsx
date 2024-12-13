@@ -28,12 +28,12 @@ export default function DropFilter({
   }, []);
 
   return (
-    <div className="dropdown-container flex flex-col mb-1 pr-4 w-[12vw] relative">
+    <div className="dropdown-container flex flex-col mb-1 pr-4 xl:w-[12vw] w-full xl:mt-[0vh] mt-[2vh] pl-2 relative">
       <div>
         <button
           className={`${
             value ? "text-black" : "text-gray-400"
-          } w-full text-left px-4 py-1`}
+          } w-full text-left px-2 py-1`}
           onClick={handleToggle}
           aria-haspopup="listbox"
           aria-expanded={isOpen}

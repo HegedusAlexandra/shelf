@@ -27,7 +27,7 @@ function SidebarRight({
     <div className="w-[100%] h-[84vh] my-[8vh]  bg-white rounded-r-md p-[1vw] text-black/70 flex flex-col justify-start gap-[4vh]">
       <div>
         <div className="flex flex-row justify-between">
-          <h2 className="font-bold text-xl mb-[4vh]">Add Todo</h2>
+          <h2 className=" text-xl mb-[4vh]">Add Todo</h2>
           {showRightSidebars ? (
             <button
               className="w-[22px] rotate-45 h-full flex justify-center items-center mb-2 ring-[1px] ring-gray-500 rounded-full hover:bg-white/50"

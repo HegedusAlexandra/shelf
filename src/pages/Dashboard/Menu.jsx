@@ -11,7 +11,7 @@ export default function Menu() {
   };
 
   return (
-    <div className="fixed z-20 left-[2vw] top-[2vh] h-[100%] bg-black ">
+    <div className="fixed z-50 left-[2vw] top-[2vh] h-[100%] bg-black ">
       <button
         onClick={toggleMenu}
         className={`absolute top-4 left-4 z-50 rounded-full hover:bg-black/10 transition-all ${

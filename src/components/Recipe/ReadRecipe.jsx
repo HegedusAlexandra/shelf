@@ -2,11 +2,17 @@ import React, { forwardRef } from "react";
 import Button from "../Button";
 
 const ReadRecipe = forwardRef(
-  ({ ingredients, phases, recipeName, steps, setCakeId ,setCurrentView},ref) => {
+  (
+    { ingredients, phases, recipeName, steps, setCakeId, setCurrentView },
+    ref
+  ) => {
     return (
-      <div ref={ref} className="z-10 text-sm flex flex-col w-[90%] md:w-[60%] min-h-screen p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
-        <div className="h-[40vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
-          <div className="-translate-y-[3vh] flex-1 bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
+      <div
+        ref={ref}
+        className="z-10 text-sm flex flex-col w-[84%] xl:w-[60%] my-[4vh] xl:p-[1vw] p-[2vw] bg-[#fff] backdrop-blur-lg rounded-lg box-shadow"
+      >
+        <div className="h-[30vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
+          <div className="-translate-y-[3vh] h-[20vh] bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
             kép feltöltése
           </div>
           <div className="w-full flex flex-row items-center">
@@ -18,7 +24,10 @@ const ReadRecipe = forwardRef(
                 label="vissza a receptekhez"
                 size="sm"
                 variant="primary"
-                onClick={() =>{setCurrentView('search'); setCakeId("")}}
+                onClick={() => {
+                  setCurrentView("search");
+                  setCakeId("");
+                }}
               >
                 search
               </Button>

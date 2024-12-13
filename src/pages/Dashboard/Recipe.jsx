@@ -33,14 +33,16 @@ const Recipe = () => {
     setPhases([""]);
     setTags([""]);
   };
-console.log(currentView, cakeId);
+  console.log(currentView, cakeId);
 
   return (
-    <div className="w-[100%] flex flex-row justify-center items-start">
-      <div className="w-[18%] flex flex-col">
+    <div className="w-[100vw] h-screen flex flex-row justify-center items-start overflow-hidden">
+      <div className="xl:w-[18%] w-[50%] left-0 xl:static flex flex-col absolute overflow-hidden">
         <div
           className={`transition-transform duration-300 ${
-            showLeftSidebars ? "translate-x-0 " : "translate-x-[78%]"
+            showLeftSidebars
+              ? "xl:translate-x-0  -translate-x-[2%] xl:z-0 z-20"
+              : "xl:translate-x-[78%] md:-translate-x-[92%] -translate-x-[88%] z-0 "
           } overflow-hidden`}
         >
           <ListofFunctions
@@ -52,10 +54,11 @@ console.log(currentView, cakeId);
             setCakeId={setCakeId}
           />
         </div>
-
         <div
           className={`transition-transform duration-300 ${
-            showLeftSidebarDays ? "translate-x-[78%]" : "translate-x-0"
+            showLeftSidebarDays
+              ? "xl:translate-x-0 -translate-x-[2%] xl:z-0 z-20"
+              : "xl:translate-x-[78%] md:-translate-x-[92%] -translate-x-[88%] z-0"
           } overflow-hidden`}
         >
           <ListforToday
@@ -108,10 +111,12 @@ console.log(currentView, cakeId);
           createNewRecipe={createNewRecipe}
         />
       )}
-      <div className="w-[18%]">
+      <div className="xl:w-[18%] w-[50%] xl:static absolute right-0 flex flex-col overflow-hidden">
         <div
           className={`transition-transform duration-300 ${
-            showRightSidebars ? "translate-x-0 w-full" : "-translate-x-[90%]"
+            showRightSidebars
+              ? "xl:translate-x-0 translate-x-0 xl:z-0 z-20"
+              : "xl:-translate-x-[90%] lg:translate-x-[54%] md:translate-x-[70%] translate-x-[88%] z-0"
           } overflow-hidden`}
         >
           <ListofRecipes

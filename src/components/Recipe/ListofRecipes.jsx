@@ -79,9 +79,14 @@ export default function ListofRecipes({
 
   return (
     <div
-      className={`h-[86vh]  md:flex flex-row justify-start items-start mt-[10vh] `}
+      className={`xl:h-[86vh] h-[92vh] w-[100%] flex xl:flex-row flex-row-reverse justify-start items-start mt-[8vh] `}
     >
-      <div className="w-[92%] h-[84vh] text-sm bg-stone-50 p-[2vh] rounded-r-xl overflow-y-scroll hide-scrollbar">
+      <div
+        className="xl:w-[92%] h-[84vh] text-sm bg-stone-50 p-[2vh] xl:rounded-r-xl xl:rounded-l-none rounded-l-xl rounded-r-none overflow-y-scroll hide-scrollbar"
+        style={{
+          boxShadow: "-1px 4px 16px rgba(0, 0, 0, 0.8)"
+        }}
+      >
         <Searchfield
           placeholder="Search recipes..."
           value={filter}
@@ -101,7 +106,7 @@ export default function ListofRecipes({
               size="sm"
               onClick={() => {
                 createNewRecipe();
-                setCurrentView('read')
+                setCurrentView("read");
                 setCakeId(recipe.id);
               }}
             />
@@ -112,7 +117,7 @@ export default function ListofRecipes({
       </div>
       <button
         onClick={() => setshowRightSidebars(!showRightSidebars)}
-        className="w-[2vw] h-[20vh] flex items-center justify-center bg-green-400 rounded-r-md mt-[10vh] font-playwrite py-4 px-auto hover:bg-green-600"
+        className="xl:w-[2vw] md:w-[4vw] w-[10vw] flex items-center justify-center bg-green-400 xl:rounded-r-md xl:rounded-l-none rounded-l-md rounded-r-none mt-[10vh] font-playwrite xl:py-[30px] py-[10px] px-auto hover:bg-green-600"
       >
         <div
           className="text-center text-sm"

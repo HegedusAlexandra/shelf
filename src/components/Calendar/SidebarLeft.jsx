@@ -24,7 +24,7 @@ function SidebarLeft({ setshowLeftSidebars, showLeftSidebars }) {
             <img src={plus} alt="plus" />
           </button>
         )}
-        <h2 className="font-bold text-xl mb-[4vh]">Add Todo</h2>
+        <h2 className="text-xl mb-[4vh]">Add Todo</h2>
       </div>
       <div>
         <h2>Instructions</h2>

@@ -200,7 +200,7 @@ console.log(event.extendedProps);
           />
         </div>
       </div>
-      <div className="z-10 text-sm flex flex-col  w-[90%] md:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
+      <div className="z-10 text-sm flex flex-col  w-[84%] md:w-[60%] h-[92vh] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={headerToolbarConfig}
