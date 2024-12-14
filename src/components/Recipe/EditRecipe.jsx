@@ -127,7 +127,7 @@ export default function EditRecipe({
   );
 
   return (
-    <div className="z-10 flex flex-col w-[84%] xl:w-[60%] h-[92vh] xl:p-[1vw] xl:px-0 px-[1vw] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow ">
+    <div className="z-10 flex flex-col w-[84%] xl:w-[60%] h-min-[92vh] xl:p-[1vw] xl:px-0 px-[1vw] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow ">
       <div className="h-[30vh] w-full flex flex-col mt-[2vh] pt-[1vh]">
         <div className="-translate-y-[3vh] h-[20vh] mx-[1vw] bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
           kép feltöltése
@@ -138,7 +138,7 @@ export default function EditRecipe({
             : "Receptek Szerkesztése"}
         </h1>
       </div>
-      <div className="w-full h-[64vh] overflow-scroll flex flex-col">
+      <div className="w-full h-min-[64vh] flex flex-col">
         <div className="w-full p-[1vw]">
           <div className="w-[100%] flex justify-center items-center gap-2 mt-[6vh]">
             <div className="w-[100%] flex flex-col items-start ">
@@ -265,7 +265,7 @@ export default function EditRecipe({
                   )}
                 </div>
               ))}
-              <div className="w-[100%] flex justify-end mt-[10vh]">
+              <div className="w-[100%] flex justify-end mt-[20vh]">
                 <div className="w-[20%]">
                   <Button
                     onClick={submitRecipe}

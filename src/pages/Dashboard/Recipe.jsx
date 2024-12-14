@@ -36,7 +36,7 @@ const Recipe = () => {
   console.log(currentView, cakeId);
 
   return (
-    <div className="w-[100vw] h-screen flex flex-row justify-center items-start overflow-hidden">
+    <div className="w-[100vw] flex flex-row justify-center items-start overflow-hidden">
       <div className="xl:w-[18%] w-[50%] left-0 xl:static flex flex-col absolute overflow-hidden">
         <div
           className={`transition-transform duration-300 ${
