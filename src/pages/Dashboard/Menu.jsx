@@ -14,8 +14,8 @@ export default function Menu() {
     <div className="fixed z-50 left-[2vw] top-[2vh] h-[100%] bg-black ">
       <button
         onClick={toggleMenu}
-        className={`absolute top-4 left-4 z-50 rounded-full hover:bg-black/10 transition-all ${
-          isVisible ? "translate-x-[26vw]" : "translate-x-0"
+        className={`absolute top-4 z-50 rounded-full hover:bg-black/10 transition-all ${
+          isVisible ? "translate-x-[0vw]" : "translate-x-0"
         }`}
       >
         {isVisible ? (

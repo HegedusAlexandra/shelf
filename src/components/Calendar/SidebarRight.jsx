@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Button from "../Button";
 import DropRecipes from "./DropRecipes";
 import DropFilter from "../Recipe/DropFilter";
-import plus from "../../assets/icons/plus.png";
 
 function SidebarRight({
   handleSaveTodo,

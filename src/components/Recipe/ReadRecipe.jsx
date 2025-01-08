@@ -12,7 +12,7 @@ const ReadRecipe = forwardRef(
         className="z-10 text-sm flex flex-col w-[84%] xl:w-[60%] my-[4vh] xl:p-[1vw] p-[2vw] bg-[#fff] backdrop-blur-lg rounded-lg box-shadow"
       >
         <div className="h-[30vh] w-full flex flex-col justify-start mt-[2vh] pt-[1vh]">
-          <div className="-translate-y-[3vh] h-[20vh] bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
+          <div className="-translate-y-[3vh] h-[20vh] bg-pink bg-cover bg-no-repeat text-white uppercase rounded-md flex justify-center items-center">
             kép feltöltése
           </div>
           <div className="w-full flex flex-row items-center">

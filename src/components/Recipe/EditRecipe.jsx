@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 import { GET_INGREDIENTS, GET_ALL_RECIPE } from "../../utils/graphql/queries";
-import { ADD_RECIPE } from "../../utils/graphql/mutations";
+import { ADD_RECIPE, DELETE_RECIPE } from "../../utils/graphql/mutations";
 import RecipeValidationSchema from "../../utils/recipeValidationSchema";
 import plus from "../../assets/icons/plus.png";
 import Button from "../Button";
@@ -27,14 +27,28 @@ export default function EditRecipe({
   recipeName,
   user,
   createNewRecipe,
-  currentView
+  currentView,
+  cakeId
 }) {
   const [modal, setModal] = useState("");
   const [errors, setErrors] = useState({});
-  const [addRecipe] = useMutation(ADD_RECIPE);
 
+  const [addRecipe] = useMutation(ADD_RECIPE);
+  const [deleteRecipeMutation] = useMutation(DELETE_RECIPE);
   const modalRef = useRef();
   const { data: allIngredient } = useQuery(GET_INGREDIENTS);
+
+  const deleteRecipe = (value) => {
+    deleteRecipeMutation({
+      variables: { recipeId: value, userId: user?.id },
+      refetchQueries: [
+        { query: GET_ALL_RECIPE, variables: { userId: user?.id } }
+      ],
+      awaitRefetchQueries: true
+    }).catch((error) => {
+      console.error("Error deleting recipe:", error);
+    });
+  };
 
   const addFieldIngredient = (stateSetter) =>
     stateSetter((prev) => [
@@ -67,7 +81,7 @@ export default function EditRecipe({
       userId: user.id,
       recipeName,
       steps,
-      ingredients: ingredients.flat(),
+      ingredients: ingredients.flat().map(({ __typename, ...rest }) => rest),
       phases,
       tags
     };
@@ -103,6 +117,11 @@ export default function EditRecipe({
     }
   };
 
+  const updateRecipe = () => {
+    deleteRecipe(cakeId);
+    submitRecipe()
+  }
+
   const plus_abort_button = useCallback(
     (func1, func2, isPlus) => (
       <>
@@ -129,7 +148,7 @@ export default function EditRecipe({
   return (
     <div className="z-10 flex flex-col w-[84%] xl:w-[60%] h-min-[92vh] xl:p-[1vw] xl:px-0 px-[1vw] p-[2vw] bg-[#fff] backdrop-blur-lg my-[4vh] rounded-lg box-shadow ">
       <div className="h-[30vh] w-full flex flex-col mt-[2vh] pt-[1vh]">
-        <div className="-translate-y-[3vh] h-[20vh] mx-[1vw] bg-pink bg-cover bg-no-repeat text-white/70 uppercase rounded-md flex justify-center items-center">
+        <div className="-translate-y-[3vh] h-[20vh] mx-[1vw] bg-pink bg-cover bg-no-repeat text-white uppercase rounded-md flex justify-center items-center">
           kép feltöltése
         </div>
         <h1 className="xl:text-[6vh] text-[4vh] w-full flex px-[1vw] text-stone-600">
@@ -158,9 +177,9 @@ export default function EditRecipe({
             </div>
           </div>
           <div className="w-[1/3] flex flex-col items-start ">
-            <label className="text-xs font-medium text-gray-700 mb-2">
+            <p className="text-xs font-medium text-gray-700 mb-2">
               Hozzávalók
-            </label>
+            </p>
             <div className="w-full flex flex-wrap flex-row justify-center items-start gap-2">
               {ingredients.map((ingredient, index) => (
                 <div
@@ -268,10 +287,12 @@ export default function EditRecipe({
               <div className="w-[100%] flex justify-end mt-[20vh]">
                 <div className="w-[20%]">
                   <Button
-                    onClick={submitRecipe}
+                    onClick={currentView === "add" ? submitRecipe : updateRecipe}
                     variant="yellow"
                     size="sm"
-                    label="Mentsük el"
+                    label= {currentView === "add"
+                      ? "Mentsük el"
+                      : "Mentsük el a változást"}
                     disabled={
                       !recipeName || !steps.length || !ingredients.length
                     }

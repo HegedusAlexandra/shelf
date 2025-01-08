@@ -82,7 +82,7 @@ export default function ListofRecipes({
       className={`xl:h-[86vh] h-[92vh] w-[100%] flex xl:flex-row flex-row-reverse justify-start items-start mt-[8vh] `}
     >
       <div
-        className="xl:w-[92%] h-[84vh] text-sm bg-stone-50 p-[2vh] xl:rounded-r-xl xl:rounded-l-none rounded-l-xl rounded-r-none overflow-y-scroll hide-scrollbar"
+        className="xl:w-[90%] h-[84vh] text-sm bg-stone-50 p-[2vh] xl:rounded-r-xl xl:rounded-l-none rounded-l-xl rounded-r-none overflow-y-scroll hide-scrollbar"
         style={{
           boxShadow: "-1px 4px 16px rgba(0, 0, 0, 0.8)"
         }}
@@ -117,7 +117,7 @@ export default function ListofRecipes({
       </div>
       <button
         onClick={() => setshowRightSidebars(!showRightSidebars)}
-        className="xl:w-[2vw] md:w-[4vw] w-[10vw] flex items-center justify-center bg-green-400 xl:rounded-r-md xl:rounded-l-none rounded-l-md rounded-r-none mt-[10vh] font-playwrite xl:py-[30px] py-[10px] px-auto hover:bg-green-600"
+        className="xl:w-[1.5vw] md:w-[4vw] w-[10vw] flex items-center justify-center bg-green-400 xl:rounded-r-md xl:rounded-l-none rounded-l-md rounded-r-none mt-[10vh] font-playwrite py-[10px] px-auto hover:bg-green-600"
       >
         <div
           className="text-center text-sm"

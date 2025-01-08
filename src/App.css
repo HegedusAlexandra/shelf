@@ -28,10 +28,6 @@
   overflow: hidden; /* Prevents scrollbars from being visible */
 }
 
-.hide-scrollbar-scrollable {
-  overflow: auto; /* Allows scrolling */
-}
-
 /* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
 .hide-scrollbar-scrollable::-webkit-scrollbar {
   display: none; /* Hides the scrollbar */

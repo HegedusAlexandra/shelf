@@ -4,10 +4,11 @@ import React, { memo, useState, useEffect } from "react";
 import ListofRecipes from "../../components/Recipe/ListofRecipes";
 import EditRecipe from "../../components/Recipe/EditRecipe";
 import ReadRecipe from "../../components/Recipe/ReadRecipe";
-import ListofFunctions from "../../components/Recipe/ListofFunctions";
+import ListofActions from "../../components/Recipe/ListofActions";
 import { useUser } from "../../contexts/UserContext";
 import SearchRecipe from "../../components/Recipe/SearchRecipe";
 import ListforToday from "../../components/Recipe/ListforToday";
+import AllRecipes from "../../components/Recipe/AllRecipes";
 
 const Recipe = () => {
   const [currentView, setCurrentView] = useState("read");
@@ -20,6 +21,7 @@ const Recipe = () => {
   const [tags, setTags] = useState([""]);
   const user = useUser();
   const [cakeId, setCakeId] = useState("");
+  const [listOfCakeId, setListOfCakeId] = useState([]);
   const [showLeftSidebars, setshowLeftSidebars] = useState(false);
   const [showRightSidebars, setshowRightSidebars] = useState(false);
   const [showLeftSidebarDays, setshowLeftSidebarDays] = useState(false);
@@ -37,7 +39,7 @@ const Recipe = () => {
 
   return (
     <div className="w-[100vw] flex flex-row justify-center items-start overflow-hidden">
-      <div className="xl:w-[18%] w-[50%] left-0 xl:static flex flex-col absolute overflow-hidden">
+      <div className="xl:w-[18%] w-[50%] left-0 xl:static flex flex-col absolute overflow-hidden mt-[6vh]">
         <div
           className={`transition-transform duration-300 ${
             showLeftSidebars
@@ -45,7 +47,7 @@ const Recipe = () => {
               : "xl:translate-x-[78%] md:-translate-x-[92%] -translate-x-[88%] z-0 "
           } overflow-hidden`}
         >
-          <ListofFunctions
+          <ListofActions
             showLeftSidebars={showLeftSidebars}
             setshowLeftSidebars={setshowLeftSidebars}
             createNewRecipe={createNewRecipe}
@@ -67,6 +69,7 @@ const Recipe = () => {
             createNewRecipe={createNewRecipe}
             setCurrentView={setCurrentView}
             setCakeId={setCakeId}
+            setListOfCakeId={setListOfCakeId}
           />
         </div>
       </div>
@@ -80,6 +83,15 @@ const Recipe = () => {
           user={user}
           setCakeId={setCakeId}
           setCurrentView={setCurrentView}
+        />
+      )}
+      {currentView === "allRecipes" && (
+        <AllRecipes
+          user={user}
+          cakeId={cakeId}
+          setCakeId={setCakeId}
+          setCurrentView={setCurrentView}
+          listOfCakeId={listOfCakeId}
         />
       )}
       {currentView === "search" && !cakeId && (
@@ -109,6 +121,7 @@ const Recipe = () => {
           user={user}
           currentView={currentView}
           createNewRecipe={createNewRecipe}
+          cakeId={cakeId}
         />
       )}
       <div className="xl:w-[18%] w-[50%] xl:static absolute right-0 flex flex-col overflow-hidden">

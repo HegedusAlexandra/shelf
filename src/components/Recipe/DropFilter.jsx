@@ -29,12 +29,12 @@ console.log(value);
   }, []);
 
   return (
-    <div className="dropdown-container flex flex-col mb-1 pr-4 xl:w-[12vw] w-full xl:mt-[0vh] mt-[2vh] pl-2 relative">
+    <div className="dropdown-container flex flex-col mb-1 pr-2 pl-2 xl:w-[12vw] w-full xl:mt-[0vh] mt-[2vh] relative">
       <div>
         <button
           className={`${
             value ? "text-black" : "text-gray-400"
-          } w-full text-left px-2 py-1`}
+          } w-full text-left py-1`}
           onClick={handleToggle}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
@@ -54,7 +54,7 @@ console.log(value);
       {isOpen && (
         <ul
           ref={dropdownRef}
-          className="absolute top-[calc(100%+5px)] z-10 mt-1 w-full min-w-[160px] bg-stone-200 shadow-lg rounded-md max-h-40 overflow-y-auto"
+          className="absolute top-[calc(100%+5px)] z-10 mt-1 w-[90%] min-w-[160px] bg-stone-200 shadow-lg rounded-md max-h-40 overflow-y-auto"
           role="listbox"
         >
           {Object.keys(TagType).map((option, index) => (

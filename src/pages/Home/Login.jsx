@@ -16,7 +16,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export default function Login() {
   const [session, setSession] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,5 +85,5 @@ export default function Login() {
     );
   }
 
-  return null; // Prevent unnecessary rendering
+  return null;
 }
